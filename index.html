@@ -484,7 +484,7 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
 .itg-h3{font-family:var(--dp);font-size:1.15rem;color:var(--navy);margin-bottom:1.25rem}
 .itg-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem}
 .itg-card{
-  position:relative;height:230px;border-radius:12px;cursor:pointer;
+  position:relative;height:290px;border-radius:12px;cursor:pointer;
   perspective:1200px;
 }
 .itg-card-inner{
@@ -499,7 +499,7 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
 }
 .itg-front{background:#fff;border:1px solid rgba(0,0,0,.07)}
 .itg-avatar{
-  height:150px;display:flex;align-items:center;justify-content:center;
+  height:210px;display:flex;align-items:center;justify-content:center;
   font-family:var(--dp);font-size:2.1rem;color:rgba(255,255,255,.9);flex-shrink:0;
 }
 .itg-front-info{padding:.85rem 1rem;flex:1;display:flex;flex-direction:column;justify-content:center}
@@ -525,7 +525,7 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
 .itg-card.itg-open .itg-avatar{background:rgba(232,184,75,.08)!important;color:var(--accent);height:100%}
 
 @media(max-width:900px){.itg-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:480px){.itg-grid{grid-template-columns:1fr}.itg-card{height:210px}}
+@media(max-width:480px){.itg-grid{grid-template-columns:1fr}.itg-card{height:270px}}
 
 /* Modal */
 .itg-overlay{
@@ -557,14 +557,14 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
 const ITG_DATA = {
   current: [
     {
-      id:'shen', name:'Jiabin Shen, PhD', role:'Principal Investigator', initials:'JS', photo:'images/jiabin-shen.jpg', pos:'center 10%',
+      id:'shen', name:'Jiabin Shen, PhD', role:'Principal Investigator', initials:'JS', photo:'images/jiabin-shen.jpg',
       color:'linear-gradient(135deg,#2E6CA8,#1B3A6B)',
       focus:'TBI rehabilitation · injury epidemiology · neurodivergent youth',
       bio:'Dr. Shen has studied pediatric injury prevention and rehabilitation since 2011. He directs the Pediatric Injury Research Lab at UMass Lowell, where his interdisciplinary program integrates virtual reality, fNIRS, and large-scale national datasets to improve outcomes for children with TBI, ADHD, and autism. Over $1.6M in external funding secured, 69 peer-reviewed publications, and 43 students mentored at UML. Dr. Shen received his PhD in Life-Span Developmental Psychology from University of Alabama at Birmingham (2015).',
       links:[{label:'UML Profile', url:'https://www.uml.edu/fahss/psychology/faculty/shen-jiabin.aspx'},{label:'Google Scholar', url:'https://scholar.google.com/citations?hl=en&user=PZkRpx8AAAAJ&view_op=list_works&sortby=pubdate'}]
     },
     {
-      id:'davis', name:'Angelina Davis', role:'PhD in Psychology · Lab Manager', initials:'AD', photo:'images/angelina-davis.jpg', pos:'center 10%',
+      id:'davis', name:'Angelina Davis', role:'PhD in Psychology · Lab Manager', initials:'AD', photo:'images/angelina-davis.jpg',
       color:'linear-gradient(135deg,#2E6CA8,#1B3A6B)',
       focus:'Cognitive development · TBI · ASD · mental health',
       bio:'Lab Manager and PhD student in Psychology. Research interests include cognitive development, traumatic brain injuries, autism spectrum disorder, and mental health promotion in children. Presented at the APA 2024 conference ("Memory Impairment after Sports-Related TBI in Pediatric and Young Adult Athletes: A Scoping Review") and the NEPA 2024 conference ("Activity Level Predicts Injury History in Children"), plus the UML Psychology Research Symposium in May 2025 and May 2026. B.A. Neuroscience & Psychology, Assumption University (2023).',
