@@ -598,7 +598,7 @@ function ITGcard(p, extraClass){
     ? p.links.map(l=>`<a href="${l.url}" target="_blank" rel="noopener" class="pl" onclick="event.stopPropagation()">${l.label} →</a>`).join(' ')
     : '';
   const avatarHTML = p.photo
-    ? `<img src="${p.photo}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none';this.parentElement.textContent='${p.initials}'">`
+    ? `<img src="${p.photo}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;object-position:center 20%" onerror="this.style.display='none';this.parentElement.textContent='${p.initials}'">`
     : p.initials;
   return `
   <div class="itg-card ${extraClass||''}" data-id="${p.id}" onclick="ITGopenModal('${p.id}')" tabindex="0" role="button" aria-label="View ${p.name} bio">
@@ -643,7 +643,7 @@ function ITGopenModal(id){
     ? `<div class="itg-modal-links">${p.links.map(l=>`<a href="${l.url}" target="_blank" rel="noopener" class="pl">${l.label} →</a>`).join('')}</div>`
     : '';
   const modalAvatarHTML = p.photo
-    ? `<img src="${p.photo}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" onerror="this.style.display='none';this.parentElement.textContent='${p.initials}'">`
+    ? `<img src="${p.photo}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;object-position:center 20%;border-radius:50%" onerror="this.style.display='none';this.parentElement.textContent='${p.initials}'">`
     : p.initials;
   document.getElementById('itg-modal-body').innerHTML = `
     <div class="itg-modal-avatar" style="background:${p.color}${p.photo?';padding:0;overflow:hidden':''}">${modalAvatarHTML}</div>
