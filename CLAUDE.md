@@ -169,20 +169,34 @@ detail — do the following:
      `Role / Title` → `role`, `Current Focus` → `focus`, `Full Bio` →
      `bio`, `Avatar initials` → `initials`.
    - `Photo filename` → the `photo` field, as a relative path:
-     `images/<filename>` (the user uploads actual image files into an
-     `images/` folder in the repo separately — never fabricate or guess
-     a filename that isn't in the spreadsheet).
+     `images/<filename>`. **How photos actually get linked to a person:**
+     there is no automatic matching — the spreadsheet cell is the *only*
+     link between a photo file and a person. Do not scan the `images/`
+     folder and guess whose photo is whose based on filename similarity
+     to a name; only use the exact filename the user typed into that
+     row's "Photo filename" cell.
+   - **Before finalizing, check that every non-blank `Photo filename`
+     actually exists in the `images/` folder** (e.g. `ls images/`). If a
+     spreadsheet row names a file that isn't there, don't silently drop
+     it or guess a replacement — leave that person's `photo` field unset
+     (so they fall back to initials, which is safe) and flag it clearly
+     in your summary: "Row for <name> references images/<file> which
+     doesn't exist in the images folder — check the filename or upload
+     the photo." The same applies in reverse: if there's a new file in
+     `images/` that isn't referenced in any row, don't add it to anyone
+     automatically — just note it in the summary so the user can update
+     the spreadsheet if they forgot.
+   - If a person's Photo filename cell is blank, leave `photo` unset —
+     the initials fallback already handles this automatically.
    - The two Link label/URL column pairs → the `links` array
      (`[{label, url}]`); omit any pair that's blank rather than adding an
      empty object.
    - If a person in the spreadsheet has no corresponding entry in
      `ITG_DATA`, add them. If `ITG_DATA` has a person no longer in the
-     spreadsheet, remove them. If someone's Photo filename is blank,
-     leave `photo` unset — the initials fallback already handles this
-     automatically. Photo crop position (`pos` field) is a display-only
-     tweak that doesn't come from the spreadsheet — leave any existing
-     `pos` override on a person untouched unless the user separately
-     reports their photo is cropped wrong.
+     spreadsheet, remove them. Photo crop position (`pos` field) is a
+     display-only tweak that doesn't come from the spreadsheet — leave
+     any existing `pos` override on a person untouched unless the user
+     separately reports their photo is cropped wrong.
 4. **Validate the `<script>` block's JavaScript syntax after editing**
    before considering the task done (e.g. extract the script contents to
    a temp file and run `node --check` on it, or equivalent). This file
