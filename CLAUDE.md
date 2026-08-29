@@ -211,3 +211,91 @@ detail — do the following:
 
 If the spreadsheet file can't be found at the expected path, ask the user
 directly rather than guessing or skipping the update.
+
+## News database spreadsheet — keeping index.html in sync
+
+The "News & Opportunities" section is driven by a JavaScript array called
+`NDB_DATA` (search for `const NDB_DATA` in `index.html`), maintained by the
+site owner in a separate spreadsheet, not edited directly in code. The
+spreadsheet lives at:
+
+    data/PIRL-News-Database.xlsx
+
+(If this file isn't at that path yet, look for it elsewhere in the repo
+root, or ask the user where they saved it — do not guess a path outside
+the repo.)
+
+**How the section behaves (context for understanding what you're
+syncing):** news items render as a single-open accordion — clicking one
+closes whatever was previously expanded. Only the 10 most recent items
+show by default (`NDB_PAGE_SIZE`), with a "Show older news" button to
+reveal more. Category filter chips ("All" + one per category present in
+the data) sit above the list — filtering is **single-select**, like tabs:
+clicking a category shows only that category, replacing any previously
+selected one (not additive/multi-select — an earlier version of this
+feature allowed multiple categories at once with OR logic, but that was
+found confusing in practice and was deliberately simplified to
+single-select; do not reintroduce multi-select unless the user explicitly
+asks for it again). Clicking the already-active category, or clicking
+"All", clears the filter. Switching the filter selection always resets
+the visible count back to 10. None of this interactive behavior comes
+from the spreadsheet — it's fixed logic in the code (`NDB_activeFilter`
+holds a single category code or `null` for "All"). The spreadsheet only
+supplies the data.
+
+**Workflow:** whenever the user says something like "I updated the news
+spreadsheet," "sync the news section," or similar — even without further
+detail — do the following:
+
+1. Read every row of the `News Items` sheet in that workbook.
+2. Compare it against the current `NDB_DATA` array in `index.html`.
+3. Regenerate `NDB_DATA` to match the spreadsheet **exactly**:
+   - `Sort Date (YYYY-MM-DD)` → the `sort` field. This is invisible to
+     visitors and controls chronological order only. A far-future date
+     like `2099-01-01` is the established convention for pinning an
+     "Ongoing" item permanently at the top — preserve that pattern for
+     any new evergreen/ongoing item rather than inventing a different
+     mechanism.
+   - `Display Date` → the `date` field (what visitors actually see, e.g.
+     "Ongoing," "2023," "May 2026").
+   - `Category` → the `cat` field. Must be one of the short internal
+     codes already used in the code (`pub`, `pres`, `award`, `grant`,
+     `recruit`, `milestone`, `other`) — map the spreadsheet's
+     human-readable Category column (Publication/Presentation/Award/
+     Grant/Recruiting/Milestone/Other) to these codes using the existing
+     `NDB_CAT_LABEL` object in the code as the source of truth for the
+     mapping. If the user adds a genuinely new category not in that
+     list, add both a new short code and a matching entry in
+     `NDB_CAT_LABEL`, and give it a CSS color rule alongside the existing
+     `.ndb-cat.pub` / `.ndb-cat.pres` / etc. rules rather than leaving it
+     unstyled.
+   - `Headline` → the `headline` field.
+   - `Details` → the `detail` field.
+   - `Link label` + `Link URL` (if both present) → weave them into the
+     `detail` field as an inline `<a>` tag (there is no separate `links`
+     structure for news items, unlike the team database) — follow the
+     existing style of embedded links already in `detail` fields (e.g.
+     the "UML Psychology PhD program" link in the recruiting item).
+   - If a person in the spreadsheet has no corresponding entry in
+     `NDB_DATA`, add them. If `NDB_DATA` has an item no longer in the
+     spreadsheet, remove it.
+4. **Validate the `<script>` block's JavaScript syntax after editing**
+   before considering the task done (e.g. extract the script contents to
+   a temp file and run `node --check` on it). This exact file has broken
+   silently before — twice — because of unescaped apostrophes inside
+   single-quoted string fields (a possessive like "Activity's" or
+   "Children's" typed directly into a `'...'`-delimited JS string breaks
+   the entire script with no visible error beyond a browser console
+   message). When a headline or detail field contains an apostrophe,
+   either rephrase to avoid it, or — the safer general fix — use `"..."`
+   (double-quoted) JS strings for that field instead of `'...'`, escaping
+   any literal double-quotes inside with `\"`. Do not rely on backslash-
+   escaping an apostrophe inside a single-quoted string
+   (`'Children\'s'`) — this file has a history of that specific pattern
+   getting mangled by tooling into a broken double-backslash. Prefer
+   switching the quote style over escaping.
+5. Summarize what changed (items added, removed, or edited) before
+   committing.
+
+If the spreadsheet file can't be found at the expected path, ask the user
+directly rather than guessing or skipping the update.
