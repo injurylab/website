@@ -142,3 +142,58 @@ config needed — this is GitHub's default Pages behavior for a repo with
 `index.html` at the root). Confirm important changes render correctly
 before pushing, since there is no staging environment — every push to
 `main` goes live on injurylab.org within a few minutes.
+
+## Team roster spreadsheet — keeping index.html in sync
+
+The team roster shown in the "Meet the Lab" section is maintained by the
+site owner in a separate spreadsheet, not edited directly in code. The
+spreadsheet lives at:
+
+    data/PIRL-Team-Database.xlsx
+
+**Workflow:** whenever the user says something like "I updated the
+spreadsheet," "sync the team section," or similar — even without further
+detail — do the following:
+
+1. Read every row of the `Team Members` sheet in that workbook.
+2. Compare it against the current `ITG_DATA` object in `index.html`
+   (search for `const ITG_DATA`).
+3. Regenerate `ITG_DATA` to match the spreadsheet **exactly**:
+   - The `Section` column controls which array a person belongs in:
+     `current` (for "Current Members") or `alumni` (for "Alumni"). The
+     `Status` column is metadata for the owner's own tracking — it does
+     NOT control placement in the code. Trust `Section`, not `Status`.
+   - `Order` controls the sequence within a section — lower numbers
+     first.
+   - Map each remaining column directly: `Full Name` → `name`,
+     `Role / Title` → `role`, `Current Focus` → `focus`, `Full Bio` →
+     `bio`, `Avatar initials` → `initials`.
+   - `Photo filename` → the `photo` field, as a relative path:
+     `images/<filename>` (the user uploads actual image files into an
+     `images/` folder in the repo separately — never fabricate or guess
+     a filename that isn't in the spreadsheet).
+   - The two Link label/URL column pairs → the `links` array
+     (`[{label, url}]`); omit any pair that's blank rather than adding an
+     empty object.
+   - If a person in the spreadsheet has no corresponding entry in
+     `ITG_DATA`, add them. If `ITG_DATA` has a person no longer in the
+     spreadsheet, remove them. If someone's Photo filename is blank,
+     leave `photo` unset — the initials fallback already handles this
+     automatically. Photo crop position (`pos` field) is a display-only
+     tweak that doesn't come from the spreadsheet — leave any existing
+     `pos` override on a person untouched unless the user separately
+     reports their photo is cropped wrong.
+4. **Validate the `<script>` block's JavaScript syntax after editing**
+   before considering the task done (e.g. extract the script contents to
+   a temp file and run `node --check` on it, or equivalent). This file
+   has previously broken silently — every card on the page rendering
+   empty with no visible error beyond a browser console message — because
+   of a single bad escaped character inside a bio string. Pay particular
+   attention to apostrophes inside single-quoted bio/focus/name strings
+   in the spreadsheet data; escape them correctly or rephrase to avoid
+   them.
+5. Summarize what changed (people added, removed, or edited; any fields
+   that differed) before committing.
+
+If the spreadsheet file can't be found at the expected path, ask the user
+directly rather than guessing or skipping the update.
