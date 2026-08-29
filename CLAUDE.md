@@ -56,9 +56,13 @@ click-to-open modal), and `links` (array of `{label, url}`).
 string once broke the *entire* `<script>` block silently, causing all
 three grids to render empty with no visible error except a browser console
 "Uncaught Error: Script error." **Always validate JS syntax after editing
-`ITG_DATA`** — e.g. extract the script block and run `node --check` on it,
-or at minimum carefully check every apostrophe inside single-quoted
-strings is either avoided (rephrase) or properly escaped.
+`ITG_DATA`** — try `node --check` on the extracted script contents if
+`node` is available; if not (this dev environment currently has no `node`
+on `PATH` — `command -v node` returns nothing), instead load `index.html`
+in a browser and confirm both that the console shows no errors and that
+the team grids actually render populated cards, not empty. At minimum,
+carefully check every apostrophe inside single-quoted strings is either
+avoided (rephrase) or properly escaped.
 
 **Photos:** every person currently displays as colored initials, not real
 photos. Real photo URLs from Wix and the UML site kept failing (hotlink
@@ -143,6 +147,21 @@ config needed — this is GitHub's default Pages behavior for a repo with
 before pushing, since there is no staging environment — every push to
 `main` goes live on injurylab.org within a few minutes.
 
+**Git push authentication in this environment:** this machine authenticates
+to GitHub via the `gh` CLI (logged in as `injurylab`), which registers
+git's credential helper. But `gh` is installed at `/opt/homebrew/bin/gh`
+and is *not* on the default `PATH` in a Claude Code session here — so a
+plain `git push` can fail with `fatal: could not read Username for
+'https://github.com': Device not configured` even though valid
+credentials exist, simply because `gh` isn't reachable to supply them.
+If that happens, don't conclude auth isn't set up — run the push with the
+path included instead:
+
+    PATH="/opt/homebrew/bin:$PATH" git push origin main
+
+(`/opt/homebrew/bin/gh auth status` confirms login without needing the
+PATH change, since it's invoked by full path directly.)
+
 ## Team roster spreadsheet — keeping index.html in sync
 
 The team roster shown in the "Meet the Lab" section is maintained by the
@@ -198,19 +217,56 @@ detail — do the following:
      any existing `pos` override on a person untouched unless the user
      separately reports their photo is cropped wrong.
 4. **Validate the `<script>` block's JavaScript syntax after editing**
-   before considering the task done (e.g. extract the script contents to
-   a temp file and run `node --check` on it, or equivalent). This file
-   has previously broken silently — every card on the page rendering
-   empty with no visible error beyond a browser console message — because
-   of a single bad escaped character inside a bio string. Pay particular
-   attention to apostrophes inside single-quoted bio/focus/name strings
-   in the spreadsheet data; escape them correctly or rephrase to avoid
-   them.
+   before considering the task done. Try extracting the script contents
+   to a temp file and running `node --check` on it — but don't assume
+   `node` is installed; check with `command -v node` first, since it is
+   not on `PATH` in this dev environment. If `node` isn't available,
+   validate instead by loading `index.html` in a browser (e.g. navigate
+   to the local `file://` path, or `open index.html`) and confirming both
+   that the console shows no errors and that the team grids actually
+   render populated cards, not empty ones. This file has previously
+   broken silently — every card on the page rendering empty with no
+   visible error beyond a browser console message — because of a single
+   bad escaped character inside a bio string. Pay particular attention to
+   apostrophes inside single-quoted bio/focus/name strings in the
+   spreadsheet data; escape them correctly or rephrase to avoid them.
 5. Summarize what changed (people added, removed, or edited; any fields
    that differed) before committing.
 
 If the spreadsheet file can't be found at the expected path, ask the user
 directly rather than guessing or skipping the update.
+
+## Keeping this file itself up to date
+
+This file is the persistent memory for this project across Claude Code
+sessions — it's read automatically at the start of every session, so
+anything durable that isn't written here effectively gets forgotten once
+the session ends.
+
+**When something comes up during a session that represents a genuinely
+new durable rule, decision, or lesson** — not just a one-off fix specific
+to that moment — proactively suggest adding it here before the session
+ends, rather than waiting to be asked. Examples of what counts as
+"durable" versus "one-off":
+
+- **Durable (add it):** a bug pattern likely to recur (like the
+  escaped-apostrophe issue already documented above), a deliberate design
+  decision the owner made after trying an alternative (like choosing
+  single-select over multi-select filtering), a new database or content
+  source being introduced, a tool or credential now configured for this
+  project, a fact or convention that future sessions would otherwise have
+  to rediscover from scratch.
+- **One-off (don't add it):** a specific typo fix, a single content
+  update already reflected in the live data files, troubleshooting steps
+  for a problem that's now resolved and unlikely to recur in the same
+  form.
+
+When proposing an addition, keep it in the same style as the rest of this
+file: plain prose explaining the *why*, not just the *what*, written for
+a future Claude Code session that has no memory of the conversation where
+the decision was made. Show the owner the proposed addition and confirm
+before actually writing it to the file, rather than silently editing
+this document.
 
 ## News database spreadsheet — keeping index.html in sync
 
@@ -280,8 +336,14 @@ detail — do the following:
      `NDB_DATA`, add them. If `NDB_DATA` has an item no longer in the
      spreadsheet, remove it.
 4. **Validate the `<script>` block's JavaScript syntax after editing**
-   before considering the task done (e.g. extract the script contents to
-   a temp file and run `node --check` on it). This exact file has broken
+   before considering the task done. Try extracting the script contents
+   to a temp file and running `node --check` on it — but don't assume
+   `node` is installed; check with `command -v node` first, since it is
+   not on `PATH` in this dev environment. If `node` isn't available,
+   validate instead by loading `index.html` in a browser (e.g. navigate
+   to the local `file://` path, or `open index.html`) and confirming both
+   that the console shows no errors and that the news list actually
+   renders populated items, not an empty list. This exact file has broken
    silently before — twice — because of unescaped apostrophes inside
    single-quoted string fields (a possessive like "Activity's" or
    "Children's" typed directly into a `'...'`-delimited JS string breaks
