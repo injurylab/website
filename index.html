@@ -465,10 +465,6 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
     <h3 class="itg-h3">Current Members</h3>
     <div class="itg-grid" id="itg-current"></div>
 
-    <!-- RESEARCH COLLABORATORS -->
-    <h3 class="itg-h3" style="margin-top:3rem">Research Collaborators</h3>
-    <div class="itg-grid" id="itg-collab"></div>
-
     <!-- ALUMNI -->
     <h3 class="itg-h3" style="margin-top:3rem">Alumni</h3>
     <div class="itg-grid" id="itg-alumni"></div>
@@ -561,39 +557,35 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
 const ITG_DATA = {
   current: [
     {
-      id:'shen', name:'Jiabin Shen, PhD', role:'Principal Investigator', initials:'JS',
+      id:'shen', name:'Jiabin Shen, PhD', role:'Principal Investigator', initials:'JS', photo:'images/jiabin-shen.jpg',
       color:'linear-gradient(135deg,#2E6CA8,#1B3A6B)',
       focus:'TBI rehabilitation · injury epidemiology · neurodivergent youth',
-      bio:'Dr. Shen has studied pediatric injury prevention and rehabilitation since 2011. He directs the Pediatric Injury Research Lab at UMass Lowell, where his interdisciplinary program integrates virtual reality, fNIRS, and large-scale national datasets to improve outcomes for children with TBI, ADHD, and autism. Over $1.6M in external funding secured, 69 peer-reviewed publications, and 43 students mentored at UML. PhD, Life-Span Developmental Psychology, University of Alabama at Birmingham (2015).',
+      bio:'Dr. Shen has studied pediatric injury prevention and rehabilitation since 2011. He directs the Pediatric Injury Research Lab at UMass Lowell, where his interdisciplinary program integrates virtual reality, fNIRS, and large-scale national datasets to improve outcomes for children with TBI, ADHD, and autism. Over $1.6M in external funding secured, 69 peer-reviewed publications, and 43 students mentored at UML. Dr. Shen received his PhD in Life-Span Developmental Psychology from University of Alabama at Birmingham (2015).',
       links:[{label:'UML Profile', url:'https://www.uml.edu/fahss/psychology/faculty/shen-jiabin.aspx'},{label:'Google Scholar', url:'https://scholar.google.com/citations?hl=en&user=PZkRpx8AAAAJ&view_op=list_works&sortby=pubdate'}]
     },
     {
-      id:'davis', name:'Angelina Davis', role:'PhD Student', initials:'AD',
+      id:'davis', name:'Angelina Davis', role:'PhD in Psychology · Lab Manager', initials:'AD', photo:'images/angelina-davis.jpg',
       color:'linear-gradient(135deg,#2E6CA8,#1B3A6B)',
       focus:'Cognitive development · TBI · ASD · mental health',
-      bio:'PhD student in the APPS program. Research interests include cognitive development, traumatic brain injuries, autism spectrum disorder, and mental health promotion in children. Presented at the APA 2024 conference ("Memory Impairment after Sports-Related TBI in Pediatric and Young Adult Athletes: A Scoping Review") and the NEPA 2024 conference ("Activity Level Predicts Injury History in Children"), plus the UML Psychology Research Symposium in May 2025 and May 2026. B.A. Neuroscience & Psychology, Assumption University (2023).',
-      links:[]
-    },
-    {
-      id:'aravala', name:'Jai Aravala', role:'MPH Student', initials:'JA',
-      color:'linear-gradient(135deg,#2E6CA8,#1B3A6B)',
-      focus:'Population health · injury disparities',
-      bio:'Master of Public Health student contributing to the labs population-based research on pediatric injury disparities and health outcomes.',
+      bio:'Lab Manager and PhD student in Psychology. Research interests include cognitive development, traumatic brain injuries, autism spectrum disorder, and mental health promotion in children. Presented at the APA 2024 conference ("Memory Impairment after Sports-Related TBI in Pediatric and Young Adult Athletes: A Scoping Review") and the NEPA 2024 conference ("Activity Level Predicts Injury History in Children"), plus the UML Psychology Research Symposium in May 2025 and May 2026. B.A. Neuroscience & Psychology, Assumption University (2023).',
       links:[]
     }
   ],
-  collab:[
-    // Populate as active external collaborators are confirmed.
-  ],
   alumni:[
     {
-      id:'xu', name:'Tonghui Xu', role:'Lab Alumnus · EdD', initials:'TX', alum:true,
+      id:'aravala', name:'Jai Aravala', role:'Masters in Public Health', initials:'JA', photo:'images/jai-aravala.jpg', alum:true,
+      focus:'Population health · injury disparities',
+      bio:'Master of Public Health student who contributed to the lab\u2019s population-based research on pediatric injury disparities and health outcomes.',
+      links:[]
+    },
+    {
+      id:'xu', name:'Tonghui Xu', role:'Doctor of Education', initials:'TX', photo:'images/tonghui-xu.jpg', alum:true,
       focus:'ASD injury risk · MEPS analysis',
       bio:'Doctoral graduate in Research & Evaluation in Education. Presented "Identifying Crucial Predictors for Injury Risk in Children with ASD Using 22 Years of MEPS Data" at the American Public Health Association (APHA) annual conference, December 2024.',
       links:[]
     },
     {
-      id:'charles', name:'Skylar Charles', role:'Lab Alumna · UML Graduate', initials:'SC', alum:true,
+      id:'charles', name:'Skylar Charles', role:'BA in Psychology', initials:'SC', photo:'images/skylar-charles.jpg', alum:true,
       focus:'TBI in multilingual populations',
       bio:'UML psychology graduate. Presented "The Effects of Traumatic Brain Injury in Individual Languages of Multilinguals: A Systematic Review" at the New England Psychological Association (NEPA) conference, November 2024.',
       links:[]
@@ -605,11 +597,14 @@ function ITGcard(p, extraClass){
   const linksHTML = p.links && p.links.length
     ? p.links.map(l=>`<a href="${l.url}" target="_blank" rel="noopener" class="pl" onclick="event.stopPropagation()">${l.label} →</a>`).join(' ')
     : '';
+  const avatarHTML = p.photo
+    ? `<img src="${p.photo}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none';this.parentElement.textContent='${p.initials}'">`
+    : p.initials;
   return `
   <div class="itg-card ${extraClass||''}" data-id="${p.id}" onclick="ITGopenModal('${p.id}')" tabindex="0" role="button" aria-label="View ${p.name} bio">
     <div class="itg-card-inner">
       <div class="itg-face itg-front">
-        <div class="itg-avatar" style="background:${p.color}">${p.initials}</div>
+        <div class="itg-avatar" style="background:${p.color}${p.photo?';padding:0':''}">${avatarHTML}</div>
         <div class="itg-front-info">
           <div class="itg-name">${p.name}</div>
           <div class="itg-role">${p.role}</div>
@@ -637,24 +632,21 @@ function ITGopenCard(){
 
 function ITGrender(){
   document.getElementById('itg-current').innerHTML = ITG_DATA.current.map(p=>ITGcard(p)).join('') + ITGopenCard();
-  const collabEl = document.getElementById('itg-collab');
-  if(ITG_DATA.collab.length===0){
-    collabEl.innerHTML = '<p style="grid-column:1/-1;font-size:.85rem;color:var(--mid)">Collaborator profiles are added as active projects are confirmed.</p>';
-  } else {
-    collabEl.innerHTML = ITG_DATA.collab.map(p=>ITGcard(p)).join('');
-  }
   document.getElementById('itg-alumni').innerHTML = ITG_DATA.alumni.map(p=>ITGcard(p,'itg-alum')).join('');
 }
 
 function ITGopenModal(id){
-  const all = [...ITG_DATA.current, ...ITG_DATA.collab, ...ITG_DATA.alumni];
+  const all = [...ITG_DATA.current, ...ITG_DATA.alumni];
   const p = all.find(x=>x.id===id);
   if(!p) return;
   const linksHTML = p.links && p.links.length
     ? `<div class="itg-modal-links">${p.links.map(l=>`<a href="${l.url}" target="_blank" rel="noopener" class="pl">${l.label} →</a>`).join('')}</div>`
     : '';
+  const modalAvatarHTML = p.photo
+    ? `<img src="${p.photo}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" onerror="this.style.display='none';this.parentElement.textContent='${p.initials}'">`
+    : p.initials;
   document.getElementById('itg-modal-body').innerHTML = `
-    <div class="itg-modal-avatar" style="background:${p.color}">${p.initials}</div>
+    <div class="itg-modal-avatar" style="background:${p.color}${p.photo?';padding:0;overflow:hidden':''}">${modalAvatarHTML}</div>
     <div class="itg-modal-name">${p.name}</div>
     <div class="itg-modal-role">${p.role}</div>
     <p class="itg-modal-bio">${p.bio}</p>
