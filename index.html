@@ -98,22 +98,47 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
 .ivx{font-size:.62rem;color:rgba(255,255,255,.32);margin-top:5px;font-family:var(--mn);letter-spacing:.02em;line-height:1.6;max-width:220px}
 
 /* ── PUBLICATIONS ── */
-.pg{display:grid;grid-template-columns:2fr 1fr;gap:1.5rem;margin-top:3rem}
-.pcard{border:1px solid rgba(0,0,0,.08);border-radius:12px;padding:1.75rem;transition:border-color .2s,box-shadow .2s}
-.pcard:hover{border-color:var(--sky);box-shadow:0 8px 24px rgba(46,108,168,.1)}
-.pm{font-family:var(--mn);font-size:.66rem;color:var(--mid);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.75rem;display:flex;gap:10px;flex-wrap:wrap}
-.pj{color:var(--sky)}
-.ptl{font-family:var(--dp);font-size:1.08rem;color:var(--navy);line-height:1.35;margin-bottom:.7rem}
-.pau{font-size:.8rem;color:var(--mid);margin-bottom:.9rem;line-height:1.5}
-.pau strong{color:var(--sky)}
-.pabs{font-size:.83rem;color:var(--mid);line-height:1.7;margin-bottom:1.1rem}
-.plnk{display:flex;gap:8px}
 .pl{font-family:var(--mn);font-size:.68rem;letter-spacing:.06em;color:var(--sky);border:1px solid currentColor;padding:4px 11px;border-radius:4px;text-transform:uppercase;transition:background .2s,color .2s}
 .pl:hover{background:var(--sky);color:#fff}
-.psd{display:flex;flex-direction:column;gap:1.5rem}
-.psm{border:1px solid rgba(0,0,0,.08);border-radius:12px;padding:1.25rem;transition:border-color .2s}
-.psm:hover{border-color:var(--sky)}
-.pst{font-family:var(--dp);font-size:.95rem;color:var(--navy);line-height:1.35;margin-bottom:.5rem}
+
+.pub-pillar{margin-top:3rem}
+.pub-head{display:flex;align-items:center;gap:10px;margin-bottom:1.25rem}
+.pub-head::before{content:'';display:block;width:20px;height:2px}
+.pub-sky .pub-head::before{background:var(--sky)}
+.pub-accent .pub-head::before{background:var(--accent)}
+.pub-sage .pub-head::before{background:var(--sage)}
+.pub-name{font-family:var(--mn);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;font-weight:500}
+.pub-sky .pub-name{color:var(--sky)}
+.pub-accent .pub-name{color:var(--accent)}
+.pub-sage .pub-name{color:var(--sage)}
+
+.pub-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem}
+
+.pub-paper{background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:12px;padding:1.3rem 1.4rem;position:relative;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .2s}
+.pub-paper::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.pub-sky .pub-paper::before{background:var(--sky)}
+.pub-accent .pub-paper::before{background:var(--accent)}
+.pub-sage .pub-paper::before{background:var(--sage)}
+.pub-paper:hover{box-shadow:0 12px 32px rgba(0,0,0,.08)}
+.pub-meta{font-family:var(--mn);font-size:.62rem;color:var(--mid);letter-spacing:.05em;text-transform:uppercase;margin-bottom:.6rem;display:flex;gap:8px;flex-wrap:wrap}
+.pub-journal{color:var(--steel)}
+.pub-title{font-family:var(--dp);font-size:.98rem;color:var(--navy);line-height:1.32;margin-bottom:.55rem}
+.pub-authors{font-size:.72rem;color:var(--mid);line-height:1.45;margin-bottom:.65rem}
+.pub-authors strong{color:var(--sky)}
+.pub-role{display:inline-block;font-family:var(--mn);font-size:.6rem;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:20px;background:var(--sand);color:var(--steel);margin-bottom:.75rem;align-self:flex-start}
+.pub-why{background:var(--sand);border-radius:8px;padding:.75rem .85rem;font-size:.78rem;color:var(--ink);line-height:1.5;margin-bottom:.7rem}
+.pub-why-label{display:block;font-family:var(--mn);font-size:.58rem;letter-spacing:.09em;text-transform:uppercase;color:var(--mid);margin-bottom:.3rem}
+.pub-link{font-family:var(--mn);font-size:.64rem;letter-spacing:.05em;color:var(--sky);text-transform:uppercase;text-decoration:none;margin-top:auto;align-self:flex-start}
+.pub-link:hover{text-decoration:underline}
+.pub-link.pending{opacity:.5;cursor:default}
+
+.pub-footer{margin-top:2.5rem;text-align:center;font-size:.85rem;color:var(--mid)}
+.pub-footer a{color:var(--sky);font-family:var(--mn);font-size:.72rem;letter-spacing:.04em;text-transform:uppercase;text-decoration:none;margin-left:6px}
+.pub-footer a:hover{text-decoration:underline}
+
+@media(max-width:700px){
+  .pub-row{grid-template-columns:1fr}
+}
 
 /* ── TEAM ── */
 .tgd{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-top:3rem}
@@ -190,7 +215,6 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
   .rg{grid-template-columns:1fr}
   .ii{grid-template-columns:1fr}
   .ins{grid-template-columns:1fr 1fr}
-  .pg{grid-template-columns:1fr}
   .tgd{grid-template-columns:1fr 1fr}
   .pr{grid-template-columns:1fr}
   .pr .tph{height:160px}
@@ -400,39 +424,103 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
 <section id="publications" class="sec">
   <div class="con">
     <div class="slb">Selected publications</div>
-    <h2 class="st">Recent &amp; featured work</h2>
-    <p class="sb">Key publications from the lab. <a href="https://scholar.google.com/citations?hl=en&user=PZkRpx8AAAAJ&view_op=list_works&sortby=pubdate" style="color:var(--sky)" target="_blank" rel="noopener">Full list on Google Scholar →</a></p>
-    <div class="pg">
-      <article class="pcard">
-        <div class="pm"><span class="pj">Child &amp; Youth Care Forum</span><span>2026</span><span>Injury Prevention</span></div>
-        <h3 class="ptl">An Evaluation of Parent and Child Perceptions About Pediatric Pedestrian Safety Skills</h3>
-        <p class="pau">Morgan, C.H., Stager, L.M., Smith, C., McClure, L.A., Davis, A.R., Johnston, A., <strong>Shen, J.</strong>, Wang, Y., &amp; Schwebel, D.C.</p>
-        <p class="pabs">This study examines how parents and children perceive children's pedestrian safety skills, informing the design of technology-assisted, caregiver-inclusive injury prevention programs for school-aged children.</p>
-        <div class="plnk">
-          <a href="https://doi.org/10.1007/s10566-026-09971-y" class="pl" target="_blank" rel="noopener">DOI</a>
-          <a href="#" class="pl">Cite</a>
+    <h2 class="st">Research, organized by focus</h2>
+    <p class="sb">A cross-section of the lab's work, spanning founding studies, current trials, and the students and collaborators driving them forward.</p>
+
+    <div class="pub-pillar pub-sky">
+      <div class="pub-head"><div class="pub-name">Injury Prevention</div></div>
+      <div class="pub-row">
+
+        <div class="pub-paper">
+          <div class="pub-meta"><span class="pub-journal">J. Safety Research</span><span>in press</span></div>
+          <h3 class="pub-title">The Moderating Role of Visual Perception Skills on the Association Between Temperamental Fear and Children's Pedestrian Safety</h3>
+          <p class="pub-authors">Davis, A.R., Schwebel, D.C., Johnston, A., McClure, L.A., Morgan, C.H., Hopkins Smith, C., Stager, L.M., Wang, Y., Wang, Y., &amp; <strong>Shen, J.</strong></p>
+          <span class="pub-role">Senior author · PhD Mentee · in press</span>
+          <div class="pub-why"><span class="pub-why-label">Why it matters</span>Extends the lab's earlier finding that fearful children take more pedestrian risks, testing whether visual perception skills change that relationship. A doctoral trainee is leading the analysis.</div>
+          <span class="pub-link pending">DOI pending</span>
         </div>
-      </article>
-      <div class="psd">
-        <div class="psm">
-          <div class="pm"><span class="pj">Journal of Attention Disorders</span><span>2023</span><span>Neurodiversity</span></div>
-          <h3 class="pst">A Population-Based Study on Injury Risk and Disparities Among Children With ADHD</h3>
-          <p class="pau" style="font-size:.77rem;margin-top:4px"><strong>Shen, J.</strong>, Shi, J., Gauthier, L., &amp; Li, W.</p>
-          <div style="margin-top:.6rem"><a href="https://doi.org/10.1177/10870547231158386" class="pl" target="_blank" rel="noopener">DOI</a></div>
+
+        <div class="pub-paper">
+          <div class="pub-meta"><span class="pub-journal">Prevention Science</span><span>2022</span></div>
+          <h3 class="pub-title">A Systematic Review on the Impact of Hot and Cool Executive Functions on Pediatric Injury Risks: A Meta-Analytic Structural Equation Modeling Approach</h3>
+          <p class="pub-authors"><strong>Shen, J.</strong>, Wang, Y., Kurpad, N., &amp; Schena, D.A.</p>
+          <span class="pub-role">First author · PhD Mentee</span>
+          <div class="pub-why"><span class="pub-why-label">Why it matters</span>Pooling 31 studies through advanced statistical modeling, this review separates emotion-driven "hot" executive function from purely cognitive "cool" executive function, clarifying which skill deficits future prevention programs should actually target.</div>
+          <a href="https://doi.org/10.1007/s11121-021-01271-2" class="pub-link" target="_blank" rel="noopener">Read the paper →</a>
         </div>
-        <div class="psm">
-          <div class="pm"><span class="pj">Trials</span><span>2024</span><span>Brain Injury Rehab</span></div>
-          <h3 class="pst">Efficacy of a Virtual Reality-Based Cognitive Interactive Training Program for Children With Traumatic Brain Injuries: Study Protocol for a Parallel-Group RCT</h3>
-          <p class="pau" style="font-size:.77rem;margin-top:4px"><strong>Shen, J.</strong>, Wang, Y., Quinn, S., Suskauer, S., Birch, J., Busch, T.A., et al.</p>
-          <div style="margin-top:.6rem"><a href="https://doi.org/10.1186/s13063-024-08049-1" class="pl" target="_blank" rel="noopener">DOI</a></div>
+
+        <div class="pub-paper">
+          <div class="pub-meta"><span class="pub-journal">Health Psychology</span><span>2016</span></div>
+          <h3 class="pub-title">A Randomized Trial Evaluating Child Dog-Bite Prevention in Rural China Through Video-Based Testimonials</h3>
+          <p class="pub-authors"><strong>Shen, J.</strong>, Pang, S., &amp; Schwebel, D.C.</p>
+          <span class="pub-role">First author · PhD dissertation study</span>
+          <div class="pub-why"><span class="pub-why-label">Why it matters</span>In a randomized trial with 280 children in rural China, a simple video of other children's real testimonials raised safety knowledge and cut risky behavior around dogs. It's evidence that low-cost, story-based interventions can work in resource-limited settings.</div>
+          <a href="https://doi.org/10.1037/hea0000273" class="pub-link" target="_blank" rel="noopener">Read the paper →</a>
         </div>
-        <div class="psm" style="border-color:var(--accent)">
-          <div class="pm"><span style="color:var(--accent)">Full list</span></div>
-          <p class="pst">Injury prevention, neurodiversity, brain injury rehabilitation, VR &amp; fNIRS</p>
-          <div style="margin-top:.6rem"><a href="https://scholar.google.com/citations?hl=en&user=PZkRpx8AAAAJ&view_op=list_works&sortby=pubdate" class="pl" target="_blank" rel="noopener">View all →</a></div>
-        </div>
+
       </div>
     </div>
+
+    <div class="pub-pillar pub-accent">
+      <div class="pub-head"><div class="pub-name">Neurodiversity</div></div>
+      <div class="pub-row">
+
+        <div class="pub-paper">
+          <div class="pub-meta"><span class="pub-journal">J. Attention Disorders</span><span>2023</span></div>
+          <h3 class="pub-title">A Population-Based Study on Injury Risk and Disparities Among Children With ADHD</h3>
+          <p class="pub-authors"><strong>Shen, J.</strong>, Shi, J., Gauthier, L., &amp; Li, W.</p>
+          <span class="pub-role">First author, PI</span>
+          <div class="pub-why"><span class="pub-why-label">Why it matters</span>Using nationally representative data, this study shows impaired attention and inhibitory control put children with ADHD at meaningfully higher injury risk than their peers, evidence that can guide screening and prevention.</div>
+          <a href="https://doi.org/10.1177/10870547231158386" class="pub-link" target="_blank" rel="noopener">Read the paper →</a>
+        </div>
+
+        <div class="pub-paper">
+          <div class="pub-meta"><span class="pub-journal">J. Attention Disorders</span><span>2023</span></div>
+          <h3 class="pub-title">The Economic Burden of Injuries in Children With ADHD in the U.S. From 2011 to 2020</h3>
+          <p class="pub-authors"><strong>Shen, J.</strong>, Shi, J., Gauthier, L., &amp; Li, W.</p>
+          <span class="pub-role">First author, PI</span>
+          <div class="pub-why"><span class="pub-why-label">Why it matters</span>Tracking a decade of national expenditure data, this companion study finds the economic burden of injury-related care for children with ADHD has nearly doubled, a concrete case for folding injury prevention into ADHD care.</div>
+          <a href="https://doi.org/10.1177/10870547231196328" class="pub-link" target="_blank" rel="noopener">Read the paper →</a>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="pub-pillar pub-sage">
+      <div class="pub-head"><div class="pub-name">Brain Injury Rehabilitation</div></div>
+      <div class="pub-row">
+
+        <div class="pub-paper">
+          <div class="pub-meta"><span class="pub-journal">Trials</span><span>2024</span></div>
+          <h3 class="pub-title">Efficacy of a Virtual Reality-Based Cognitive Interactive Training Program for Children With Traumatic Brain Injuries</h3>
+          <p class="pub-authors"><strong>Shen, J.</strong>, Wang, Y., Quinn, S., Suskauer, S., Birch, J., Busch, T.A., et al.</p>
+          <span class="pub-role">First author, PI</span>
+          <div class="pub-why"><span class="pub-why-label">Why it matters</span>The registered protocol for a randomized controlled trial testing whether a virtual-reality game (VICT) can retrain executive-function skills in children with TBI. It's designed as the empirical foundation for larger future trials.</div>
+          <a href="https://doi.org/10.1186/s13063-024-08049-1" class="pub-link" target="_blank" rel="noopener">Read the paper →</a>
+        </div>
+
+        <div class="pub-paper">
+          <div class="pub-meta"><span class="pub-journal">J. Pediatric Psychology</span><span>2025</span></div>
+          <h3 class="pub-title">Memory Outcomes and Interventions After Sports-Related Traumatic Brain Injuries in Pediatric and Young Adult Athletes: A Scoping Review</h3>
+          <p class="pub-authors">Davis, A.R., Charles, S.D., Papesh, M.H., Gerson, J., &amp; <strong>Shen, J.</strong></p>
+          <span class="pub-role">Senior author · PhD Mentee</span>
+          <div class="pub-why"><span class="pub-why-label">Why it matters</span>Memory problems are common after youth sports-related brain injuries, yet this review finds very few rehabilitation programs currently target memory specifically, identifying a clear gap for future research.</div>
+          <a href="https://doi.org/10.1093/jpepsy/jsaf075" class="pub-link" target="_blank" rel="noopener">Read the paper →</a>
+        </div>
+
+        <div class="pub-paper">
+          <div class="pub-meta"><span class="pub-journal">Clinical Psychology Review</span><span>2023</span></div>
+          <h3 class="pub-title">Family Matters: A Systematic Review and Meta-Analysis on the Efficacy of Family-Oriented Interventions for Children With Acquired Brain Injuries</h3>
+          <p class="pub-authors"><strong>Shen, J.</strong>, Zhao, S., Horn, T., Benkart, R., Busch, T., Vrabec, A., &amp; Taylor, H.G.</p>
+          <span class="pub-role">First author, PI</span>
+          <div class="pub-why"><span class="pub-why-label">Why it matters</span>A meta-analysis of 20 studies finds family-oriented interventions produce real, if modest, benefits for children with brain injuries and their parents. The exception is family functioning as a whole, which points to where the field's next interventions should focus.</div>
+          <a href="https://doi.org/10.1016/j.cpr.2022.102218" class="pub-link" target="_blank" rel="noopener">Read the paper →</a>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="pub-footer">Looking for something specific? <a href="https://scholar.google.com/citations?hl=en&user=PZkRpx8AAAAJ&view_op=list_works&sortby=pubdate" target="_blank" rel="noopener">Browse all 69 on Google Scholar →</a></div>
   </div>
 </section>
 
