@@ -38,8 +38,6 @@ nav{position:sticky;top:0;z-index:1000;background:rgba(13,31,60,.97);backdrop-fi
 .nl{display:flex;gap:0;list-style:none}
 .nl a{padding:8px 13px;font-size:.78rem;font-weight:500;color:rgba(255,255,255,.65);letter-spacing:.04em;text-transform:uppercase;border-radius:6px;transition:color .2s,background .2s}
 .nl a:hover{color:#fff;background:rgba(255,255,255,.08)}
-.nc{background:var(--accent)!important;color:var(--navy)!important;font-weight:600!important}
-.nc:hover{background:#f0c85a!important}
 /* mobile nav toggle */
 .hb{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px}
 .hb span{display:block;width:22px;height:2px;background:#fff;border-radius:2px;transition:all .3s}
@@ -47,8 +45,6 @@ nav{position:sticky;top:0;z-index:1000;background:rgba(13,31,60,.97);backdrop-fi
 
 /* ── HERO ── */
 .hero{background:var(--navy);position:relative;overflow:hidden;min-height:92vh;display:flex;align-items:center}
-.hgrid{position:absolute;inset:0;background-image:linear-gradient(rgba(46,108,168,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(46,108,168,.12) 1px,transparent 1px);background-size:48px 48px;mask-image:radial-gradient(ellipse 80% 80% at 60% 50%,#000 30%,transparent 100%)}
-.hglow{position:absolute;width:600px;height:600px;background:radial-gradient(circle,rgba(46,108,168,.22) 0%,transparent 70%);right:-100px;top:50%;transform:translateY(-50%);pointer-events:none}
 .hin{max-width:var(--mw);margin:0 auto;padding:5rem 2rem;display:grid;grid-template-columns:1fr 310px;gap:4rem;align-items:center;position:relative;z-index:2}
 .ey{font-family:var(--mn);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:1.25rem;display:flex;align-items:center;gap:10px}
 .ey::before{content:'';display:block;width:28px;height:1px;background:var(--accent)}
@@ -56,21 +52,18 @@ h1.hh{font-family:var(--dp);font-size:clamp(2.2rem,4.5vw,3.6rem);color:#fff;line
 h1.hh em{font-style:italic;color:var(--accent)}
 .sub{font-size:1.05rem;color:rgba(255,255,255,.62);max-width:560px;line-height:1.7;margin-bottom:2.5rem}
 .acts{display:flex;gap:12px;flex-wrap:wrap}
-.bp{background:var(--accent);color:var(--navy);padding:13px 26px;border-radius:6px;font-weight:600;font-size:.88rem;display:inline-flex;align-items:center;gap:7px;transition:transform .18s,box-shadow .18s}
-.bp:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(232,184,75,.35)}
+.bp{background:var(--accent);color:var(--navy);padding:13px 26px;border-radius:6px;font-weight:600;font-size:.88rem;display:inline-flex;align-items:center;gap:7px;transition:background .18s}
+.bp:hover{background:#f0c85a}
 .bo{border:1px solid rgba(255,255,255,.28);color:rgba(255,255,255,.82);padding:13px 26px;border-radius:6px;font-weight:500;font-size:.88rem;transition:border-color .2s,color .2s}
 .bo:hover{border-color:rgba(255,255,255,.65);color:#fff}
-.sts{display:flex;gap:2.5rem;margin-top:3rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,.1)}
-.sn{font-family:var(--dp);font-size:2rem;color:#fff;line-height:1}
-.sn sup{font-size:.9rem;color:var(--accent)}
-.sl{font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.42);margin-top:4px}
 /* PI card */
 .pic{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:1.75rem;text-align:center;backdrop-filter:blur(8px)}
-.pic img{width:110px;height:110px;border-radius:50%;object-fit:cover;margin:0 auto 1.1rem;border:3px solid var(--accent)}
+.pic-avatar{width:110px;height:110px;border-radius:50%;margin:0 auto 1.1rem;overflow:hidden;border:3px solid var(--accent)}
+.pic-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.pic-avatar-fallback{display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--sky),var(--steel));font-family:var(--dp);font-size:2rem;color:#fff}
 .pin{font-family:var(--dp);font-size:1.2rem;color:#fff;margin-bottom:4px}
 .pit{font-size:.73rem;color:rgba(255,255,255,.48);line-height:1.5;text-transform:uppercase;letter-spacing:.06em;margin-bottom:1.1rem}
-.bd{display:inline-block;background:rgba(46,108,168,.25);border:1px solid rgba(46,108,168,.4);border-radius:20px;padding:4px 11px;font-size:.7rem;color:rgba(255,255,255,.72);margin:3px}
-.bd.g{background:rgba(232,184,75,.15);border-color:rgba(232,184,75,.4);color:var(--accent)}
+.cred{font-size:.72rem;color:rgba(255,255,255,.55);letter-spacing:.02em}
 
 /* ── SECTIONS ── */
 .sec{padding:5rem 2rem}
@@ -88,8 +81,7 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
 .rc:nth-child(2)::before{background:var(--accent)}
 .rc:nth-child(3)::before{background:var(--sage)}
 .rc:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.08)}
-.ri{font-size:22px;margin-bottom:1.1rem}
-.rt{font-family:var(--dp);font-size:1.15rem;color:var(--navy);margin-bottom:.7rem}
+.rt{font-family:var(--dp);font-size:1.15rem;color:var(--navy);margin-bottom:.7rem;margin-top:.4rem}
 .rb{font-size:.87rem;color:var(--mid);line-height:1.7}
 .tgs{display:flex;flex-wrap:wrap;gap:5px;margin-top:1.1rem}
 .tg{background:var(--sand);font-size:.68rem;padding:3px 9px;border-radius:20px;color:var(--steel);font-family:var(--mn)}
@@ -103,8 +95,7 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
 .iv{font-family:var(--dp);font-size:2.6rem;color:var(--accent);line-height:1}
 .iv sup{font-size:1.1rem}
 .il{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.45);margin-top:5px;line-height:1.4}
-.fnds{margin-top:2.25rem;padding-top:1.75rem;border-top:1px solid rgba(255,255,255,.1);display:flex;gap:10px;flex-wrap:wrap}
-.ft{font-family:var(--mn);font-size:.68rem;letter-spacing:.1em;color:rgba(255,255,255,.42);text-transform:uppercase;border:1px solid rgba(255,255,255,.14);padding:5px 12px;border-radius:4px}
+.ivx{font-size:.62rem;color:rgba(255,255,255,.32);margin-top:5px;font-family:var(--mn);letter-spacing:.02em;line-height:1.6;max-width:220px}
 
 /* ── PUBLICATIONS ── */
 .pg{display:grid;grid-template-columns:2fr 1fr;gap:1.5rem;margin-top:3rem}
@@ -209,7 +200,6 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
 }
 @media(max-width:480px){
   .tgd{grid-template-columns:1fr}
-  .sts{gap:1.5rem;flex-wrap:wrap}
   .sec{padding:3.5rem 1.25rem}
   .hin{padding:3.5rem 1.25rem}
   .ins{grid-template-columns:1fr}
@@ -308,7 +298,7 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
       <li><a href="#team">Team</a></li>
       <li><a href="#join">Join Us</a></li>
       <li><a href="#news">News</a></li>
-      <li><a href="#contact" class="nc">Contact</a></li>
+      <li><a href="#contact">Contact</a></li>
     </ul>
   </div>
 </nav>
@@ -317,8 +307,6 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
 
 <!-- HERO -->
 <section class="hero" aria-label="Introduction">
-  <div class="hgrid" aria-hidden="true"></div>
-  <div class="hglow" aria-hidden="true"></div>
   <div class="hin">
     <div>
       <div class="ey">UMass Lowell · Department of Psychology</div>
@@ -328,30 +316,14 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
         <a href="#join" class="bp">→ Prospective Students</a>
         <a href="#research" class="bo">Explore Our Research</a>
       </div>
-      <div class="sts" role="list" aria-label="Lab statistics">
-        <div role="listitem">
-          <div class="sn">$1.5<sup>M+</sup></div>
-          <div class="sl">Funding secured</div>
-        </div>
-        <div role="listitem">
-          <div class="sn">69</div>
-          <div class="sl">Peer-reviewed publications</div>
-        </div>
-        <div role="listitem">
-          <div class="sn">2011</div>
-          <div class="sl">Research since</div>
-        </div>
-      </div>
     </div>
     <div class="pic" aria-label="Principal Investigator">
-      <img src="https://static.wixstatic.com/media/fd8bc8_4577c13ea3d34ed194f51ec591f74e3f~mv2.jpg/v1/fill/w_460,h_644,al_c,q_80/Jiabin%20Shen%20Photo.jpg" alt="Jiabin Shen, PhD" width="110" height="110" onerror="this.parentElement.style.display='none'">
+      <div class="pic-avatar">
+        <img src="images/jiabin-shen.jpg" alt="Jiabin Shen, PhD" width="110" height="110" onerror="this.style.display='none';this.parentElement.classList.add('pic-avatar-fallback');this.parentElement.textContent='JS'">
+      </div>
       <div class="pin">Jiabin Shen, PhD</div>
       <div class="pit">Associate Professor of Psychology<br>Director, Pediatric Injury Research Lab</div>
-      <div>
-        <span class="bd g">APA Fellow</span>
-        <span class="bd">Co-Director, NEST</span>
-        <span class="bd">NIH / HRSA Funded</span>
-      </div>
+      <div class="cred">APA Fellow · Co-Director, NEST</div>
     </div>
   </div>
 </section>
@@ -364,7 +336,6 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
     <p class="sb">Our interdisciplinary program bridges developmental psychology, computer science, and neuroscience to reduce the burden of childhood injury and improve outcomes for neurodivergent youth.</p>
     <div class="rg">
       <article class="rc">
-        <div class="ri" aria-hidden="true">🛡️</div>
         <h3 class="rt">Injury Prevention</h3>
         <p class="rb">From roadway safety to caregiver education, our prevention research uses technology-assisted approaches — including augmented reality for implicit bias training — to reduce injury incidence in children and adolescents, with particular attention to youth with autism, ADHD, and other neurodevelopmental conditions.</p>
         <div class="tgs" aria-label="Methods">
@@ -372,7 +343,6 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
         </div>
       </article>
       <article class="rc">
-        <div class="ri" aria-hidden="true">🧩</div>
         <h3 class="rt">Neurodiversity</h3>
         <p class="rb">Using HCUP NEDS, MEPS, and other national databases, we examine injury risk, healthcare utilization, and economic burden among neurodivergent youth — including children with autism spectrum disorder and ADHD. Dr. Shen co-directs the Center for Neurodiversity Education, Support and Training (NEST), which anchors this research within a broader university-wide commitment to the autism and neurodivergent community.</p>
         <div class="tgs" aria-label="Methods">
@@ -380,7 +350,6 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
         </div>
       </article>
       <article class="rc">
-        <div class="ri" aria-hidden="true">🧠</div>
         <h3 class="rt">Brain Injury Rehabilitation</h3>
         <p class="rb">We develop and rigorously test VR-based cognitive rehabilitation programs for children with traumatic brain injury, targeting executive function deficits through randomized controlled trials and fNIRS neuroimaging.</p>
         <div class="tgs" aria-label="Methods">
@@ -401,13 +370,26 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
       </div>
       <div>
         <div class="ins" role="list" aria-label="Impact statistics">
-          <div role="listitem"><div class="iv">$1.6<sup>M+</sup></div><div class="il">External funding secured</div></div>
-          <div role="listitem"><div class="iv">69</div><div class="il">Peer-reviewed publications</div></div>
-          <div role="listitem"><div class="iv">43</div><div class="il">Students mentored at UML</div></div>
-          <div role="listitem"><div class="iv">15<sup>+</sup></div><div class="il">Years studying pediatric injury</div></div>
-        </div>
-        <div class="fnds" aria-label="Funders">
-          <span class="ft">NIH · NICHD</span><span class="ft">HRSA</span><span class="ft">Ohio Dept. Public Safety</span>
+          <div role="listitem">
+            <div class="iv">$1.6<sup>M</sup></div>
+            <div class="il">External funding secured</div>
+            <div class="ivx">$1,473,305 extramural (NIH/NICHD, HRSA, Ohio Dept. Public Safety)<br>+ $149,739 intramural (UML)</div>
+          </div>
+          <div role="listitem">
+            <div class="iv">69</div>
+            <div class="il">Peer-reviewed publications</div>
+            <div class="ivx">23 first-authored · 11 with student co-authors</div>
+          </div>
+          <div role="listitem">
+            <div class="iv">43</div>
+            <div class="il">Students mentored at UML</div>
+            <div class="ivx">22 undergraduate · 9 master's · 12 doctoral</div>
+          </div>
+          <div role="listitem">
+            <div class="iv">15<sup>+</sup></div>
+            <div class="il">Years studying pediatric injury</div>
+            <div class="ivx">Since 2011 · UML faculty since 2020</div>
+          </div>
         </div>
       </div>
     </div>
@@ -445,8 +427,8 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
           <div style="margin-top:.6rem"><a href="https://doi.org/10.1186/s13063-024-08049-1" class="pl" target="_blank" rel="noopener">DOI</a></div>
         </div>
         <div class="psm" style="border-color:var(--accent)">
-          <div class="pm"><span style="color:var(--accent)">69 publications</span></div>
-          <p class="pst">Full list: injury prevention, neurodiversity, brain injury rehabilitation, VR &amp; fNIRS</p>
+          <div class="pm"><span style="color:var(--accent)">Full list</span></div>
+          <p class="pst">Injury prevention, neurodiversity, brain injury rehabilitation, VR &amp; fNIRS</p>
           <div style="margin-top:.6rem"><a href="https://scholar.google.com/citations?hl=en&user=PZkRpx8AAAAJ&view_op=list_works&sortby=pubdate" class="pl" target="_blank" rel="noopener">View all →</a></div>
         </div>
       </div>
@@ -550,6 +532,13 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
 .itg-modal-role{font-size:.78rem;color:var(--sky);text-transform:uppercase;letter-spacing:.05em;font-weight:500;margin-bottom:1.25rem}
 .itg-modal-bio{font-size:.9rem;color:var(--mid);line-height:1.75;margin-bottom:1.5rem}
 .itg-modal-links{display:flex;gap:10px;flex-wrap:wrap}
+.itg-modal-extra{margin-bottom:1.25rem;padding-top:.9rem;border-top:1px solid rgba(13,31,60,.1)}
+.itg-modal-extra-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--navy);font-weight:700;margin-bottom:7px}
+.itg-modal-extra-list{font-size:.85rem;color:var(--mid);line-height:1.6}
+.itg-modal-extra-list ul{list-style:none;margin:0;padding:0}
+.itg-modal-extra-list li{position:relative;padding-left:18px;margin-bottom:8px}
+.itg-modal-extra-list li::before{content:'●';position:absolute;left:0;top:.05em;color:var(--accent);font-size:.55em}
+.itg-modal-extra-sub{font-size:.68rem;text-transform:uppercase;letter-spacing:.07em;color:var(--mid);font-weight:600;margin:10px 0 6px}
 </style>
 
 <script>
@@ -560,7 +549,12 @@ const ITG_DATA = {
       id:'shen', name:'Jiabin Shen, PhD', role:'Principal Investigator', initials:'JS', photo:'images/jiabin-shen.jpg',
       color:'linear-gradient(135deg,#2E6CA8,#1B3A6B)',
       focus:'TBI rehabilitation · injury epidemiology · neurodivergent youth',
-      bio:'Dr. Shen has studied pediatric injury prevention and rehabilitation since 2011. He directs the Pediatric Injury Research Lab at UMass Lowell, where his interdisciplinary program integrates virtual reality, fNIRS, and large-scale national datasets to improve outcomes for children with TBI, ADHD, and autism. Over $1.6M in external funding secured, 69 peer-reviewed publications, and 43 students mentored at UML. Dr. Shen received his PhD in Life-Span Developmental Psychology from University of Alabama at Birmingham (2015).',
+      bio:'Dr. Shen has studied pediatric injury prevention and rehabilitation since 2011. He directs the Pediatric Injury Research Lab at UMass Lowell, where his interdisciplinary program integrates virtual reality, fNIRS, and large-scale national datasets to improve outcomes for children with TBI, ADHD, and autism. Dr. Shen received his PhD in Life-Span Developmental Psychology from University of Alabama at Birmingham (2015).',
+      teaching:['PSYC.2600 Child and Adolescent Development (undergraduate)','PSYC.6410 Fundamentals of Prevention Science (graduate)','PSYC.4880 Research Service Learning (undergraduate, mentored research)'],
+      service:{
+        current:['Associate Editor, Frontiers in Public Health (Injury Prevention &amp; Control)','Editorial Board Member, BMC Injury Prevention','Editorial Board Member &amp; Guest Editor, Rehabilitation Psychology','Program Officer &amp; Executive Committee Member, Brain Injury Interdisciplinary SIG, American Congress of Rehabilitation Medicine (ACRM)','Member at Large, Executive Committee, APA Division 22 (Rehabilitation Psychology)'],
+        past:['Chair, Awards Committee, APA Division 22 (2023–2025)','Chair, Membership Committee, APA Division 22 (2021–2024)']
+      },
       links:[{label:'UML Profile', url:'https://www.uml.edu/fahss/psychology/faculty/shen-jiabin.aspx'},{label:'Google Scholar', url:'https://scholar.google.com/citations?hl=en&user=PZkRpx8AAAAJ&view_op=list_works&sortby=pubdate'}]
     },
     {
@@ -645,11 +639,28 @@ function ITGopenModal(id){
   const modalAvatarHTML = p.photo
     ? `<img src="${p.photo}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;object-position:${p.pos||'center 20%'};border-radius:50%" onerror="this.style.display='none';this.parentElement.textContent='${p.initials}'">`
     : p.initials;
+  const ulHTML = items => items && items.length ? `<ul>${items.map(i=>`<li>${i}</li>`).join('')}</ul>` : '';
+  const extraHTML = (label, data) => {
+    if(!data) return '';
+    let body;
+    if(Array.isArray(data)){
+      if(!data.length) return '';
+      body = ulHTML(data);
+    } else {
+      const cur = ulHTML(data.current);
+      const past = (data.past && data.past.length) ? `<div class="itg-modal-extra-sub">Past leadership</div>${ulHTML(data.past)}` : '';
+      if(!cur && !past) return '';
+      body = cur + past;
+    }
+    return `<div class="itg-modal-extra"><div class="itg-modal-extra-label">${label}</div><div class="itg-modal-extra-list">${body}</div></div>`;
+  };
   document.getElementById('itg-modal-body').innerHTML = `
     <div class="itg-modal-avatar" style="background:${p.color}${p.photo?';padding:0;overflow:hidden':''}">${modalAvatarHTML}</div>
     <div class="itg-modal-name">${p.name}</div>
     <div class="itg-modal-role">${p.role}</div>
     <p class="itg-modal-bio">${p.bio}</p>
+    ${extraHTML('Teaching', p.teaching)}
+    ${extraHTML('Editorial &amp; Professional Service', p.service)}
     ${linksHTML}
   `;
   document.getElementById('itg-modal-overlay').classList.add('itg-open-modal');
@@ -741,10 +752,10 @@ ITGrender();
 // Each item: sort (YYYY-MM-DD, controls order only — never shown to visitors),
 // date (display text), cat (category), headline, detail, link (optional {label,url})
 const NDB_DATA = [
-  {sort:'2099-01-01', date:'Ongoing', cat:'recruit', headline:'📢 Accepting applications — PhD students &amp; RAs for Fall 2027', detail:'Email Dr. Shen with your CV and a brief statement of interest. PhD students apply through the <a href="https://www.uml.edu/fahss/psychology/programs/graduate/phd-psychology/" target="_blank" rel="noopener">UML Psychology PhD program</a>.'},
+  {sort:'2099-01-01', date:'Ongoing', cat:'recruit', headline:'Accepting applications — PhD students &amp; RAs for Fall 2027', detail:'Email Dr. Shen with your CV and a brief statement of interest. PhD students apply through the <a href="https://www.uml.edu/fahss/psychology/programs/graduate/phd-psychology/" target="_blank" rel="noopener">UML Psychology PhD program</a>.'},
   {sort:'2026-05-01', date:'May 2026', cat:'pres', headline:'PhD student Angelina Davis presented at the UML Psychology Research Symposium', detail:"Poster: \"Exploring Physical Activity's Moderating Role on the Association Between Traumatic Brain Injury History and College Student Mental Health.\""},
   {sort:'2025-09-01', date:'Sep 2025', cat:'award', headline:'Dr. Shen granted tenure and promoted to Associate Professor at UMass Lowell', detail:'Recognized for outstanding contributions to research in injury prevention and rehabilitation, and for excellence in teaching, mentoring, and service to the university community.'},
-  {sort:'2025-08-01', date:'Aug 2025', cat:'award', headline:'🏅 Dr. Shen elected Fellow of the American Psychological Association (APA)', detail:'APA Fellowship recognizes members who have made outstanding and unusual contributions to the science or profession of psychology.'},
+  {sort:'2025-08-01', date:'Aug 2025', cat:'award', headline:'Dr. Shen elected Fellow of the American Psychological Association (APA)', detail:'APA Fellowship recognizes members who have made outstanding and unusual contributions to the science or profession of psychology.'},
   {sort:'2025-05-01', date:'May 2025', cat:'pres', headline:'PhD student Angelina Davis presented at the UML Psychology Research Symposium', detail:"Poster: \"The Moderating Role of Visual Perception Skills on the Association Between Temperamental Fear and Children's Pedestrian Safety.\""},
   {sort:'2024-12-01', date:'Dec 2024', cat:'pres', headline:'Lab alumnus Tonghui Xu presented at the American Public Health Association (APHA) annual conference', detail:'Poster: "Identifying Crucial Predictors for Injury Risk in Children with ASD Using 22 Years of MEPS Data." Xu is a doctoral graduate in Research &amp; Evaluation in Education.'},
   {sort:'2024-11-01', date:'Nov 2024', cat:'pres', headline:'PhD student Angelina Davis presented at the New England Psychological Association (NEPA) conference', detail:'Poster: "Activity Level Predicts Injury History in Children." Study of 404 children ages 6–8 found high physical activity intensity was significantly associated with lifetime injury history (OR = 1.33).'},
