@@ -120,12 +120,11 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
 .pub-accent .pub-paper::before{background:var(--accent)}
 .pub-sage .pub-paper::before{background:var(--sage)}
 .pub-paper:hover{box-shadow:0 12px 32px rgba(0,0,0,.08)}
-.pub-meta{font-family:var(--mn);font-size:.62rem;color:var(--mid);letter-spacing:.05em;text-transform:uppercase;margin-bottom:.6rem;display:flex;gap:8px;flex-wrap:wrap}
-.pub-journal{color:var(--steel)}
-.pub-title{font-family:var(--dp);font-size:.98rem;color:var(--navy);line-height:1.32;margin-bottom:.55rem}
-.pub-authors{font-size:.72rem;color:var(--mid);line-height:1.45;margin-bottom:.65rem}
-.pub-authors strong{color:var(--sky)}
 .pub-role{display:inline-block;font-family:var(--mn);font-size:.6rem;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:20px;background:var(--sand);color:var(--steel);margin-bottom:.75rem;align-self:flex-start}
+.pub-ref{font-size:.82rem;color:var(--ink);line-height:1.55;margin-bottom:.7rem;padding-left:1.3em;text-indent:-1.3em}
+.pub-ref em{font-style:italic}
+.pub-ref a{color:var(--sky);word-break:break-word}
+.pub-ref a:hover{text-decoration:underline}
 .pub-why{background:var(--sand);border-radius:8px;padding:.75rem .85rem;font-size:.78rem;color:var(--ink);line-height:1.5;margin-bottom:.7rem}
 .pub-why-label{display:block;font-family:var(--mn);font-size:.58rem;letter-spacing:.09em;text-transform:uppercase;color:var(--mid);margin-bottom:.3rem}
 .pub-link{font-family:var(--mn);font-size:.64rem;letter-spacing:.05em;color:var(--sky);text-transform:uppercase;text-decoration:none;margin-top:auto;align-self:flex-start}
@@ -427,100 +426,9 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
     <h2 class="st">Research, organized by focus</h2>
     <p class="sb">A cross-section of the lab's work, spanning founding studies, current trials, and the students and collaborators driving them forward.</p>
 
-    <div class="pub-pillar pub-sky">
-      <div class="pub-head"><div class="pub-name">Injury Prevention</div></div>
-      <div class="pub-row">
+    <div id="pub-pillars"></div>
 
-        <div class="pub-paper">
-          <div class="pub-meta"><span class="pub-journal">J. Safety Research</span><span>in press</span></div>
-          <h3 class="pub-title">The Moderating Role of Visual Perception Skills on the Association Between Temperamental Fear and Children's Pedestrian Safety</h3>
-          <p class="pub-authors">Davis, A.R., Schwebel, D.C., Johnston, A., McClure, L.A., Morgan, C.H., Hopkins Smith, C., Stager, L.M., Wang, Y., Wang, Y., &amp; <strong>Shen, J.</strong></p>
-          <span class="pub-role">Senior author · PhD Mentee · in press</span>
-          <div class="pub-why"><span class="pub-why-label">Why it matters</span>Extends the lab's earlier finding that fearful children take more pedestrian risks, testing whether visual perception skills change that relationship. A doctoral trainee is leading the analysis.</div>
-          <span class="pub-link pending">DOI pending</span>
-        </div>
-
-        <div class="pub-paper">
-          <div class="pub-meta"><span class="pub-journal">Prevention Science</span><span>2022</span></div>
-          <h3 class="pub-title">A Systematic Review on the Impact of Hot and Cool Executive Functions on Pediatric Injury Risks: A Meta-Analytic Structural Equation Modeling Approach</h3>
-          <p class="pub-authors"><strong>Shen, J.</strong>, Wang, Y., Kurpad, N., &amp; Schena, D.A.</p>
-          <span class="pub-role">First author · PhD Mentee</span>
-          <div class="pub-why"><span class="pub-why-label">Why it matters</span>Pooling 31 studies through advanced statistical modeling, this review separates emotion-driven "hot" executive function from purely cognitive "cool" executive function, clarifying which skill deficits future prevention programs should actually target.</div>
-          <a href="https://doi.org/10.1007/s11121-021-01271-2" class="pub-link" target="_blank" rel="noopener">Read the paper →</a>
-        </div>
-
-        <div class="pub-paper">
-          <div class="pub-meta"><span class="pub-journal">Health Psychology</span><span>2016</span></div>
-          <h3 class="pub-title">A Randomized Trial Evaluating Child Dog-Bite Prevention in Rural China Through Video-Based Testimonials</h3>
-          <p class="pub-authors"><strong>Shen, J.</strong>, Pang, S., &amp; Schwebel, D.C.</p>
-          <span class="pub-role">First author · PhD dissertation study</span>
-          <div class="pub-why"><span class="pub-why-label">Why it matters</span>In a randomized trial with 280 children in rural China, a simple video of other children's real testimonials raised safety knowledge and cut risky behavior around dogs. It's evidence that low-cost, story-based interventions can work in resource-limited settings.</div>
-          <a href="https://doi.org/10.1037/hea0000273" class="pub-link" target="_blank" rel="noopener">Read the paper →</a>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="pub-pillar pub-accent">
-      <div class="pub-head"><div class="pub-name">Neurodiversity</div></div>
-      <div class="pub-row">
-
-        <div class="pub-paper">
-          <div class="pub-meta"><span class="pub-journal">J. Attention Disorders</span><span>2023</span></div>
-          <h3 class="pub-title">A Population-Based Study on Injury Risk and Disparities Among Children With ADHD</h3>
-          <p class="pub-authors"><strong>Shen, J.</strong>, Shi, J., Gauthier, L., &amp; Li, W.</p>
-          <span class="pub-role">First author, PI</span>
-          <div class="pub-why"><span class="pub-why-label">Why it matters</span>Using nationally representative data, this study shows impaired attention and inhibitory control put children with ADHD at meaningfully higher injury risk than their peers, evidence that can guide screening and prevention.</div>
-          <a href="https://doi.org/10.1177/10870547231158386" class="pub-link" target="_blank" rel="noopener">Read the paper →</a>
-        </div>
-
-        <div class="pub-paper">
-          <div class="pub-meta"><span class="pub-journal">J. Attention Disorders</span><span>2023</span></div>
-          <h3 class="pub-title">The Economic Burden of Injuries in Children With ADHD in the U.S. From 2011 to 2020</h3>
-          <p class="pub-authors"><strong>Shen, J.</strong>, Shi, J., Gauthier, L., &amp; Li, W.</p>
-          <span class="pub-role">First author, PI</span>
-          <div class="pub-why"><span class="pub-why-label">Why it matters</span>Tracking a decade of national expenditure data, this companion study finds the economic burden of injury-related care for children with ADHD has nearly doubled, a concrete case for folding injury prevention into ADHD care.</div>
-          <a href="https://doi.org/10.1177/10870547231196328" class="pub-link" target="_blank" rel="noopener">Read the paper →</a>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="pub-pillar pub-sage">
-      <div class="pub-head"><div class="pub-name">Brain Injury Rehabilitation</div></div>
-      <div class="pub-row">
-
-        <div class="pub-paper">
-          <div class="pub-meta"><span class="pub-journal">Trials</span><span>2024</span></div>
-          <h3 class="pub-title">Efficacy of a Virtual Reality-Based Cognitive Interactive Training Program for Children With Traumatic Brain Injuries</h3>
-          <p class="pub-authors"><strong>Shen, J.</strong>, Wang, Y., Quinn, S., Suskauer, S., Birch, J., Busch, T.A., et al.</p>
-          <span class="pub-role">First author, PI</span>
-          <div class="pub-why"><span class="pub-why-label">Why it matters</span>The registered protocol for a randomized controlled trial testing whether a virtual-reality game (VICT) can retrain executive-function skills in children with TBI. It's designed as the empirical foundation for larger future trials.</div>
-          <a href="https://doi.org/10.1186/s13063-024-08049-1" class="pub-link" target="_blank" rel="noopener">Read the paper →</a>
-        </div>
-
-        <div class="pub-paper">
-          <div class="pub-meta"><span class="pub-journal">J. Pediatric Psychology</span><span>2025</span></div>
-          <h3 class="pub-title">Memory Outcomes and Interventions After Sports-Related Traumatic Brain Injuries in Pediatric and Young Adult Athletes: A Scoping Review</h3>
-          <p class="pub-authors">Davis, A.R., Charles, S.D., Papesh, M.H., Gerson, J., &amp; <strong>Shen, J.</strong></p>
-          <span class="pub-role">Senior author · PhD Mentee</span>
-          <div class="pub-why"><span class="pub-why-label">Why it matters</span>Memory problems are common after youth sports-related brain injuries, yet this review finds very few rehabilitation programs currently target memory specifically, identifying a clear gap for future research.</div>
-          <a href="https://doi.org/10.1093/jpepsy/jsaf075" class="pub-link" target="_blank" rel="noopener">Read the paper →</a>
-        </div>
-
-        <div class="pub-paper">
-          <div class="pub-meta"><span class="pub-journal">Clinical Psychology Review</span><span>2023</span></div>
-          <h3 class="pub-title">Family Matters: A Systematic Review and Meta-Analysis on the Efficacy of Family-Oriented Interventions for Children With Acquired Brain Injuries</h3>
-          <p class="pub-authors"><strong>Shen, J.</strong>, Zhao, S., Horn, T., Benkart, R., Busch, T., Vrabec, A., &amp; Taylor, H.G.</p>
-          <span class="pub-role">First author, PI</span>
-          <div class="pub-why"><span class="pub-why-label">Why it matters</span>A meta-analysis of 20 studies finds family-oriented interventions produce real, if modest, benefits for children with brain injuries and their parents. The exception is family functioning as a whole, which points to where the field's next interventions should focus.</div>
-          <a href="https://doi.org/10.1016/j.cpr.2022.102218" class="pub-link" target="_blank" rel="noopener">Read the paper →</a>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="pub-footer">Looking for something specific? <a href="https://scholar.google.com/citations?hl=en&user=PZkRpx8AAAAJ&view_op=list_works&sortby=pubdate" target="_blank" rel="noopener">Browse all 69 on Google Scholar →</a></div>
+    <div class="pub-footer">Looking for something specific? <a href="publications.html" id="pub-browse-all">Browse all publications →</a> <a href="https://scholar.google.com/citations?hl=en&user=PZkRpx8AAAAJ&view_op=list_works&sortby=pubdate" target="_blank" rel="noopener">View on Google Scholar</a></div>
   </div>
 </section>
 
@@ -628,6 +536,44 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
 .itg-modal-extra-list li::before{content:'●';position:absolute;left:0;top:.05em;color:var(--accent);font-size:.55em}
 .itg-modal-extra-sub{font-size:.68rem;text-transform:uppercase;letter-spacing:.07em;color:var(--mid);font-weight:600;margin:10px 0 6px}
 </style>
+
+<script src="data/publications-data.js"></script>
+<script>
+// ── Featured publications — reads the same database that drives publications.html. ──
+const PUB_THEMES = [
+  {key:'prevention', label:'Injury Prevention', cls:'pub-sky'},
+  {key:'neuro', label:'Neurodiversity', cls:'pub-accent'},
+  {key:'tbi', label:'Brain Injury Rehabilitation', cls:'pub-sage'}
+];
+
+function PUBcard(p){
+  const inPress = p.apa.includes('Advance online publication.');
+  const role = p.role + (inPress ? ' · In Press' : '');
+  return `
+  <div class="pub-paper">
+    <span class="pub-role">${role}</span>
+    <p class="pub-ref">${p.apa}</p>
+    ${p.note ? `<div class="pub-why"><span class="pub-why-label">Why it matters</span>${p.note}</div>` : ''}
+  </div>`;
+}
+
+(function renderFeaturedPublications(){
+  const container = document.getElementById('pub-pillars');
+  const featured = (typeof papers !== 'undefined' ? papers : []).filter(p => p.featured);
+  PUB_THEMES.forEach(theme => {
+    const items = featured.filter(p => p.theme === theme.key);
+    if (!items.length) return;
+    const pillar = document.createElement('div');
+    pillar.className = `pub-pillar ${theme.cls}`;
+    pillar.innerHTML = `<div class="pub-head"><div class="pub-name">${theme.label}</div></div><div class="pub-row">${items.map(PUBcard).join('')}</div>`;
+    container.appendChild(pillar);
+  });
+  const browseAll = document.getElementById('pub-browse-all');
+  if (browseAll && typeof papers !== 'undefined') {
+    browseAll.textContent = `Browse all ${papers.length} publications →`;
+  }
+})();
+</script>
 
 <script>
 // ── Team data — every fact sourced from CV, UML profile, or lab-confirmed conference posters. No fabricated links. ──
