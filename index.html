@@ -87,9 +87,7 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
 .tg{background:var(--sand);font-size:.68rem;padding:3px 9px;border-radius:20px;color:var(--steel);font-family:var(--mn)}
 
 /* ── IMPACT ── */
-.imp{background:linear-gradient(135deg,var(--navy) 0%,var(--steel) 100%);color:#fff}
-.ih{font-family:var(--dp);font-size:clamp(1.6rem,2.8vw,2.2rem);line-height:1.25;margin-bottom:1.1rem}
-.ih em{font-style:italic;color:var(--accent)}
+.eng-card{background:linear-gradient(135deg,var(--navy) 0%,var(--steel) 100%);border-radius:14px;padding:3rem 2.5rem;color:#fff;margin:2.5rem 0 3rem}
 .ihs{font-size:1rem;color:rgba(255,255,255,.7);max-width:640px;line-height:1.75;margin-bottom:2.5rem}
 .pw-tag{font-family:var(--bd);font-weight:600;font-size:1.05rem;color:var(--accent);margin-bottom:.6rem}
 
@@ -115,6 +113,7 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
 @media(max-width:760px){
   .pw-examples{grid-template-columns:1fr}
   .pw-tab{margin-right:1.25rem;font-size:.78rem}
+  .eng-card{padding:2rem 1.5rem}
 }
 
 /* ── PUBLICATIONS ── */
@@ -180,7 +179,6 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
 .ji{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
 .prks{display:flex;flex-direction:column;gap:1rem;margin-top:2rem}
 .pk{display:flex;gap:1rem;align-items:flex-start;background:var(--sand);border-radius:8px;padding:1.2rem}
-.pki{font-size:1.4rem;flex-shrink:0;width:36px;text-align:center;margin-top:1px}
 .pkt{font-weight:600;font-size:.88rem;color:var(--navy);margin-bottom:3px}
 .pkb{font-size:.8rem;color:var(--mid);line-height:1.55}
 .cb{background:var(--navy);border-radius:12px;padding:2.25rem;color:#fff}
@@ -402,142 +400,6 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
     </div>
   </div>
 </section>
-
-<!-- STUDENT ENGAGEMENT -->
-<section class="sec imp" aria-label="Student engagement">
-  <div class="con">
-    <div class="slb">Student engagement</div>
-    <h2 class="ih">Research training, built <em>one skill at a time</em></h2>
-    <p class="ihs">Literature reviews, family interviews, data analysis, manuscript writing, conference presentations: students build a real range of skills, working across psychology, nursing, public health, engineering, and beyond.</p>
-
-    <div class="pw-tabs" role="tablist" id="pw-tabs"></div>
-    <div id="pw-panels"></div>
-
-    <div class="fnds-line">Research supported by NIH &middot; HRSA &middot; UML intramural grants</div>
-  </div>
-</section>
-
-<!-- ──────────────────────────────────────────────────────────────
-     STUDENT ENGAGEMENT DATA
-     Edit the values below to update the section; the four tabs
-     render from this object. Nothing here is user-facing markup.
-
-     Update cadence: refresh whenever Dr. Shen's CV is updated
-     (typically once a year). Hand the new CV to Claude Code along
-     with this file and ask it to re-verify each number using the
-     same method used to build this section:
-       1. Pull the "Student Mentoring" section of the CV for the
-          full, named list of UML/lab mentees (undergrad/master's/
-          doctoral).
-       2. For "mentor.number" (total mentored) and the UG/MA/PhD
-          breakdown in "mentor.sub", use the CV's own summary line
-          under STUDENT MENTORING.
-       3. For "pubs.number", use the CV's own Publications summary
-          line ("Mentored Students as Coauthors" + "Senior Author
-          with Mentored Student as First Author").
-       4. For "conf.number" and "conf.sub", do NOT just count
-          asterisks in the CV's presentation list. Cross-reference
-          every asterisked co-author's surname against the named
-          roster from step 1 first. The CV marks ANY student
-          co-author (including Dr. Schwebel's UAB mentees and other
-          collaborators' students), not just this lab's own mentees,
-          so an unfiltered asterisk count will overstate the number.
-       5. Swap "examples" only for facts you can point to in the CV,
-          the Narrative of Accomplishments, or something Dr. Shen
-          states directly. Never infer a number or an outcome.
-       6. Keep each "source" note updated to say where the current
-          number/example came from, even though it won't render.
-     ────────────────────────────────────────────────────────────── -->
-<script>
-const IMPACT_DATA = [
-  {
-    id: "mentor",
-    tabLabel: "Mentorship & Training",
-    tag: "Research experience, at every level",
-    number: "43",
-    numLabel: "students mentored at UML since 2020",
-    sub: "22 undergraduate &middot; 9 master's &middot; 12 doctoral",
-    overview: "Training looks different depending on what a student is looking for, from a semester of Research Service Learning or Directed Study to a doctoral assistantship or mentorship through a qualifying paper or dissertation.",
-    examples: [
-      "In spring 2024 alone, the lab supported 13 student-led research projects.",
-      "Entry points include the FAHSS Emerging Scholars Program, Honors College Fellowship, and Moloney Scholar Fellowship for undergraduates, and NIH- or HRSA-funded assistantships for doctoral students."
-    ],
-    source: "CV, Student Mentoring section."
-  },
-  {
-    id: "pubs",
-    tabLabel: "Student-Authored Research",
-    tag: "Coauthors, not just assistants",
-    number: "9",
-    numLabel: "papers with a student coauthor at UML",
-    sub: "2 with a mentee as first author &middot; 7 as coauthor",
-    overview: "Mentored students don't just assist with the research, they coauthor it: shaping a research question, defending an analytic choice, and seeing a manuscript through peer review.",
-    examples: [
-      "Recent student-coauthored work appears in journals including <em>Prevention Science</em> and <em>Rehabilitation Psychology</em>.",
-      "In a 2026 paper in the <em>Journal of Safety Research</em>, Angelina Davis is first author with Dr. Shen as senior author."
-    ],
-    source: "CV, Publications summary; Journal of Safety Research (in press), corroborated by Narrative of Accomplishments."
-  },
-  {
-    id: "conf",
-    tabLabel: "Conference Presentations",
-    tag: "Students take the podium",
-    number: "23",
-    numLabel: "conference presentations with a lab student since 2020",
-    sub: "20 with the student as lead presenter",
-    overview: "Presenting original research, not just helping with it, is part of training here. Students take the podium at regional and national meetings starting as undergraduates.",
-    examples: [
-      "Angelina Davis, PhD student and Lab Manager, has led seven conference presentations since 2024, most recently at the Eastern Psychological Association's 2026 convention.",
-      "A 2024 poster led by Tonghui Xu won the Excellence in Research Methods Student Award at the Rehabilitation Psychology Conference."
-    ],
-    source: "CV, conference presentations, hand-tallied against the Student Mentoring roster to exclude non-lab-mentee coauthors."
-  },
-  {
-    id: "comm",
-    tabLabel: "Community Engagement",
-    tag: "Family-partnered research",
-    number: null,
-    numLabel: null,
-    sub: null,
-    overview: "Community engagement here means direct partnership with families in the lab's research, not one-off outreach events.",
-    examples: [
-      "A mixed-methods interview study on injury-prevention barriers among families of children with ADHD, co-developed and run by four Pediatric Injury Research Lab students across psychology, nursing, and health sciences, has engaged families and is ongoing.",
-      "Both of the lab's HRSA-funded autism grants, the Autism Secondary Data Analysis Research grant and the Maternal and Child Health Faculty Development Fellowship (via UNC Chapel Hill), included a Community Advisory Board of autistic individuals and family members who helped guide the direction of the research rather than serve as study subjects."
-    ],
-    source: "example 1, Narrative of Accomplishments, Research Domain 1 / Injury Disparity in Neurodiverse Children. example 2, described directly by Dr. Shen: both HRSA autism grants (Autism SDAR; MCH Faculty Development Fellowship) included Community Advisory Board engagement."
-  }
-];
-
-function IMPACTrender(){
-  const tabsEl = document.getElementById("pw-tabs");
-  const panelsEl = document.getElementById("pw-panels");
-
-  tabsEl.innerHTML = IMPACT_DATA.map((t,i) =>
-    `<button class="pw-tab${i===0?' active':''}" role="tab" aria-selected="${i===0}" data-tab="${t.id}">${t.tabLabel}</button>`
-  ).join("");
-
-  panelsEl.innerHTML = IMPACT_DATA.map((t,i) => `
-    <div class="pw-panel${i===0?' active':''}" data-panel="${t.id}">
-      <div class="pw-tag">${t.tag}</div>
-      ${t.number ? `<div class="pw-num-row"><div class="pw-num">${t.number}</div><div class="pw-num-label">${t.numLabel}</div></div>` : ''}
-      ${t.sub ? `<div class="pw-sub">${t.sub}</div>` : ''}
-      <p class="pw-overview">${t.overview}</p>
-      <div class="pw-examples">${t.examples.map(ex => `<div class="pw-example">${ex}</div>`).join('')}</div>
-    </div>`
-  ).join("");
-
-  tabsEl.querySelectorAll(".pw-tab").forEach(function(tab){
-    tab.addEventListener("click", function(){
-      const name = tab.getAttribute("data-tab");
-      tabsEl.querySelectorAll(".pw-tab").forEach(t => { t.classList.remove("active"); t.setAttribute("aria-selected","false"); });
-      panelsEl.querySelectorAll(".pw-panel").forEach(p => p.classList.remove("active"));
-      tab.classList.add("active"); tab.setAttribute("aria-selected","true");
-      panelsEl.querySelector('.pw-panel[data-panel="' + name + '"]').classList.add("active");
-    });
-  });
-}
-IMPACTrender();
-</script>
 
 <!-- PUBLICATIONS -->
 <section id="publications" class="sec">
@@ -829,16 +691,24 @@ ITGrender();
 <!-- JOIN US -->
 <section id="join" class="sec">
   <div class="con">
+    <div class="slb">Open positions</div>
+    <h2 class="st">Why join our lab?</h2>
+    <p class="sb">A rigorous, supportive environment with real opportunities to lead projects, publish, and present at national conferences.</p>
+
+    <div class="eng-card">
+      <p class="ihs">Literature reviews, family interviews, data analysis, manuscript writing, conference presentations: students build a real range of skills, working across psychology, nursing, public health, engineering, and beyond.</p>
+
+      <div class="pw-tabs" role="tablist" id="pw-tabs"></div>
+      <div id="pw-panels"></div>
+
+      <div class="fnds-line">Research supported by NIH &middot; HRSA &middot; UML intramural grants</div>
+    </div>
+
     <div class="ji">
       <div>
-        <div class="slb">Open positions</div>
-        <h2 class="st">Why join our lab?</h2>
-        <p class="sb">A rigorous, supportive environment with real opportunities to lead projects, publish, and present at national conferences.</p>
         <div class="prks">
-          <div class="pk"><div class="pki" aria-hidden="true">🔬</div><div><div class="pkt">Cutting-edge methods</div><p class="pkb">Hands-on experience with VR development, fNIRS neuroimaging, randomized controlled trials, and national database analysis in R.</p></div></div>
-          <div class="pk"><div class="pki" aria-hidden="true">📑</div><div><div class="pkt">Publication opportunities</div><p class="pkb">Students are co-authors on peer-reviewed papers across psychology, medicine, and computer science journals.</p></div></div>
-          <div class="pk"><div class="pki" aria-hidden="true">🌐</div><div><div class="pkt">Interdisciplinary network</div><p class="pkb">Collaborate with partners at NIH and universities nationwide across psychology, computer science, and medicine.</p></div></div>
-          <div class="pk"><div class="pki" aria-hidden="true">🎓</div><div><div class="pkt">Mentored for success</div><p class="pkb">One-on-one mentoring, conference travel support, and training in grant writing and scientific communication.</p></div></div>
+          <div class="pk"><div><div class="pkt">Cutting-edge methods</div><p class="pkb">Hands-on experience with VR development, fNIRS neuroimaging, randomized controlled trials, and national database analysis in R.</p></div></div>
+          <div class="pk"><div><div class="pkt">Interdisciplinary network</div><p class="pkb">Collaborate with partners at NIH and universities nationwide across psychology, computer science, and medicine.</p></div></div>
         </div>
       </div>
       <div class="cb">
@@ -854,6 +724,128 @@ ITGrender();
     </div>
   </div>
 </section>
+
+<!-- ──────────────────────────────────────────────────────────────
+     STUDENT ENGAGEMENT DATA
+     Edit the values below to update the section; the four tabs
+     render from this object. Nothing here is user-facing markup.
+
+     Update cadence: refresh whenever Dr. Shen's CV is updated
+     (typically once a year). Hand the new CV to Claude Code along
+     with this file and ask it to re-verify each number using the
+     same method used to build this section:
+       1. Pull the "Student Mentoring" section of the CV for the
+          full, named list of UML/lab mentees (undergrad/master's/
+          doctoral).
+       2. For "mentor.number" (total mentored) and the UG/MA/PhD
+          breakdown in "mentor.sub", use the CV's own summary line
+          under STUDENT MENTORING.
+       3. For "pubs.number", use the CV's own Publications summary
+          line ("Mentored Students as Coauthors" + "Senior Author
+          with Mentored Student as First Author").
+       4. For "conf.number" and "conf.sub", do NOT just count
+          asterisks in the CV's presentation list. Cross-reference
+          every asterisked co-author's surname against the named
+          roster from step 1 first. The CV marks ANY student
+          co-author (including Dr. Schwebel's UAB mentees and other
+          collaborators' students), not just this lab's own mentees,
+          so an unfiltered asterisk count will overstate the number.
+       5. Swap "examples" only for facts you can point to in the CV,
+          the Narrative of Accomplishments, or something Dr. Shen
+          states directly. Never infer a number or an outcome.
+       6. Keep each "source" note updated to say where the current
+          number/example came from, even though it won't render.
+     ────────────────────────────────────────────────────────────── -->
+<script>
+const IMPACT_DATA = [
+  {
+    id: "mentor",
+    tabLabel: "Mentorship & Training",
+    tag: "Research experience, at every level",
+    number: "43",
+    numLabel: "students mentored at UML since 2020",
+    sub: "22 undergraduate &middot; 9 master's &middot; 12 doctoral",
+    overview: "Training looks different depending on what a student is looking for, from a semester of Research Service Learning or Directed Study to a doctoral assistantship or mentorship through a qualifying paper or dissertation.",
+    examples: [
+      "In spring 2024 alone, the lab supported 13 student-led research projects.",
+      "Entry points include the FAHSS Emerging Scholars Program, Honors College Fellowship, and Moloney Scholar Fellowship for undergraduates, and NIH- or HRSA-funded assistantships for doctoral students."
+    ],
+    source: "CV, Student Mentoring section."
+  },
+  {
+    id: "pubs",
+    tabLabel: "Student-Authored Research",
+    tag: "Coauthors, not just assistants",
+    number: "9",
+    numLabel: "papers with a student coauthor at UML",
+    sub: "2 with a mentee as first author &middot; 7 as coauthor",
+    overview: "Mentored students don't just assist with the research, they coauthor it: shaping a research question, defending an analytic choice, and seeing a manuscript through peer review.",
+    examples: [
+      "Recent student-coauthored work appears in journals including <em>Prevention Science</em> and <em>Rehabilitation Psychology</em>.",
+      "In a 2026 paper in the <em>Journal of Safety Research</em>, Angelina Davis is first author with Dr. Shen as senior author."
+    ],
+    source: "CV, Publications summary; Journal of Safety Research (in press), corroborated by Narrative of Accomplishments."
+  },
+  {
+    id: "conf",
+    tabLabel: "Conference Presentations",
+    tag: "Students take the podium",
+    number: "23",
+    numLabel: "conference presentations with a lab student since 2020",
+    sub: "20 with the student as lead presenter",
+    overview: "Presenting original research, not just helping with it, is part of training here. Students take the podium at regional and national meetings starting as undergraduates.",
+    examples: [
+      "Angelina Davis, PhD student and Lab Manager, has led seven conference presentations since 2024, most recently at the Eastern Psychological Association's 2026 convention.",
+      "A 2024 poster led by Tonghui Xu won the Excellence in Research Methods Student Award at the Rehabilitation Psychology Conference."
+    ],
+    source: "CV, conference presentations, hand-tallied against the Student Mentoring roster to exclude non-lab-mentee coauthors."
+  },
+  {
+    id: "comm",
+    tabLabel: "Community Engagement",
+    tag: "Family-partnered research",
+    number: null,
+    numLabel: null,
+    sub: null,
+    overview: "Community engagement here means direct partnership with families in the lab's research, not one-off outreach events.",
+    examples: [
+      "A mixed-methods interview study on injury-prevention barriers among families of children with ADHD, co-developed and run by four Pediatric Injury Research Lab students across psychology, nursing, and health sciences, has engaged families and is ongoing.",
+      "Both of the lab's HRSA-funded autism grants, the Autism Secondary Data Analysis Research grant and the Maternal and Child Health Faculty Development Fellowship (via UNC Chapel Hill), included a Community Advisory Board of autistic individuals and family members who helped guide the direction of the research rather than serve as study subjects."
+    ],
+    source: "example 1, Narrative of Accomplishments, Research Domain 1 / Injury Disparity in Neurodiverse Children. example 2, described directly by Dr. Shen: both HRSA autism grants (Autism SDAR; MCH Faculty Development Fellowship) included Community Advisory Board engagement."
+  }
+];
+
+function IMPACTrender(){
+  const tabsEl = document.getElementById("pw-tabs");
+  const panelsEl = document.getElementById("pw-panels");
+
+  tabsEl.innerHTML = IMPACT_DATA.map((t,i) =>
+    `<button class="pw-tab${i===0?' active':''}" role="tab" aria-selected="${i===0}" data-tab="${t.id}">${t.tabLabel}</button>`
+  ).join("");
+
+  panelsEl.innerHTML = IMPACT_DATA.map((t,i) => `
+    <div class="pw-panel${i===0?' active':''}" data-panel="${t.id}">
+      <div class="pw-tag">${t.tag}</div>
+      ${t.number ? `<div class="pw-num-row"><div class="pw-num">${t.number}</div><div class="pw-num-label">${t.numLabel}</div></div>` : ''}
+      ${t.sub ? `<div class="pw-sub">${t.sub}</div>` : ''}
+      <p class="pw-overview">${t.overview}</p>
+      <div class="pw-examples">${t.examples.map(ex => `<div class="pw-example">${ex}</div>`).join('')}</div>
+    </div>`
+  ).join("");
+
+  tabsEl.querySelectorAll(".pw-tab").forEach(function(tab){
+    tab.addEventListener("click", function(){
+      const name = tab.getAttribute("data-tab");
+      tabsEl.querySelectorAll(".pw-tab").forEach(t => { t.classList.remove("active"); t.setAttribute("aria-selected","false"); });
+      panelsEl.querySelectorAll(".pw-panel").forEach(p => p.classList.remove("active"));
+      tab.classList.add("active"); tab.setAttribute("aria-selected","true");
+      panelsEl.querySelector('.pw-panel[data-panel="' + name + '"]').classList.add("active");
+    });
+  });
+}
+IMPACTrender();
+</script>
 
 <!-- NEWS -->
 <section id="news" class="sec snd">

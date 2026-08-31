@@ -31,10 +31,11 @@ correctly), and visually check the change. There is no test suite to run.
 **Gotcha:** opening `index.html` directly via `file://` can silently fail
 to load the *external* `<script src="data/publications-data.js">` that
 drives the Publications section, while everything else on the page
-(Team, News, Student Engagement) still renders fine, since those are
-driven by inline `<script>` blocks with data baked directly into the
-HTML. If Publications looks empty while nothing else does, this is
-almost certainly the cause, not a real bug — serve the directory instead
+(Team, News, the engagement tabs inside Join Us) still renders fine,
+since those are driven by inline `<script>` blocks with data baked
+directly into the HTML. If Publications looks empty while nothing else
+does, this is almost certainly the cause, not a real bug — serve the
+directory instead
 of opening the file: `python3 -m http.server 8000`, then open
 `http://localhost:8000/index.html`.
 
@@ -46,29 +47,46 @@ of opening the file: `python3 -m http.server 8000`, then open
   `JetBrains Mono` for small labels/eyebrows/tags. All loaded via Google
   Fonts `<link>` in `<head>`.
 - **Layout:** single scrolling page, sections in this order: Nav → Hero →
-  Research Pillars (3 cards) → Student Engagement (tabbed) → Publications →
-  Team ("Meet the Lab") → Join Us (grad student recruiting) → News →
-  Contact/Footer.
+  Research Pillars (3 cards) → Publications → Team ("Meet the Lab") →
+  Join Us (grad student recruiting, including the tabbed student
+  engagement content) → News → Contact/Footer.
 - All custom CSS classes are short/abbreviated (e.g. `.hin`, `.rc`, `.tgd`,
   `.itg-card`) to keep the single file compact. Follow the existing naming
   convention rather than introducing verbose class names.
 
-## The "Student Engagement" section — structure and update cadence
+## The "Why join our lab?" section — merged structure and update cadence
 
-Between Research Pillars and Publications sits a tabbed section
-(`aria-label="Student engagement"`) that replaced an earlier PI-facing
-"Impact Numbers" stats strip (funding total, publication count, years
-active). That framing was deliberately dropped in favor of student-facing
-training/engagement stats — don't reintroduce total-funding or
-total-publications figures here.
+The `#join` section (between Team and News) now combines two things that
+used to live separately: the grad-student-recruiting content (perk cards
++ a "Ready to apply?" CTA box) and a tabbed "Student Engagement" section
+that used to sit between Research Pillars and Publications as its own
+full-bleed navy section. That standalone section had itself already
+replaced an even earlier PI-facing "Impact Numbers" stats strip (funding
+total, publication count, years active) — that framing was deliberately
+dropped in favor of student-facing training/engagement stats. **Don't
+split the tabs back out into their own standalone section, and don't
+reintroduce total-funding or total-publications figures here** — both of
+those have already been tried and deliberately moved away from.
 
-It renders from a JS object `IMPACT_DATA` (search for `const IMPACT_DATA`
-in the file), one entry per tab: `mentor`, `pubs`, `conf`, `comm`. Each
-entry has `tabLabel`, `tag`, an optional `number`/`numLabel`/`sub`
-(Community Engagement intentionally omits these — no clean single number
-exists for it), `overview`, `examples` (2 short fact strings), and a
-`source` field that is never rendered — it exists only so a future update
-can see where a number/example came from.
+The tabbed content now lives inside `#join`, wrapped in an `.eng-card`
+(a navy card, not a full-bleed section) directly below the section's
+"Why join our lab?" heading and intro line. It renders from a JS object
+`IMPACT_DATA` (search for `const IMPACT_DATA` in the file, right after
+the `#join` section closes), one entry per tab: `mentor`, `pubs`, `conf`,
+`comm`. Each entry has `tabLabel`, `tag`, an optional
+`number`/`numLabel`/`sub` (Community Engagement intentionally omits
+these — no clean single number exists for it), `overview`, `examples`
+(2 short fact strings), and a `source` field that is never rendered — it
+exists only so a future update can see where a number/example came from.
+
+Because the tabs now back up the "students publish here" and "students
+are mentored here" claims with real numbers, the two perk cards that
+made the same claims in prose ("Publication opportunities," "Mentored
+for success") were removed as redundant when the sections merged — only
+"Cutting-edge methods" and "Interdisciplinary network" remain. All perk
+cards also lost their emoji icon (the `.pki` div) in the same pass, as a
+deliberate simplification — don't reintroduce icons here without being
+asked.
 
 **Update cadence:** refresh whenever Dr. Shen's CV is updated (annual).
 The full re-verification method — which CV sections map to which fields,
@@ -79,10 +97,12 @@ against the named Student Mentoring roster first — is documented in the
 HTML comment directly above `const IMPACT_DATA` in `index.html`. Read
 that comment before updating rather than re-deriving the method here.
 
-**Convention:** any new full-bleed section like this needs both `sec`
-(for the standard `padding:5rem 2rem`) and its own background class
-(`imp` here) on the `<section>` tag — `.con` alone only centers content,
-it adds no padding of its own.
+**Convention:** `.eng-card` gives the tabs their navy background and
+padding now that they live as a card inside a light `.sec`, not as a
+full-bleed section of their own (the old `.imp` background class this
+used before the merge no longer exists — don't resurrect it). Its mobile
+padding override lives in the existing `@media(max-width:760px)` block
+alongside `.pw-tab`/`.pw-examples`, not a new media query.
 
 ## The "Meet the Lab" team section — important structure
 
