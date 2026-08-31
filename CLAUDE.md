@@ -28,6 +28,16 @@ a browser (`open index.html` on Mac, or a simple local server like
 `python3 -m http.server` if relative asset paths need to resolve
 correctly), and visually check the change. There is no test suite to run.
 
+**Gotcha:** opening `index.html` directly via `file://` can silently fail
+to load the *external* `<script src="data/publications-data.js">` that
+drives the Publications section, while everything else on the page
+(Team, News, Student Engagement) still renders fine, since those are
+driven by inline `<script>` blocks with data baked directly into the
+HTML. If Publications looks empty while nothing else does, this is
+almost certainly the cause, not a real bug — serve the directory instead
+of opening the file: `python3 -m http.server 8000`, then open
+`http://localhost:8000/index.html`.
+
 ## Design system (do not deviate without being asked)
 
 - **Colors:** navy `#0D1F3C`, steel `#1B3A6B`, sky blue `#2E6CA8`, amber
@@ -36,12 +46,43 @@ correctly), and visually check the change. There is no test suite to run.
   `JetBrains Mono` for small labels/eyebrows/tags. All loaded via Google
   Fonts `<link>` in `<head>`.
 - **Layout:** single scrolling page, sections in this order: Nav → Hero →
-  Research Pillars (3 cards) → Impact numbers strip → Publications →
+  Research Pillars (3 cards) → Student Engagement (tabbed) → Publications →
   Team ("Meet the Lab") → Join Us (grad student recruiting) → News →
   Contact/Footer.
 - All custom CSS classes are short/abbreviated (e.g. `.hin`, `.rc`, `.tgd`,
   `.itg-card`) to keep the single file compact. Follow the existing naming
   convention rather than introducing verbose class names.
+
+## The "Student Engagement" section — structure and update cadence
+
+Between Research Pillars and Publications sits a tabbed section
+(`aria-label="Student engagement"`) that replaced an earlier PI-facing
+"Impact Numbers" stats strip (funding total, publication count, years
+active). That framing was deliberately dropped in favor of student-facing
+training/engagement stats — don't reintroduce total-funding or
+total-publications figures here.
+
+It renders from a JS object `IMPACT_DATA` (search for `const IMPACT_DATA`
+in the file), one entry per tab: `mentor`, `pubs`, `conf`, `comm`. Each
+entry has `tabLabel`, `tag`, an optional `number`/`numLabel`/`sub`
+(Community Engagement intentionally omits these — no clean single number
+exists for it), `overview`, `examples` (2 short fact strings), and a
+`source` field that is never rendered — it exists only so a future update
+can see where a number/example came from.
+
+**Update cadence:** refresh whenever Dr. Shen's CV is updated (annual).
+The full re-verification method — which CV sections map to which fields,
+and the specific pitfall that the CV's asterisk-marks-student-coauthor
+convention includes collaborators' students (e.g. Dr. Schwebel's UAB
+mentees), not just this lab's own mentees, so counts must be filtered
+against the named Student Mentoring roster first — is documented in the
+HTML comment directly above `const IMPACT_DATA` in `index.html`. Read
+that comment before updating rather than re-deriving the method here.
+
+**Convention:** any new full-bleed section like this needs both `sec`
+(for the standard `padding:5rem 2rem`) and its own background class
+(`imp` here) on the `<section>` tag — `.con` alone only centers content,
+it adds no padding of its own.
 
 ## The "Meet the Lab" team section — important structure
 
