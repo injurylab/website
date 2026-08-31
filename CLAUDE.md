@@ -68,16 +68,21 @@ split the tabs back out into their own standalone section, and don't
 reintroduce total-funding or total-publications figures here** — both of
 those have already been tried and deliberately moved away from.
 
-The tabbed content now lives inside `#join`, wrapped in an `.eng-card`
-(a navy card, not a full-bleed section) directly below the section's
-"Why join our lab?" heading and intro line. It renders from a JS object
-`IMPACT_DATA` (search for `const IMPACT_DATA` in the file, right after
-the `#join` section closes), one entry per tab: `mentor`, `pubs`, `conf`,
-`comm`. Each entry has `tabLabel`, `tag`, an optional
-`number`/`numLabel`/`sub` (Community Engagement intentionally omits
-these — no clean single number exists for it), `overview`, `examples`
-(2 short fact strings), and a `source` field that is never rendered — it
-exists only so a future update can see where a number/example came from.
+Inside `#join`, the section now reads top to bottom as a pitch, then
+quick perks, then proof, then a clear call to action: the "Why join our
+lab?" heading and intro line, then the two perk cards (`.prks`, now a
+2-column row, not a stack), then the tabbed evidence card (`.eng-card`,
+a navy card, not a full-bleed section), then the "Ready to apply?" CTA
+box (`.cb.cb-closing`, centered at a constrained width as the section's
+final element, not paired side by side with the perks in a grid
+anymore). The tabs render from a JS object `IMPACT_DATA` (search for
+`const IMPACT_DATA` in the file, right after the `#join` section
+closes), one entry per tab: `mentor`, `pubs`, `conf`, `comm`. Each entry
+has `tabLabel`, `tag`, an optional `number`/`numLabel`/`sub` (Community
+Engagement intentionally omits these — no clean single number exists for
+it), `overview`, `examples` (2 short fact strings), and a `source` field
+that is never rendered — it exists only so a future update can see where
+a number/example came from.
 
 Because the tabs now back up the "students publish here" and "students
 are mentored here" claims with real numbers, the two perk cards that
@@ -100,9 +105,26 @@ that comment before updating rather than re-deriving the method here.
 **Convention:** `.eng-card` gives the tabs their navy background and
 padding now that they live as a card inside a light `.sec`, not as a
 full-bleed section of their own (the old `.imp` background class this
-used before the merge no longer exists — don't resurrect it). Its mobile
-padding override lives in the existing `@media(max-width:760px)` block
-alongside `.pw-tab`/`.pw-examples`, not a new media query.
+used before the merge no longer exists — don't resurrect it). `.cb-closing`
+(`max-width:640px;margin:0 auto`) is what keeps the CTA box readable
+instead of stretching edge to edge now that it's not sharing a 2-column
+grid with the perks anymore.
+
+**Gotcha: this file's mobile overrides only work if they come after their
+base rule in source order.** The single `@media(max-width:760px)` block
+(currently sitting right after the `.stps`/`.stxt` rules, at the end of
+the JOIN CSS) holds mobile tweaks for several unrelated components
+(`.pw-tab`, `.pw-examples`, `.eng-card`, `.prks`) — not because they're
+related, but because CSS resolves a tie in specificity by whichever rule
+comes *later* in the file, media query or not. When `.prks`'s base rule
+briefly lived below this media query during a reorder, its mobile
+override was silently ignored (grid stayed 2 columns at every width) even
+though the CSS looked correct and no console error appeared — the only
+way to catch it was checking `getComputedStyle` at a narrow width. If you
+add a new mobile override here, or move a class's base rule around,
+confirm in a browser (not just by reading the CSS) that the base rule
+still sits earlier in the file than this media query, or move the media
+query again rather than assuming order doesn't matter.
 
 ## The "Meet the Lab" team section — important structure
 

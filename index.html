@@ -110,12 +110,6 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
 
 .fnds-line{margin-top:2.75rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.1);font-size:.72rem;color:rgba(255,255,255,.4);font-family:var(--mn);letter-spacing:.04em}
 
-@media(max-width:760px){
-  .pw-examples{grid-template-columns:1fr}
-  .pw-tab{margin-right:1.25rem;font-size:.78rem}
-  .eng-card{padding:2rem 1.5rem}
-}
-
 /* ── PUBLICATIONS ── */
 .pl{font-family:var(--mn);font-size:.68rem;letter-spacing:.06em;color:var(--sky);border:1px solid currentColor;padding:4px 11px;border-radius:4px;text-transform:uppercase;transition:background .2s,color .2s}
 .pl:hover{background:var(--sky);color:#fff}
@@ -176,18 +170,25 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
 .pb3{background:rgba(232,184,75,.12);border:1px solid rgba(232,184,75,.4);border-radius:20px;padding:3px 10px;font-size:.68rem;color:#b88a2a}
 
 /* ── JOIN ── */
-.ji{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
-.prks{display:flex;flex-direction:column;gap:1rem;margin-top:2rem}
+.prks{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:2rem}
 .pk{display:flex;gap:1rem;align-items:flex-start;background:var(--sand);border-radius:8px;padding:1.2rem}
 .pkt{font-weight:600;font-size:.88rem;color:var(--navy);margin-bottom:3px}
 .pkb{font-size:.8rem;color:var(--mid);line-height:1.55}
 .cb{background:var(--navy);border-radius:12px;padding:2.25rem;color:#fff}
+.cb-closing{max-width:640px;margin:0 auto}
 .ct{font-family:var(--dp);font-size:1.5rem;margin-bottom:.7rem}
 .cbody{font-size:.88rem;color:rgba(255,255,255,.62);margin-bottom:1.5rem;line-height:1.7}
 .stps{display:flex;flex-direction:column;gap:11px;margin-bottom:1.75rem}
 .stp{display:flex;gap:11px;align-items:flex-start}
 .snum{width:26px;height:26px;background:var(--accent);color:var(--navy);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.75rem;flex-shrink:0}
 .stxt{font-size:.83rem;color:rgba(255,255,255,.72);line-height:1.5;padding-top:3px}
+
+@media(max-width:760px){
+  .pw-examples{grid-template-columns:1fr}
+  .pw-tab{margin-right:1.25rem;font-size:.78rem}
+  .eng-card{padding:2rem 1.5rem}
+  .prks{grid-template-columns:1fr}
+}
 
 /* ── NEWS + PARTICIPATE ── */
 .tc2{display:grid;grid-template-columns:1fr 1fr;gap:3rem;margin-top:3rem}
@@ -235,7 +236,6 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
   .tgd{grid-template-columns:1fr 1fr}
   .pr{grid-template-columns:1fr}
   .pr .tph{height:160px}
-  .ji{grid-template-columns:1fr}
   .tc2{grid-template-columns:1fr}
   .cg{grid-template-columns:1fr}
 }
@@ -695,6 +695,11 @@ ITGrender();
     <h2 class="st">Why join our lab?</h2>
     <p class="sb">A rigorous, supportive environment with real opportunities to lead projects, publish, and present at national conferences.</p>
 
+    <div class="prks">
+      <div class="pk"><div><div class="pkt">Cutting-edge methods</div><p class="pkb">Hands-on experience with VR development, fNIRS neuroimaging, randomized controlled trials, and national database analysis in R.</p></div></div>
+      <div class="pk"><div><div class="pkt">Interdisciplinary network</div><p class="pkb">Collaborate with partners at NIH and universities nationwide across psychology, computer science, and medicine.</p></div></div>
+    </div>
+
     <div class="eng-card">
       <p class="ihs">Literature reviews, family interviews, data analysis, manuscript writing, conference presentations: students build a real range of skills, working across psychology, nursing, public health, engineering, and beyond.</p>
 
@@ -704,23 +709,15 @@ ITGrender();
       <div class="fnds-line">Research supported by NIH &middot; HRSA &middot; UML intramural grants</div>
     </div>
 
-    <div class="ji">
-      <div>
-        <div class="prks">
-          <div class="pk"><div><div class="pkt">Cutting-edge methods</div><p class="pkb">Hands-on experience with VR development, fNIRS neuroimaging, randomized controlled trials, and national database analysis in R.</p></div></div>
-          <div class="pk"><div><div class="pkt">Interdisciplinary network</div><p class="pkb">Collaborate with partners at NIH and universities nationwide across psychology, computer science, and medicine.</p></div></div>
-        </div>
+    <div class="cb cb-closing">
+      <div class="ct">Ready to apply?</div>
+      <p class="cbody">We consider applications on a rolling basis. PhD students are admitted through the UMass Lowell Psychology PhD program. Research assistantships and honours thesis positions also available.</p>
+      <div class="stps">
+        <div class="stp"><div class="snum">1</div><p class="stxt">Read recent publications to understand our research agenda.</p></div>
+        <div class="stp"><div class="snum">2</div><p class="stxt">Email Dr. Shen with your CV and a brief statement of research interests.</p></div>
+        <div class="stp"><div class="snum">3</div><p class="stxt"><em>PhD applicants:</em> Apply through the <a href="https://www.uml.edu/fahss/psychology/programs/graduate/phd-psychology/" target="_blank" rel="noopener" style="color:var(--accent)">UML Psychology PhD program</a>, listing Dr. Shen as your preferred advisor.</p></div>
       </div>
-      <div class="cb">
-        <div class="ct">Ready to apply?</div>
-        <p class="cbody">We consider applications on a rolling basis. PhD students are admitted through the UMass Lowell Psychology PhD program. Research assistantships and honours thesis positions also available.</p>
-        <div class="stps">
-          <div class="stp"><div class="snum">1</div><p class="stxt">Read recent publications to understand our research agenda.</p></div>
-          <div class="stp"><div class="snum">2</div><p class="stxt">Email Dr. Shen with your CV and a brief statement of research interests.</p></div>
-          <div class="stp"><div class="snum">3</div><p class="stxt"><em>PhD applicants:</em> Apply through the <a href="https://www.uml.edu/fahss/psychology/programs/graduate/phd-psychology/" target="_blank" rel="noopener" style="color:var(--accent)">UML Psychology PhD program</a>, listing Dr. Shen as your preferred advisor.</p></div>
-        </div>
-        <a href="mailto:jiabin_shen@uml.edu" class="bp">Email Dr. Shen →</a>
-      </div>
+      <a href="mailto:jiabin_shen@uml.edu" class="bp">Email Dr. Shen →</a>
     </div>
   </div>
 </section>
