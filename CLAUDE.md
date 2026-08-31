@@ -402,3 +402,106 @@ detail — do the following:
 
 If the spreadsheet file can't be found at the expected path, ask the user
 directly rather than guessing or skipping the update.
+
+## Publications database — keeping index.html and publications.html in sync
+
+Unlike Team and News, the publications list isn't hand-edited in a
+spreadsheet — it's a CSV that Claude maintains directly, sourced from
+Dr. Shen's CV, which gets run through a script that pulls real metadata
+from CrossRef. Three files work together:
+
+    data/PIRL-Publications-Database.csv   -- hand-maintained source of truth
+    scripts/sync_publications.py          -- generates the file below from it
+    data/publications-data.js             -- generated; loaded by BOTH
+                                              index.html (featured:true only,
+                                              in the "Selected publications"
+                                              section) and publications.html
+                                              (everything)
+
+**Never hand-edit `publications-data.js` directly except for the CrossRef-
+pending workaround below** — it's generated output, and the next sync run
+will silently overwrite manual edits.
+
+**CSV columns:** `doi, url, theme, role, note, featured`. `doi` is
+preferred; `url` is only a fallback for a paper with no DOI yet (the
+script scrapes `citation_*` meta tags from that URL instead). `theme` is
+one of `prevention | neuro | tbi | other` — GBD/consortium-style papers
+with huge collaborator lists (Dr. Shen contributes analytic/interpretive
+input, not authorship credit) consistently go in `other` with
+`role: "Consortium collaborator"`, even when the topic is injury-related,
+since there's no clean way to feature or theme-bucket a 200+ author paper.
+`role` should reuse the existing vocabulary already in the CSV (e.g.
+`"First author, PI"`, `"Senior author · PhD Mentee"`, `"Collaborator"`,
+`"Contributing author"`) rather than inventing new phrasing, so filtering
+and role-pill styling stay consistent. `note` and `featured:yes` are only
+meaningful for the ~8 papers curated onto the homepage; every other row
+should have `featured:no` and a blank `note` — don't write "why it
+matters" copy for the general list, per the site's no-fabrication rule.
+
+**Running the sync script needs one-time setup in this dev environment:**
+`requests`, `beautifulsoup4`, and `lxml` are not preinstalled — run
+`python3 -m pip install requests beautifulsoup4 lxml` first, or the
+script fails with `ModuleNotFoundError`. As with `node` elsewhere in this
+file, don't assume the dependency is there; check/install before
+concluding the environment is broken.
+
+**Gotcha: a DOI can resolve via `doi.org` but still 404 on CrossRef's
+REST API.** This happens for papers still in "advance online
+publication" — the DOI is registered and `https://doi.org/<doi>` redirects
+correctly to the publisher's page, but `api.crossref.org/works/<doi>`
+returns 404 until CrossRef finishes indexing it (observed lag: at least
+several months). The sync script has no fallback for this case when only
+a DOI (no URL) is given, so the row fails and gets dropped from the
+output. Don't assume a fetch failure means the DOI is wrong — check
+`curl -sL -o /dev/null -w "%{http_code}" https://doi.org/<doi>` first; a
+200 there with a 404 from the CrossRef API confirms this specific
+situation. The fix is to source the real citation manually (web search
+for the title usually surfaces the publisher's page with authors,
+volume/issue/pages) and hand-append the entry into the generated
+`publications-data.js`, formatted to match `build_apa()`'s output exactly.
+Leave a comment at the top of the file listing which `id`s were patched
+this way, since **re-running the sync script will silently drop them
+again** until CrossRef catches up — check that comment before trusting a
+fresh sync's output is complete.
+
+**`sentence_case()`'s heuristic has two extension points, not one:**
+`_PROTECTED_WORDS` (single proper nouns, e.g. `"China"`, `"Poland"`) and
+`_PROTECTED_PHRASES` (multi-word proper nouns applied via whole-phrase
+regex after word-level casing, e.g. `"Global Burden of Disease Study"`,
+`"Otto the Auto"` — necessary because GBD papers are a recurring category
+in this CV and word-level protection of "Global"/"Burden"/"Disease"/
+"Study" individually would risk over-capitalizing those common words
+elsewhere). The function also has dedicated handling for hyphenated
+acronym compounds (`"VR-based"`, not caught by the plain ALL-CAPS check
+since the whole token isn't uppercase) and acronyms with a lowercase
+plural suffix (`"DALYs"`). If a future sync surfaces a new
+mis-capitalized title, check first whether it fits one of these four
+existing mechanisms before adding a fifth.
+
+**Workflow:** whenever the user says something like "add this paper,"
+"sync the publications database," or similar:
+
+1. Add/edit the CSV row(s), reusing existing `theme`/`role` conventions
+   above.
+2. Run `python3 scripts/sync_publications.py data/PIRL-Publications-Database.csv data/publications-data.js`.
+3. Handle any fetch failures per the CrossRef-pending gotcha above rather
+   than assuming they're errors in the CSV.
+4. Spot-check 5-10 generated titles for capitalization issues (the
+   script prints a reminder of this every run) and extend
+   `_PROTECTED_WORDS`/`_PROTECTED_PHRASES` if needed.
+5. Verify both `index.html`'s featured section and `publications.html`
+   render correctly (search, theme/year toggle, mentee filter) with no
+   console errors before considering the task done.
+6. Summarize what changed before committing.
+
+**Known open discrepancy (as of the CSV's initial build, August 2026):**
+the CV's own "Publications Across All Years" summary field states 69
+peer-reviewed journal articles, but manually enumerating the CV's journal
+article list found only 68 distinct entries, two of which have no
+discoverable DOI anywhere (an obscure conference-adjacent journal article
+and a 2009 Chinese-language journal piece) and were excluded, leaving 66
+rows in the CSV. The homepage's hero impact-strip and meta tags still say
+"69" (pre-existing, unchanged by that work) — this doesn't match the 66
+actually browsable on `publications.html`. Don't silently "fix" this
+number in either direction; it needs Dr. Shen or Paul to either locate
+the missing CV entries or confirm 69 was always approximate.
