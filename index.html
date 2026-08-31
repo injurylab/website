@@ -71,7 +71,7 @@ h1.hh em{font-style:italic;color:var(--accent)}
 .slb{font-family:var(--mn);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--sky);margin-bottom:.75rem;display:flex;align-items:center;gap:8px}
 .slb::before{content:'';display:block;width:20px;height:1px;background:var(--sky)}
 h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy);line-height:1.2;margin-bottom:1rem}
-.sb{font-size:1rem;color:var(--mid);max-width:620px;line-height:1.75}
+.sb{font-size:1rem;color:var(--mid);max-width:900px;line-height:1.75}
 .snd{background:var(--sand)}
 
 /* ── RESEARCH ── */
@@ -111,6 +111,7 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
 .fnds-line{margin-top:2.75rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.1);font-size:.72rem;color:rgba(255,255,255,.4);font-family:var(--mn);letter-spacing:.04em}
 
 /* ── PUBLICATIONS ── */
+#publications .sb{text-wrap:balance}
 .pl{font-family:var(--mn);font-size:.68rem;letter-spacing:.06em;color:var(--sky);border:1px solid currentColor;padding:4px 11px;border-radius:4px;text-transform:uppercase;transition:background .2s,color .2s}
 .pl:hover{background:var(--sky);color:#fff}
 
@@ -170,19 +171,20 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
 .pb3{background:rgba(232,184,75,.12);border:1px solid rgba(232,184,75,.4);border-radius:20px;padding:3px 10px;font-size:.68rem;color:#b88a2a}
 
 /* ── JOIN ── */
-#join .sb{max-width:900px;text-wrap:balance}
+#join .sb{text-wrap:balance}
 .prks{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:2rem}
 .pk{display:flex;gap:1rem;align-items:flex-start;background:var(--sand);border-radius:8px;padding:1.2rem}
 .pkt{font-weight:600;font-size:.88rem;color:var(--navy);margin-bottom:3px}
 .pkb{font-size:.8rem;color:var(--mid);line-height:1.55}
-.cb{background:var(--navy);border-radius:12px;padding:2.25rem;color:#fff}
+.cb{background:var(--sand);border-radius:12px;padding:2.25rem;color:var(--ink)}
 .cb-closing{max-width:640px;margin:0 auto}
-.ct{font-family:var(--dp);font-size:1.5rem;margin-bottom:.7rem}
-.cbody{font-size:.88rem;color:rgba(255,255,255,.62);margin-bottom:1.5rem;line-height:1.7}
+.ct{font-family:var(--dp);font-size:1.5rem;margin-bottom:.7rem;color:var(--navy)}
+.cbody{font-size:.88rem;color:var(--ink);margin-bottom:1.5rem;line-height:1.7}
 .stps{display:flex;flex-direction:column;gap:11px;margin-bottom:1.75rem}
 .stp{display:flex;gap:11px;align-items:flex-start}
 .snum{width:26px;height:26px;background:var(--accent);color:var(--navy);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.75rem;flex-shrink:0}
-.stxt{font-size:.83rem;color:rgba(255,255,255,.72);line-height:1.5;padding-top:3px}
+.stxt{font-size:.83rem;color:var(--ink);line-height:1.5;padding-top:3px}
+.cb .bp{background:var(--navy);color:#fff}
 
 @media(max-width:760px){
   .pw-examples{grid-template-columns:1fr}
@@ -712,7 +714,7 @@ ITGrender();
 
     <div class="cb cb-closing">
       <div class="ct">Ready to apply?</div>
-      <p class="cbody">We consider applications on a rolling basis. PhD students are admitted through the UMass Lowell Psychology PhD program. Research assistantships and honours thesis positions also available.</p>
+      <p class="cbody">We consider applications on a rolling basis. Many undergraduates join through Research Service Learning (PSYC 4880) for course credit, PhD students are admitted through the UMass Lowell Psychology PhD program, and research assistantships and honours thesis positions are also available.</p>
       <div class="stps">
         <div class="stp"><div class="snum">1</div><p class="stxt">Read recent publications to understand our research agenda.</p></div>
         <div class="stp"><div class="snum">2</div><p class="stxt">Email Dr. Shen with your CV and a brief statement of research interests.</p></div>
