@@ -591,9 +591,9 @@ const ITG_DATA = {
       links:[]
     },
     {
-      id:'gomes', name:'Joy Gomes', role:"Master's Thesis", initials:'JG',
+      id:'gomes', name:'Joy Gomes', role:"MS in Applied Behavior Analysis & Autism Studies · Master's Thesis", initials:'JG',
       color:'linear-gradient(135deg,#2E6CA8,#1B3A6B)',
-      focus:'Applied Behavior Analysis & Autism Studies',
+      focus:'',
       bio:'',
       links:[]
     }
@@ -638,8 +638,7 @@ function ITGcard(p, extraClass){
         </div>
       </div>
       <div class="itg-face itg-back">
-        <div class="itg-back-label">Current Focus</div>
-        <div class="itg-back-focus">${p.focus}</div>
+        ${p.focus ? `<div class="itg-back-label">Current Focus</div><div class="itg-back-focus">${p.focus}</div>` : ''}
         <div class="itg-back-hint">${p.bio ? `Click for full bio${linksHTML? ' & links':''}` : 'Click for more'}</div>
       </div>
     </div>

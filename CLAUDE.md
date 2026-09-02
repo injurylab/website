@@ -317,22 +317,42 @@ separator, when Role/Title is blank. Em dashes are reserved for prose
 elsewhere on the site; don't use one to glue name/department/role
 together into a single line here.
 
+**`team.html` sorting is different for Current Members than for
+Alumni.** Current Members sort by the spreadsheet's `Order` column
+ascending — a manual, PI-first sequence the owner sets directly, not
+date-based, so don't auto-sort it. Alumni ignore `Order` entirely: each
+of the three Degree Level subgroups sorts by `TDIRalumniSort` (search
+for it in `team.html`), which parses `Years in Lab` via
+`TDIRyearRange` and orders by end year descending, then start year
+descending as a tiebreak, then name alphabetically as the final
+tiebreak. This makes a newly added alumni row slot into the correct
+chronological position automatically with no manual renumbering needed
+on future syncs. An open-ended range like `"2024–"` (no end year) sorts
+as if it were the most recent/ongoing entry — but treat that as a data
+smell to flag back to the owner during a sync, not something to accept
+silently: an "ongoing" person filed under Alumni usually means they
+should be a Current Member instead. This happened with Jesus Santiago
+and Diya Patel in an earlier spreadsheet draft; both were corrected to
+closed ranges (rather than left open-ended) before being finalized.
+
 **Gotcha, worth remembering: a row can be flagged for a full card
-without having the data a card needs.** Joy Gomes's row (`Section` and
-`Featured` both flip-flopped across a couple of syncs — she's landed as
-`Section = Current Members`, `Featured = Yes`) has never had a Current
-Focus, Full Bio, Photo filename, or Avatar initials filled in. Don't
-fabricate any of those to fill the gap — ask the owner if you're unsure
-whether the card should exist at all, but if they confirm the person
-belongs as a Current Member / Featured card as-is, the deliberate
-treatment is: derive initials from their own name (a standard
-abbreviation, same convention as everyone else's, not a fabricated
-fact), use a literal existing field for the flip-side focus line (e.g.
-her `Department / Program` value), and leave `bio` unset entirely
-rather than an empty string. `ITGcard`/`ITGopenModal` already handle a
-falsy `bio` gracefully — the modal skips the bio paragraph and the
-flip-card hint reads "Click for more" instead of "Click for full bio" —
-so lean on that existing behavior rather than inventing new markup.
+without having the data a card needs.** Joy Gomes has gone back and
+forth between `Section = Alumni`/`Current Members` and
+`Featured = No`/`Yes` across several syncs, and even now that she's
+settled as `Section = Current Members`, her Current Focus, Full Bio,
+Photo filename, and Avatar initials are still blank. Don't fabricate any
+of those to fill the gap — ask the owner if you're unsure whether the
+card should exist at all, but if they confirm the person belongs as a
+Current Member card as-is, the deliberate treatment is: derive initials
+from their own name (a standard abbreviation, same convention as
+everyone else's, not a fabricated fact), and leave both `focus` and
+`bio` as empty strings rather than inventing text for either. `ITGcard`
+and `ITGopenModal` both handle a falsy `focus` and a falsy `bio`
+gracefully — the flip-card skips the "Current Focus" label entirely
+when `focus` is empty, the modal skips the bio paragraph when `bio` is
+empty, and the flip-card hint reads "Click for more" instead of "Click
+for full bio" whenever `bio` is empty — so lean on that existing
+behavior rather than inventing new markup or placeholder copy.
 Since this row's Section/Featured value has changed direction more than
 once, double-check its current values against the spreadsheet (or ask)
 before assuming either state is stable.
