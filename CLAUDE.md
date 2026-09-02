@@ -596,7 +596,17 @@ from CrossRef. Three files work together:
 pending workaround below** — it's generated output, and the next sync run
 will silently overwrite manual edits.
 
-**CSV columns:** `doi, url, theme, role, note, featured`. `doi` is
+**CSV columns:** `doi, title, url, theme, role, note, featured`. `title`
+exists purely so the CSV is readable by a human scanning rows (originally
+added because the owner couldn't tell which paper a row was just from its
+DOI) — the sync script fills or refreshes it automatically after every
+successful CrossRef/URL fetch, so don't hand-maintain it, and don't add
+it to the generated JS output (`papers` objects intentionally don't carry
+a `title` field; the real title only ever lives inside the `apa` string).
+A row whose fetch fails this run keeps whatever `title` it already had
+rather than being blanked out — for a brand-new row with a CrossRef-
+pending DOI, that means filling `title` in by hand once, same as you'd
+source the rest of its citation manually (see the gotcha below). `doi` is
 preferred; `url` is only a fallback for a paper with no DOI yet (the
 script scrapes `citation_*` meta tags from that URL instead). `theme` is
 one of `prevention | neuro | tbi | other` — GBD/consortium-style papers

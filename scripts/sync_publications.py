@@ -6,8 +6,15 @@ Reads ONE database (PIRL-Publications-Database.csv) and produces ONE output
 file (publications-data.js) that both the homepage's featured section and
 the all-publications page load via <script src="publications-data.js">.
 
-Database columns (this is ALL you maintain by hand):
+Database columns (you only ever need to hand-maintain doi/url/theme/role/
+note/featured -- `title` is written back into the CSV by this script on
+every run, purely so the file is readable by a human scanning rows; it
+is not read back in as input):
     doi       -- preferred identifier
+    title     -- auto-filled/refreshed by this script after each successful
+                 fetch, so a row is identifiable at a glance without having
+                 to decode its DOI. Left untouched for a row whose fetch
+                 fails this run (see the CrossRef-pending gotcha below).
     url       -- fallback if no DOI exists yet (uses citation_* meta tags)
     theme     -- prevention | neuro | tbi | other
     role      -- e.g. "First author, PI" or "Senior author \u00b7 PhD Mentee"
@@ -16,9 +23,10 @@ Database columns (this is ALL you maintain by hand):
                  curated 3-pillar section (all 69 always appear on the
                  all-publications page regardless of this flag)
 
-Everything else -- title, authors, journal, volume/issue/pages, and the
-full APA 7 reference string -- is generated automatically from CrossRef
-(for DOIs) or citation_* meta tags (for URLs).
+Everything else -- authors, journal, volume/issue/pages, and the full
+APA 7 reference string -- is generated automatically from CrossRef (for
+DOIs) or citation_* meta tags (for URLs) and written only into the JS
+output, not back into the CSV.
 
 Usage:
     python3 sync_publications.py PIRL-Publications-Database.csv publications-data.js
@@ -259,6 +267,8 @@ def sync(csv_path, out_path):
         apa = build_apa(meta["authors"], meta["year"], meta["title"], meta["journal"],
                          meta["volume"], meta["issue"], meta["page"], meta["doi"], in_press)
 
+        row["title"] = meta["title"]  # write back so the CSV stays human-scannable
+
         papers.append({
             "id": i,
             "year": meta["year"] or 2100,   # sorts undated/in-press entries last
@@ -276,6 +286,13 @@ def sync(csv_path, out_path):
         f.write("const papers = ")
         f.write(json.dumps(papers, indent=2, ensure_ascii=False))
         f.write(";\n")
+
+    csv_fieldnames = ["doi", "title", "url", "theme", "role", "note", "featured"]
+    with open(csv_path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=csv_fieldnames, extrasaction="ignore")
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({k: row.get(k, "") or "" for k in csv_fieldnames})
 
     featured_count = sum(1 for p in papers if p["featured"])
     print(f"Wrote {len(papers)} publications to {out_path} ({featured_count} featured)")
