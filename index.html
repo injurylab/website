@@ -432,6 +432,8 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
     <h3 class="itg-h3" style="margin-top:3rem">Alumni</h3>
     <div class="itg-grid" id="itg-alumni"></div>
 
+    <div class="pub-footer">Looking for someone not shown here? <a href="team.html">View full team &amp; alumni →</a></div>
+
   </div>
 </section>
 
@@ -562,13 +564,18 @@ function PUBcard(p){
 
 <script>
 // ── Team data — every fact sourced from CV, UML profile, or lab-confirmed conference posters. No fabricated links. ──
+// PUB_COUNT reads the live count from data/publications-data.js (the same array publications.html
+// renders from) so Dr. Shen's bio never drifts out of sync with the actual publication list. Falls
+// back to a fixed number only if that script failed to load (e.g. opening index.html via file://
+// instead of a server — see the file:// gotcha documented in CLAUDE.md).
+const PUB_COUNT = typeof papers !== 'undefined' ? papers.length : 66;
 const ITG_DATA = {
   current: [
     {
       id:'shen', name:'Jiabin Shen, PhD', role:'Principal Investigator', initials:'JS', photo:'images/jiabin-shen.jpg',
       color:'linear-gradient(135deg,#2E6CA8,#1B3A6B)',
       focus:'TBI rehabilitation · injury epidemiology · neurodivergent youth',
-      bio:'Dr. Shen has studied pediatric injury prevention and rehabilitation since 2011. He directs the Pediatric Injury Research Lab at UMass Lowell, where his interdisciplinary program integrates virtual reality, fNIRS, and large-scale national datasets to improve outcomes for children with TBI, ADHD, and autism. Dr. Shen received his PhD in Life-Span Developmental Psychology from University of Alabama at Birmingham (2015).',
+      bio:`Dr. Shen has studied pediatric injury prevention and rehabilitation since 2011. He directs the Pediatric Injury Research Lab at UMass Lowell, where his interdisciplinary program integrates virtual reality, fNIRS, and large-scale national datasets to improve outcomes for children with TBI, ADHD, and autism. Over $1.6M in external funding secured, ${PUB_COUNT} peer-reviewed publications, and 43 students mentored at UML. Dr. Shen received his PhD in Life-Span Developmental Psychology from University of Alabama at Birmingham (2015).`,
       teaching:['PSYC.2600 Child and Adolescent Development (undergraduate)','PSYC.6410 Fundamentals of Prevention Science (graduate)','PSYC.4880 Research Service Learning (undergraduate, mentored research)'],
       service:{
         current:['Associate Editor, Frontiers in Public Health (Injury Prevention &amp; Control)','Editorial Board Member, BMC Injury Prevention','Editorial Board Member &amp; Guest Editor, Rehabilitation Psychology','Program Officer &amp; Executive Committee Member, Brain Injury Interdisciplinary SIG, American Congress of Rehabilitation Medicine (ACRM)','Member at Large, Executive Committee, APA Division 22 (Rehabilitation Psychology)'],
@@ -581,6 +588,13 @@ const ITG_DATA = {
       color:'linear-gradient(135deg,#2E6CA8,#1B3A6B)',
       focus:'Cognitive development · TBI · ASD · mental health',
       bio:'Lab Manager and PhD student in Psychology. Research interests include cognitive development, traumatic brain injuries, autism spectrum disorder, and mental health promotion in children. Presented at the APA 2024 conference ("Memory Impairment after Sports-Related TBI in Pediatric and Young Adult Athletes: A Scoping Review") and the NEPA 2024 conference ("Activity Level Predicts Injury History in Children"), plus the UML Psychology Research Symposium in May 2025 and May 2026. B.A. Neuroscience & Psychology, Assumption University (2023).',
+      links:[]
+    },
+    {
+      id:'gomes', name:'Joy Gomes', role:'Thesis Chair', initials:'JG',
+      color:'linear-gradient(135deg,#2E6CA8,#1B3A6B)',
+      focus:'Master’s – Applied Behavior Analysis & Autism Studies',
+      bio:'',
       links:[]
     }
   ],
@@ -626,7 +640,7 @@ function ITGcard(p, extraClass){
       <div class="itg-face itg-back">
         <div class="itg-back-label">Current Focus</div>
         <div class="itg-back-focus">${p.focus}</div>
-        <div class="itg-back-hint">Click for full bio${linksHTML? ' & links':''}</div>
+        <div class="itg-back-hint">${p.bio ? `Click for full bio${linksHTML? ' & links':''}` : 'Click for more'}</div>
       </div>
     </div>
   </div>`;
@@ -677,7 +691,7 @@ function ITGopenModal(id){
     <div class="itg-modal-avatar" style="background:${p.color}${p.photo?';padding:0;overflow:hidden':''}">${modalAvatarHTML}</div>
     <div class="itg-modal-name">${p.name}</div>
     <div class="itg-modal-role">${p.role}</div>
-    <p class="itg-modal-bio">${p.bio}</p>
+    ${p.bio ? `<p class="itg-modal-bio">${p.bio}</p>` : ''}
     ${extraHTML('Teaching', p.teaching)}
     ${extraHTML('Editorial &amp; Professional Service', p.service)}
     ${linksHTML}

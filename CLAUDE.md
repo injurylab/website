@@ -245,31 +245,86 @@ path included instead:
 (`/opt/homebrew/bin/gh auth status` confirms login without needing the
 PATH change, since it's invoked by full path directly.)
 
-## Team roster spreadsheet — keeping index.html in sync
+## Team roster spreadsheet — keeping index.html and team.html in sync
 
-The team roster shown in the "Meet the Lab" section is maintained by the
-site owner in a separate spreadsheet, not edited directly in code. The
-spreadsheet lives at:
+The team roster is maintained by the site owner in a separate spreadsheet,
+not edited directly in code. The spreadsheet lives at:
 
     data/PIRL-Team-Database.xlsx
+
+It now drives **two** places on the site, not one:
+
+- `index.html`'s `ITG_DATA` object (search for `const ITG_DATA`) — the
+  "Meet the Lab" flip-card grid on the homepage. This only ever holds a
+  *subset* of the roster: full cards need a photo/initials, a focus line,
+  and a bio to look right.
+- `team.html`'s `TDIR_DATA` array (search for `const TDIR_DATA`) — a
+  plain-text directory of **every** row in the spreadsheet, no cards, no
+  bios, no photos, for anyone (including the PI). It exists specifically
+  so alumni who don't get a homepage card still show up somewhere. It is
+  self-contained (its own inline data array, not shared with `ITG_DATA`
+  via an external file the way publications data is).
+
+**Columns and what each one controls:**
+
+- `Section` — `Current Members` or `Alumni`. Drives placement in
+  `TDIR_DATA` for both pages. The `Status` column is the owner's own
+  tracking metadata and does NOT control placement — trust `Section`.
+- `Order` — sequence within a group, lower numbers first. It's a single
+  counter across the whole sheet (not reset to 1 within every group), so
+  don't be surprised when Alumni order numbers aren't contiguous — just
+  sort by it within whatever group you're building.
+- `Program (Degree – Department)` and `Years in Lab` — short plain facts,
+  e.g. `"Doctoral – Applied Psychology & Prevention Science"` and
+  `"2021–2024"`. On `team.html`, the `Program` column's *prefix*
+  (`"Doctoral"` / `"Master's"` / `"Undergraduate"`) determines which of
+  the three Alumni subheadings a person lands in. These two columns are
+  only rendered on `team.html`, never on the homepage cards.
+- `Featured` (`Yes`/`No`) — controls whether an **Alumni** row also gets
+  a full homepage card in `ITG_DATA` (bio, focus, photo/initials, links)
+  versus a text-only line on `team.html` only. It does NOT gate whether
+  someone appears on `team.html` at all — every row appears there
+  regardless of Featured. It also doesn't affect **Current Members**:
+  every Current Member always gets a homepage card, Featured or not,
+  since removing a current lab member's card would be a much bigger
+  visual change than trimming an alumnus down to a text line.
+- The rest of the columns (`Full Name`, `Role / Title`, `Current Focus`,
+  `Full Bio`, `Photo filename`, `Avatar initials`, the two Link
+  label/URL pairs) map the same way they always have — see the field
+  mapping below.
+
+**Known gotcha: a row can claim a full card it doesn't have the data
+for.** `team.html` was introduced alongside a spreadsheet row (Joy
+Gomes) that was `Section = Current Members` with `Featured = Yes`, but
+had no Current Focus, Full Bio, Photo filename, or Avatar initials
+filled in — despite Current Members always getting cards. Don't
+fabricate a bio or focus line to fill a gap like this; ask the user how
+they want it handled. The resolution used for that case, if the user
+wants to move forward without new content: give the card initials
+derived from the person's own name (not a fabricated fact, just a
+standard abbreviation, same convention as everyone else's initials),
+optionally borrow a literal existing field (e.g. the `Program` column)
+for the flip-side focus line, and leave `bio` unset entirely rather than
+an empty string. `ITGcard`/`ITGopenModal` already handle a falsy `bio`
+gracefully — the modal skips the bio paragraph and the flip-card hint
+reads "Click for more" instead of "Click for full bio" — so lean on
+that existing behavior instead of inventing new markup for the gap.
 
 **Workflow:** whenever the user says something like "I updated the
 spreadsheet," "sync the team section," or similar — even without further
 detail — do the following:
 
 1. Read every row of the `Team Members` sheet in that workbook.
-2. Compare it against the current `ITG_DATA` object in `index.html`
-   (search for `const ITG_DATA`).
-3. Regenerate `ITG_DATA` to match the spreadsheet **exactly**:
-   - The `Section` column controls which array a person belongs in:
-     `current` (for "Current Members") or `alumni` (for "Alumni"). The
-     `Status` column is metadata for the owner's own tracking — it does
-     NOT control placement in the code. Trust `Section`, not `Status`.
-   - `Order` controls the sequence within a section — lower numbers
-     first.
-   - Map each remaining column directly: `Full Name` → `name`,
-     `Role / Title` → `role`, `Current Focus` → `focus`, `Full Bio` →
-     `bio`, `Avatar initials` → `initials`.
+2. Compare it against both `ITG_DATA` in `index.html` and `TDIR_DATA` in
+   `team.html`.
+3. Regenerate `TDIR_DATA` in `team.html` to match the spreadsheet
+   **exactly** — every row, every time, since that page has no Featured
+   filter of its own.
+4. Regenerate `ITG_DATA` in `index.html` to hold only: all Current
+   Members, plus any Alumni row with `Featured = Yes`.
+   - Map each column directly: `Full Name` → `name`, `Role / Title` →
+     `role`, `Current Focus` → `focus`, `Full Bio` → `bio`, `Avatar
+     initials` → `initials`.
    - `Photo filename` → the `photo` field, as a relative path:
      `images/<filename>`. **How photos actually get linked to a person:**
      there is no automatic matching — the spreadsheet cell is the *only*
@@ -293,31 +348,57 @@ detail — do the following:
    - The two Link label/URL column pairs → the `links` array
      (`[{label, url}]`); omit any pair that's blank rather than adding an
      empty object.
-   - If a person in the spreadsheet has no corresponding entry in
-     `ITG_DATA`, add them. If `ITG_DATA` has a person no longer in the
-     spreadsheet, remove them. Photo crop position (`pos` field) is a
-     display-only tweak that doesn't come from the spreadsheet — leave
-     any existing `pos` override on a person untouched unless the user
-     separately reports their photo is cropped wrong.
-4. **Validate the `<script>` block's JavaScript syntax after editing**
-   before considering the task done. Try extracting the script contents
-   to a temp file and running `node --check` on it — but don't assume
-   `node` is installed; check with `command -v node` first, since it is
-   not on `PATH` in this dev environment. If `node` isn't available,
-   validate instead by loading `index.html` in a browser (e.g. navigate
-   to the local `file://` path, or `open index.html`) and confirming both
-   that the console shows no errors and that the team grids actually
-   render populated cards, not empty ones. This file has previously
-   broken silently — every card on the page rendering empty with no
-   visible error beyond a browser console message — because of a single
-   bad escaped character inside a bio string. Pay particular attention to
-   apostrophes inside single-quoted bio/focus/name strings in the
-   spreadsheet data; escape them correctly or rephrase to avoid them.
-5. Summarize what changed (people added, removed, or edited; any fields
-   that differed) before committing.
+   - If a person now qualifies for a homepage card (Current Member, or
+     Alumni newly marked Featured) and has no corresponding `ITG_DATA`
+     entry, add them (falling back to the initials-only pattern above if
+     the card fields are missing). If `ITG_DATA` has a person no longer
+     in the spreadsheet, or an Alumni row that lost its Featured flag,
+     remove them from `ITG_DATA` (they'll still show on `team.html`).
+     Photo crop position (`pos` field) is a display-only tweak that
+     doesn't come from the spreadsheet — leave any existing `pos`
+     override on a person untouched unless the user separately reports
+     their photo is cropped wrong.
+5. **Validate the JavaScript syntax in both files' `<script>` blocks**
+   after editing, before considering the task done. Try extracting each
+   script's contents to a temp file and running `node --check` on it —
+   but don't assume `node` is installed; check with `command -v node`
+   first, since it is not on `PATH` in this dev environment. If `node`
+   isn't available, validate instead by serving the directory (e.g.
+   `python3 -m http.server`) and loading both `index.html` and
+   `team.html` in a browser, confirming the console shows no errors and
+   that the homepage cards and the `team.html` directory both render
+   populated, not empty. This file has previously broken silently —
+   every card on the page rendering empty with no visible error beyond a
+   browser console message — because of a single bad escaped character
+   inside a bio string. Pay particular attention to apostrophes inside
+   single-quoted bio/focus/name strings in the spreadsheet data; escape
+   them correctly or rephrase to avoid them.
+6. Summarize what changed on each page (people added, removed, or
+   edited; any fields that differed; anyone whose Featured status moved
+   them between a card and a text line) before committing.
 
 If the spreadsheet file can't be found at the expected path, ask the user
 directly rather than guessing or skipping the update.
+
+**Dr. Shen's bio publication count is a live value, not typed text.**
+Inside `ITG_DATA`, Shen's `bio` field is a template literal (backticks,
+not a plain string) that interpolates `PUB_COUNT`, a constant defined
+just above `const ITG_DATA` as `typeof papers !== 'undefined' ?
+papers.length : 66` — `papers` being the same array `data/publications-
+data.js` exports for `publications.html`. This means the "N
+peer-reviewed publications" figure in the bio always matches the actual
+count on the publications page and never needs manual updating during a
+Team sync; it only needs attention if the sentence's *wording* changes
+(e.g. adding a new sentence near it — remember it's a template literal
+now, so a literal `` ` `` or an unescaped `${` inside new bio text would
+break it). The `66` fallback only fires if `data/publications-data.js`
+failed to load entirely (e.g. testing via `file://` — see the gotcha
+under "How to test changes" above) and should be bumped to match reality
+if it ever drifts, but it is not the source of truth in normal use. The
+funding total ($1.6M) and mentee count (43) later in the same sentence
+are still static text sourced from the CV — there's no live data source
+for those in this codebase, so they still need manual updates when the
+CV changes.
 
 ## Keeping this file itself up to date
 

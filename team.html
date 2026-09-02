@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Current members and alumni of the UMass Lowell Pediatric Injury Research Lab, directed by Jiabin Shen, PhD.">
+<link rel="canonical" href="https://www.injurylab.org/team.html">
+<title>Team &amp; Alumni | Pediatric Injury Research Lab | Jiabin Shen, PhD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#0D1F3C; --steel:#1B3A6B; --sky:#2E6CA8;
+  --accent:#E8B84B; --sage:#5B8A6F; --sand:#F7F4EE;
+  --white:#fff; --mid:#6E7B8B; --ink:#1A2332;
+  --dp:'DM Serif Display',Georgia,serif;
+  --bd:'Inter',system-ui,sans-serif;
+  --mn:'JetBrains Mono',monospace;
+  --mw:1140px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--bd);color:var(--ink);background:var(--white);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.skip{position:absolute;top:-40px;left:0;background:var(--accent);color:var(--navy);padding:8px 16px;z-index:9999;border-radius:0 0 6px 0;font-weight:600;transition:top .2s}
+.skip:focus{top:0}
+
+/* NAV (matches index.html / publications.html) */
+nav{position:sticky;top:0;z-index:1000;background:rgba(13,31,60,.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.08)}
+.ni{max-width:var(--mw);margin:0 auto;padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:12px}
+.logo .mk{width:36px;height:36px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--dp);font-size:18px;color:var(--navy);font-weight:700}
+.logo .wm{font-weight:600;font-size:.85rem;color:#fff;line-height:1.2}
+.logo .wm span{display:block;font-weight:300;font-size:.68rem;color:rgba(255,255,255,.5);letter-spacing:.08em;text-transform:uppercase}
+.nl{display:flex;gap:0;list-style:none}
+.nl a{padding:8px 13px;font-size:.78rem;font-weight:500;color:rgba(255,255,255,.65);letter-spacing:.04em;text-transform:uppercase;border-radius:6px;transition:color .2s,background .2s}
+.nl a:hover,.nl a.active{color:#fff;background:rgba(255,255,255,.08)}
+.hb{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:none;border:none}
+.hb span{display:block;width:22px;height:2px;background:#fff;border-radius:2px;transition:all .3s}
+@media(max-width:820px){.hb{display:flex}.nl{display:none;position:fixed;top:64px;left:0;right:0;background:rgba(13,31,60,.98);flex-direction:column;padding:1rem 2rem 2rem;gap:4px}.nl.open{display:flex}.nl a{padding:12px 0;border-radius:0;border-bottom:1px solid rgba(255,255,255,.06)}}
+
+.con{max-width:var(--mw);margin:0 auto;padding:0 2rem}
+
+/* PAGE HEAD */
+.phead{background:var(--navy);color:#fff;padding:3.5rem 0 2.75rem}
+.phead .back{font-family:var(--mn);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.55);display:inline-flex;align-items:center;gap:6px;margin-bottom:1.25rem}
+.phead .back:hover{color:var(--accent)}
+.phead h1{font-family:var(--dp);font-size:clamp(1.9rem,3.4vw,2.6rem);margin-bottom:.6rem}
+.phead p{color:rgba(255,255,255,.65);font-size:.92rem;max-width:560px;line-height:1.6}
+
+/* CONTROLS */
+.controls{padding:2rem 0 1.25rem;position:sticky;top:64px;background:var(--white);z-index:100;border-bottom:1px solid rgba(0,0,0,.07)}
+.search-wrap{position:relative;margin-bottom:1rem}
+.search{width:100%;padding:.8rem 1rem .8rem 2.6rem;border:1px solid rgba(0,0,0,.14);border-radius:8px;font-family:var(--bd);font-size:.9rem;color:var(--ink);background:var(--sand)}
+.search:focus{outline:2px solid var(--sky);outline-offset:1px;background:#fff}
+.search-icon{position:absolute;left:.9rem;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--mid);pointer-events:none}
+.result-count{font-family:var(--mn);font-size:.66rem;letter-spacing:.04em;text-transform:uppercase;color:var(--mid)}
+
+/* LIST */
+.plist{padding:2rem 0 5rem}
+.theme-group{margin-bottom:2.5rem}
+.theme-group-head{display:flex;align-items:center;gap:10px;margin-bottom:1rem;padding-top:.5rem;border-top:3px solid var(--mid)}
+.theme-group-head.current{border-top-color:var(--sky)}
+.theme-group-head.doctoral{border-top-color:var(--steel)}
+.theme-group-head.masters{border-top-color:var(--sage)}
+.theme-group-head.undergrad{border-top-color:var(--accent)}
+.theme-group-name{font-family:var(--mn);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--navy);font-weight:500}
+.theme-group-count{font-family:var(--mn);font-size:.68rem;color:var(--mid)}
+
+.trow{display:flex;align-items:flex-start;gap:.85rem;padding:.7rem 0;border-bottom:1px solid rgba(0,0,0,.06)}
+.trow:last-child{border-bottom:none}
+.trow-dot{width:9px;height:9px;border-radius:50%;margin-top:.55rem;flex-shrink:0}
+.trow-dot.current{background:var(--sky)}
+.trow-dot.doctoral{background:var(--steel)}
+.trow-dot.masters{background:var(--sage)}
+.trow-dot.undergrad{background:var(--accent)}
+.trow-text{font-size:.86rem;color:var(--ink);line-height:1.6}
+
+.alum-note{font-size:.82rem;color:var(--mid);line-height:1.6;margin-bottom:1.5rem}
+.alum-note a{color:var(--sky)}
+.alum-note a:hover{text-decoration:underline}
+
+.no-results{text-align:center;padding:3rem 1rem;color:var(--mid);font-size:.9rem}
+
+/* FOOTER */
+footer.pf{background:var(--navy);color:rgba(255,255,255,.6);padding:2rem 0;font-size:.8rem}
+footer.pf a{color:rgba(255,255,255,.8)}
+footer.pf a:hover{color:var(--accent)}
+
+@media(max-width:640px){
+  .con{padding:0 1.25rem}
+  .trow{gap:.6rem}
+}
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip">Skip to main content</a>
+
+<nav role="navigation" aria-label="Main">
+  <div class="ni">
+    <a href="index.html" class="logo">
+      <div class="mk" aria-hidden="true">P</div>
+      <div class="wm">Pediatric Injury Research Lab<span>UMass Lowell · Dept. of Psychology</span></div>
+    </a>
+    <button class="hb" aria-label="Toggle menu" aria-expanded="false" onclick="this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true');document.querySelector('.nl').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nl" role="list">
+      <li><a href="index.html#research">Research</a></li>
+      <li><a href="publications.html">Publications</a></li>
+      <li><a href="team.html" class="active">Team</a></li>
+      <li><a href="index.html#join">Join Us</a></li>
+      <li><a href="index.html#news">News</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="main">
+
+<div class="phead">
+  <div class="con">
+    <a href="index.html#team" class="back">← Back to lab homepage</a>
+    <h1>Team &amp; Alumni</h1>
+    <p id="phead-sub">Current members and alumni of the Pediatric Injury Research Lab.</p>
+  </div>
+</div>
+
+<div class="controls">
+  <div class="con">
+    <div class="search-wrap">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="text" id="search" class="search" placeholder="Search by name…" aria-label="Search team and alumni">
+    </div>
+    <div class="result-count" id="result-count"></div>
+  </div>
+</div>
+
+<div class="plist">
+  <div class="con" id="team-list"></div>
+</div>
+
+</main>
+
+<footer class="pf">
+  <div class="con">© 2025 UMass Lowell Pediatric Injury Research Lab · <a href="index.html">injurylab.org</a></div>
+</footer>
+
+<!-- ──────────────────────────────────────────────────────────────
+     TEAM & ALUMNI DIRECTORY DATA
+     Source of truth: data/PIRL-Team-Database.xlsx (Team Members tab).
+     This is a plain-text listing only: no bios, photos, or focus
+     areas here (those live in index.html's ITG_DATA for the subset
+     of people who get homepage cards). Section groups people into
+     "current" vs "alumni"; alumni are further split into Doctoral /
+     Master's / Undergraduate on this page based on the Program
+     field's prefix. Sort within each group by "order" ascending,
+     matching the spreadsheet's Order column.
+
+     Alumni list includes only CV-documented direct mentoring roles
+     (Research Service Learning, Directed Study, Emerging Scholars,
+     Honors/Fellowship programs, Mentored Research, Thesis/Dissertation
+     Chair, etc.). Committee-only relationships (QP/dissertation
+     committee where Dr. Shen was not the primary mentor) are excluded.
+     Source: Shen CV, Student Mentoring section.
+     ────────────────────────────────────────────────────────────── -->
+<script>
+const TDIR_DATA = [
+  {sec:"current", order:1, name:"Jiabin Shen, PhD", role:"Principal Investigator", program:"", years:""},
+  {sec:"current", order:2, name:"Angelina Davis", role:"PhD in Psychology · Lab Manager", program:"", years:""},
+  {sec:"alumni", order:1, name:"Jai Aravala", role:"Masters in Public Health", program:"Master's – Public Health", years:"2023–2025"},
+  {sec:"alumni", order:2, name:"Tonghui Xu", role:"Doctor of Education", program:"Doctoral – Research & Evaluation in Education", years:"2023–2024"},
+  {sec:"alumni", order:3, name:"Skylar Charles", role:"BA in Psychology", program:"Undergraduate – Psychology", years:"2023–2024"},
+  {sec:"alumni", order:4, name:"Alexandria Winstead", role:"Mentored Research (Meta-Analysis of TBI Cognitive Training); FAHSS Student Assistantship", program:"Doctoral – Applied Psychology & Prevention Science", years:"2021–2024"},
+  {sec:"alumni", order:5, name:"Alex Clinton", role:"Mentored Research (Donahue Humanities Ethics Fellowship); FAHSS Student Assistantship", program:"Doctoral – Applied Psychology & Prevention Science", years:"2020–2024"},
+  {sec:"alumni", order:6, name:"Nayantara Kurpad", role:"Mentored Research (Meta-Analytic SEM for Injury Prevention)", program:"Doctoral – Applied Psychology & Prevention Science", years:"2020–2021"},
+  {sec:"alumni", order:7, name:"David Schena", role:"Mentored Research (Meta-Analytic SEM for Injury Prevention)", program:"Doctoral – Applied Psychology & Prevention Science", years:"2020–2021"},
+  {sec:"alumni", order:8, name:"Elyas Irankhah", role:"Mentored Research (Machine Learning for Pediatric TBI Diagnosis), co-mentor", program:"Doctoral – Mechanical Engineering", years:"2021–2025"},
+  {sec:"alumni", order:9, name:"Amanda Carmichael", role:"Mentored Research (Donahue Humanities Ethics Fellowship); NURS.7390 Mentored Research Course", program:"Doctoral – Nursing", years:"2022–2025"},
+  {sec:"current", order:10, name:"Joy Gomes", role:"Thesis Chair", program:"Master's – Applied Behavior Analysis & Autism Studies", years:"2024–"},
+  {sec:"alumni", order:11, name:"Evagelia C. Anthony", role:"MA Community Social Psychology", program:"Master's – Community Social Psychology", years:"2022–2023"},
+  {sec:"alumni", order:12, name:"Shelby Kosterman", role:"Moloney Scholar Fellow, Public Health Intern", program:"Master's – Public Health", years:"2024"},
+  {sec:"alumni", order:13, name:"Samantha Peters", role:"Public Health Intern", program:"Master's – Public Health", years:"2023"},
+  {sec:"alumni", order:14, name:"Kathryn Smolag", role:"Public Health Intern", program:"Master's – Public Health", years:"2023"},
+  {sec:"alumni", order:15, name:"Sara Avdulla", role:"Public Health Intern", program:"Master's – Public Health", years:"2022"},
+  {sec:"alumni", order:16, name:"Loreynis FigueroaBrito", role:"Public Health Intern", program:"Master's – Public Health", years:"2021"},
+  {sec:"alumni", order:17, name:"Venkata Shashidhar Akella", role:"MS Engineering, co-mentor", program:"Master's – Mechanical Engineering", years:"2022–2025"},
+  {sec:"alumni", order:18, name:"Jesus Santiago", role:"Emerging Scholars Program, Volunteer", program:"Undergraduate – Psychology", years:"2024–"},
+  {sec:"alumni", order:19, name:"Diya Patel", role:"Lab Volunteer", program:"Undergraduate – Psychology", years:"2025–"},
+  {sec:"alumni", order:20, name:"Nicolas Spiegel", role:"Research Service Learning", program:"Undergraduate – Psychology", years:"2024"},
+  {sec:"alumni", order:21, name:"Quynh Pham", role:"Moloney Scholar Fellow, Emerging Scholars Program", program:"Undergraduate – Psychology", years:"2024–2025"},
+  {sec:"alumni", order:22, name:"Benjamin Hickman", role:"Research Service Learning", program:"Undergraduate – Psychology", years:"2024–2025"},
+  {sec:"alumni", order:23, name:"Ashley Cline", role:"Research Service Learning", program:"Undergraduate – Psychology", years:"2024–2025"},
+  {sec:"alumni", order:24, name:"Arthur Chigas", role:"Research Service Learning, co-mentor", program:"Undergraduate – Psychology", years:"2024–2025"},
+  {sec:"alumni", order:25, name:"Joseph Chaghouri", role:"Research Service Learning, co-mentor", program:"Undergraduate – Psychology", years:"2024–2025"},
+  {sec:"alumni", order:26, name:"Meher Kaur", role:"Research Service Learning", program:"Undergraduate – Psychology", years:"2024"},
+  {sec:"alumni", order:27, name:"Julia Harrington", role:"Honors Directed Study", program:"Undergraduate – Psychology", years:"2023"},
+  {sec:"alumni", order:28, name:"Racksa Sim", role:"Research Service Learning", program:"Undergraduate – Psychology", years:"2023"},
+  {sec:"alumni", order:29, name:"Ronald Creed", role:"Research Service Learning, co-mentor", program:"Undergraduate – Psychology", years:"2022–2025"},
+  {sec:"alumni", order:30, name:"Gayathri Dayashankar", role:"Directed Study / Research Service Learning", program:"Undergraduate – Psychology", years:"2022–2023"},
+  {sec:"alumni", order:31, name:"Jack Blake", role:"Emerging Scholars Program", program:"Undergraduate – Psychology", years:"2021–2022"},
+  {sec:"alumni", order:32, name:"Hailey DuBose", role:"Research Service Learning / Directed Study", program:"Undergraduate – Psychology", years:"2021–2022"},
+  {sec:"alumni", order:33, name:"Vy Phan", role:"Research Service Learning", program:"Undergraduate – Psychology", years:"2021–2022"},
+  {sec:"alumni", order:34, name:"Dejonai Willis", role:"Honors College Fellowship Program", program:"Undergraduate – Psychology", years:"2021–2022"},
+  {sec:"alumni", order:35, name:"Lauren Field", role:"Mentored Research, co-mentor", program:"Undergraduate – Physical Therapy & Kinesiology", years:"2021"},
+  {sec:"alumni", order:36, name:"Kyra Barry", role:"Honors College Fellowship Program", program:"Undergraduate – Nursing", years:"2023–2024"},
+  {sec:"alumni", order:37, name:"Maika Belizor", role:"River Hawk Scholars Academy Road to Research program", program:"Undergraduate – Biological Sciences", years:"2023–2024"}
+];
+
+const TDIR_GROUPS = [
+  {key:"current", label:"Current Members", test: p => p.sec === "current"},
+  {key:"doctoral", label:"Alumni · Doctoral", test: p => p.sec === "alumni" && p.program.indexOf("Doctoral") === 0},
+  {key:"masters", label:"Alumni · Master's", test: p => p.sec === "alumni" && p.program.indexOf("Master's") === 0},
+  {key:"undergrad", label:"Alumni · Undergraduate", test: p => p.sec === "alumni" && p.program.indexOf("Undergraduate") === 0}
+];
+
+function TDIRrowText(p){
+  return p.sec === "current"
+    ? `${p.name} — ${p.role}`
+    : `${p.name} — ${p.program}, ${p.years}, ${p.role}`;
+}
+
+function TDIRrender(query){
+  const q = (query || "").trim().toLowerCase();
+  const container = document.getElementById("team-list");
+  const matches = TDIR_DATA.filter(p => !q || p.name.toLowerCase().includes(q));
+
+  document.getElementById("result-count").textContent = q
+    ? `${matches.length} of ${TDIR_DATA.length} people`
+    : `${TDIR_DATA.length} people`;
+
+  if (!matches.length) {
+    container.innerHTML = '<div class="no-results">No one matches that search.</div>';
+    return;
+  }
+
+  container.innerHTML = TDIR_GROUPS.map(g => {
+    const items = matches.filter(g.test).sort((a,b) => a.order - b.order);
+    if (!items.length) return "";
+    const note = g.key === "doctoral"
+      ? '<p class="alum-note">Former lab members: <a href="index.html#contact">contact us</a> to update or remove your listing.</p>'
+      : "";
+    return `
+    ${note}
+    <div class="theme-group">
+      <div class="theme-group-head ${g.key}">
+        <span class="theme-group-name">${g.label}</span>
+        <span class="theme-group-count">${items.length}</span>
+      </div>
+      ${items.map(p => `
+      <div class="trow">
+        <span class="trow-dot ${g.key}"></span>
+        <p class="trow-text">${TDIRrowText(p)}</p>
+      </div>`).join("")}
+    </div>`;
+  }).join("");
+}
+
+document.getElementById("search").addEventListener("input", e => TDIRrender(e.target.value));
+
+document.querySelectorAll('.nl a').forEach(function(a){
+  a.addEventListener('click',function(){
+    document.querySelector('.nl').classList.remove('open');
+    document.querySelector('.hb').setAttribute('aria-expanded','false');
+  });
+});
+
+TDIRrender("");
+</script>
+</body>
+</html>
