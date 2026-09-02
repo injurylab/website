@@ -69,12 +69,16 @@ nav{position:sticky;top:0;z-index:1000;background:rgba(13,31,60,.97);backdrop-fi
 
 .trow{display:flex;align-items:flex-start;gap:.85rem;padding:.7rem 0;border-bottom:1px solid rgba(0,0,0,.06)}
 .trow:last-child{border-bottom:none}
-.trow-dot{width:9px;height:9px;border-radius:50%;margin-top:.55rem;flex-shrink:0}
+.trow-dot{width:9px;height:9px;border-radius:50%;margin-top:.6rem;flex-shrink:0}
 .trow-dot.current{background:var(--sky)}
 .trow-dot.doctoral{background:var(--steel)}
 .trow-dot.masters{background:var(--sage)}
 .trow-dot.undergrad{background:var(--accent)}
-.trow-text{font-size:.86rem;color:var(--ink);line-height:1.6}
+.trow-body{flex:1;min-width:0}
+.trow-line1{display:flex;align-items:baseline;justify-content:space-between;gap:1rem}
+.trow-name{font-size:.86rem;color:var(--ink);line-height:1.6}
+.trow-years{font-family:var(--mn);font-size:.66rem;color:var(--mid);letter-spacing:.06em;white-space:nowrap;flex-shrink:0}
+.trow-sub{font-size:.78rem;color:var(--mid);line-height:1.5;margin-top:1px}
 
 .alum-note{font-size:.82rem;color:var(--mid);line-height:1.6;margin-bottom:1.5rem}
 .alum-note a{color:var(--sky)}
@@ -154,9 +158,17 @@ footer.pf a:hover{color:var(--accent)}
      areas here (those live in index.html's ITG_DATA for the subset
      of people who get homepage cards). Section groups people into
      "current" vs "alumni"; alumni are further split into Doctoral /
-     Master's / Undergraduate on this page based on the Program
-     field's prefix. Sort within each group by "order" ascending,
-     matching the spreadsheet's Order column.
+     Master's / Undergraduate on this page using the spreadsheet's
+     "Degree Level" column (grouping only, never displayed directly —
+     the "Department / Program" column is what's shown). Sort within
+     each group by "order" ascending, matching the spreadsheet's Order
+     column.
+
+     "role" here is the STUDENT's own activity (Research Service
+     Learning, Mentored Research, etc.), never Dr. Shen's mentoring
+     relationship to them (no "co-mentor," "committee chair," etc.) —
+     that distinction lives in the spreadsheet's Read Me tab and must
+     be preserved on every sync.
 
      Alumni list includes only CV-documented direct mentoring roles
      (Research Service Learning, Directed Study, Emerging Scholars,
@@ -167,58 +179,77 @@ footer.pf a:hover{color:var(--accent)}
      ────────────────────────────────────────────────────────────── -->
 <script>
 const TDIR_DATA = [
-  {sec:"current", order:1, name:"Jiabin Shen, PhD", role:"Principal Investigator", program:"", years:""},
-  {sec:"current", order:2, name:"Angelina Davis", role:"PhD in Psychology · Lab Manager", program:"", years:""},
-  {sec:"alumni", order:1, name:"Jai Aravala", role:"Masters in Public Health", program:"Master's – Public Health", years:"2023–2025"},
-  {sec:"alumni", order:2, name:"Tonghui Xu", role:"Doctor of Education", program:"Doctoral – Research & Evaluation in Education", years:"2023–2024"},
-  {sec:"alumni", order:3, name:"Skylar Charles", role:"BA in Psychology", program:"Undergraduate – Psychology", years:"2023–2024"},
-  {sec:"alumni", order:4, name:"Alexandria Winstead", role:"Mentored Research (Meta-Analysis of TBI Cognitive Training); FAHSS Student Assistantship", program:"Doctoral – Applied Psychology & Prevention Science", years:"2021–2024"},
-  {sec:"alumni", order:5, name:"Alex Clinton", role:"Mentored Research (Donahue Humanities Ethics Fellowship); FAHSS Student Assistantship", program:"Doctoral – Applied Psychology & Prevention Science", years:"2020–2024"},
-  {sec:"alumni", order:6, name:"Nayantara Kurpad", role:"Mentored Research (Meta-Analytic SEM for Injury Prevention)", program:"Doctoral – Applied Psychology & Prevention Science", years:"2020–2021"},
-  {sec:"alumni", order:7, name:"David Schena", role:"Mentored Research (Meta-Analytic SEM for Injury Prevention)", program:"Doctoral – Applied Psychology & Prevention Science", years:"2020–2021"},
-  {sec:"alumni", order:8, name:"Elyas Irankhah", role:"Mentored Research (Machine Learning for Pediatric TBI Diagnosis), co-mentor", program:"Doctoral – Mechanical Engineering", years:"2021–2025"},
-  {sec:"alumni", order:9, name:"Amanda Carmichael", role:"Mentored Research (Donahue Humanities Ethics Fellowship); NURS.7390 Mentored Research Course", program:"Doctoral – Nursing", years:"2022–2025"},
-  {sec:"current", order:10, name:"Joy Gomes", role:"ABAAS Masters Student", program:"Master's – Applied Behavior Analysis & Autism Studies", years:"2024–"},
-  {sec:"alumni", order:11, name:"Evagelia C. Anthony", role:"MA Community Social Psychology", program:"Master's – Community Social Psychology", years:"2022–2023"},
-  {sec:"alumni", order:12, name:"Shelby Kosterman", role:"Moloney Scholar Fellow, Public Health Intern", program:"Master's – Public Health", years:"2024"},
-  {sec:"alumni", order:13, name:"Samantha Peters", role:"Public Health Intern", program:"Master's – Public Health", years:"2023"},
-  {sec:"alumni", order:14, name:"Kathryn Smolag", role:"Public Health Intern", program:"Master's – Public Health", years:"2023"},
-  {sec:"alumni", order:15, name:"Sara Avdulla", role:"Public Health Intern", program:"Master's – Public Health", years:"2022"},
-  {sec:"alumni", order:16, name:"Loreynis FigueroaBrito", role:"Public Health Intern", program:"Master's – Public Health", years:"2021"},
-  {sec:"alumni", order:17, name:"Venkata Shashidhar Akella", role:"MS Engineering, co-mentor", program:"Master's – Mechanical Engineering", years:"2022–2025"},
-  {sec:"alumni", order:18, name:"Jesus Santiago", role:"Emerging Scholars Program, Volunteer", program:"Undergraduate – Psychology", years:"2024–"},
-  {sec:"alumni", order:19, name:"Diya Patel", role:"Lab Volunteer", program:"Undergraduate – Psychology", years:"2025–"},
-  {sec:"alumni", order:20, name:"Nicolas Spiegel", role:"Research Service Learning", program:"Undergraduate – Psychology", years:"2024"},
-  {sec:"alumni", order:21, name:"Quynh Pham", role:"Moloney Scholar Fellow, Emerging Scholars Program", program:"Undergraduate – Psychology", years:"2024–2025"},
-  {sec:"alumni", order:22, name:"Benjamin Hickman", role:"Research Service Learning", program:"Undergraduate – Psychology", years:"2024–2025"},
-  {sec:"alumni", order:23, name:"Ashley Cline", role:"Research Service Learning", program:"Undergraduate – Psychology", years:"2024–2025"},
-  {sec:"alumni", order:24, name:"Arthur Chigas", role:"Research Service Learning, co-mentor", program:"Undergraduate – Psychology", years:"2024–2025"},
-  {sec:"alumni", order:25, name:"Joseph Chaghouri", role:"Research Service Learning, co-mentor", program:"Undergraduate – Psychology", years:"2024–2025"},
-  {sec:"alumni", order:26, name:"Meher Kaur", role:"Research Service Learning", program:"Undergraduate – Psychology", years:"2024"},
-  {sec:"alumni", order:27, name:"Julia Harrington", role:"Honors Directed Study", program:"Undergraduate – Psychology", years:"2023"},
-  {sec:"alumni", order:28, name:"Racksa Sim", role:"Research Service Learning", program:"Undergraduate – Psychology", years:"2023"},
-  {sec:"alumni", order:29, name:"Ronald Creed", role:"Research Service Learning, co-mentor", program:"Undergraduate – Psychology", years:"2022–2025"},
-  {sec:"alumni", order:30, name:"Gayathri Dayashankar", role:"Directed Study / Research Service Learning", program:"Undergraduate – Psychology", years:"2022–2023"},
-  {sec:"alumni", order:31, name:"Jack Blake", role:"Emerging Scholars Program", program:"Undergraduate – Psychology", years:"2021–2022"},
-  {sec:"alumni", order:32, name:"Hailey DuBose", role:"Research Service Learning / Directed Study", program:"Undergraduate – Psychology", years:"2021–2022"},
-  {sec:"alumni", order:33, name:"Vy Phan", role:"Research Service Learning", program:"Undergraduate – Psychology", years:"2021–2022"},
-  {sec:"alumni", order:34, name:"Dejonai Willis", role:"Honors College Fellowship Program", program:"Undergraduate – Psychology", years:"2021–2022"},
-  {sec:"alumni", order:35, name:"Lauren Field", role:"Mentored Research, co-mentor", program:"Undergraduate – Physical Therapy & Kinesiology", years:"2021"},
-  {sec:"alumni", order:36, name:"Kyra Barry", role:"Honors College Fellowship Program", program:"Undergraduate – Nursing", years:"2023–2024"},
-  {sec:"alumni", order:37, name:"Maika Belizor", role:"River Hawk Scholars Academy Road to Research program", program:"Undergraduate – Biological Sciences", years:"2023–2024"}
+  {sec:"current", order:1, name:"Jiabin Shen, PhD", role:"Principal Investigator", degree:"", dept:"", years:""},
+  {sec:"current", order:2, name:"Angelina Davis", role:"PhD in Psychology · Lab Manager", degree:"", dept:"", years:""},
+  {sec:"alumni", order:1, name:"Jai Aravala", role:"Public Health Intern", degree:"Master's", dept:"Public Health", years:"2023–2025"},
+  {sec:"alumni", order:2, name:"Tonghui Xu", role:"Grant-Funded Mentored Research", degree:"Doctoral", dept:"Research & Evaluation in Education", years:"2023–2024"},
+  {sec:"alumni", order:3, name:"Skylar Charles", role:"Research Service Learning, Directed Study", degree:"Undergraduate", dept:"Psychology", years:"2023–2024"},
+  {sec:"alumni", order:4, name:"Alexandria Winstead", role:"Mentored Research (Meta-Analysis of TBI Cognitive Training); FAHSS Student Assistantship", degree:"Doctoral", dept:"Applied Psychology & Prevention Science", years:"2021–2024"},
+  {sec:"alumni", order:5, name:"Alex Clinton", role:"Mentored Research (Donahue Humanities Ethics Fellowship); FAHSS Student Assistantship", degree:"Doctoral", dept:"Applied Psychology & Prevention Science", years:"2020–2024"},
+  {sec:"alumni", order:6, name:"Nayantara Kurpad", role:"Mentored Research (Meta-Analytic SEM for Injury Prevention)", degree:"Doctoral", dept:"Applied Psychology & Prevention Science", years:"2020–2021"},
+  {sec:"alumni", order:7, name:"David Schena", role:"Mentored Research (Meta-Analytic SEM for Injury Prevention)", degree:"Doctoral", dept:"Applied Psychology & Prevention Science", years:"2020–2021"},
+  {sec:"alumni", order:8, name:"Elyas Irankhah", role:"Mentored Research (Machine Learning for Pediatric TBI Diagnosis)", degree:"Doctoral", dept:"Mechanical Engineering", years:"2021–2025"},
+  {sec:"alumni", order:9, name:"Amanda Carmichael", role:"Mentored Research (Donahue Humanities Ethics Fellowship); NURS.7390 Mentored Research Course", degree:"Doctoral", dept:"Nursing", years:"2022–2025"},
+  {sec:"current", order:10, name:"Joy Gomes", role:"Master's Thesis", degree:"Master's", dept:"Applied Behavior Analysis & Autism Studies", years:"2024–"},
+  {sec:"alumni", order:11, name:"Evagelia C. Anthony", role:"Mentored Research", degree:"Master's", dept:"Community Social Psychology", years:"2022–2023"},
+  {sec:"alumni", order:12, name:"Shelby Kosterman", role:"Moloney Scholar Fellow, Public Health Intern", degree:"Master's", dept:"Public Health", years:"2024"},
+  {sec:"alumni", order:13, name:"Samantha Peters", role:"Public Health Intern", degree:"Master's", dept:"Public Health", years:"2023"},
+  {sec:"alumni", order:14, name:"Kathryn Smolag", role:"Public Health Intern", degree:"Master's", dept:"Public Health", years:"2023"},
+  {sec:"alumni", order:15, name:"Sara Avdulla", role:"Public Health Intern", degree:"Master's", dept:"Public Health", years:"2022"},
+  {sec:"alumni", order:16, name:"Loreynis FigueroaBrito", role:"Public Health Intern", degree:"Master's", dept:"Public Health", years:"2021"},
+  {sec:"alumni", order:17, name:"Venkata Shashidhar Akella", role:"", degree:"Master's", dept:"Mechanical Engineering", years:"2022–2025"},
+  {sec:"alumni", order:18, name:"Jesus Santiago", role:"Emerging Scholars Program, Volunteer", degree:"Undergraduate", dept:"Psychology", years:"2024–"},
+  {sec:"alumni", order:19, name:"Diya Patel", role:"Lab Volunteer", degree:"Undergraduate", dept:"Psychology", years:"2025–"},
+  {sec:"alumni", order:20, name:"Nicolas Spiegel", role:"Research Service Learning", degree:"Undergraduate", dept:"Psychology", years:"2024"},
+  {sec:"alumni", order:21, name:"Quynh Pham", role:"Moloney Scholar Fellow, Emerging Scholars Program", degree:"Undergraduate", dept:"Psychology", years:"2024–2025"},
+  {sec:"alumni", order:22, name:"Benjamin Hickman", role:"Research Service Learning", degree:"Undergraduate", dept:"Psychology", years:"2024–2025"},
+  {sec:"alumni", order:23, name:"Ashley Cline", role:"Research Service Learning", degree:"Undergraduate", dept:"Psychology", years:"2024–2025"},
+  {sec:"alumni", order:24, name:"Arthur Chigas", role:"Research Service Learning", degree:"Undergraduate", dept:"Psychology", years:"2024–2025"},
+  {sec:"alumni", order:25, name:"Joseph Chaghouri", role:"Research Service Learning", degree:"Undergraduate", dept:"Psychology", years:"2024–2025"},
+  {sec:"alumni", order:26, name:"Meher Kaur", role:"Research Service Learning", degree:"Undergraduate", dept:"Psychology", years:"2024"},
+  {sec:"alumni", order:27, name:"Julia Harrington", role:"Honors Directed Study", degree:"Undergraduate", dept:"Psychology", years:"2023"},
+  {sec:"alumni", order:28, name:"Racksa Sim", role:"Research Service Learning", degree:"Undergraduate", dept:"Psychology", years:"2023"},
+  {sec:"alumni", order:29, name:"Ronald Creed", role:"Research Service Learning", degree:"Undergraduate", dept:"Psychology", years:"2022–2025"},
+  {sec:"alumni", order:30, name:"Gayathri Dayashankar", role:"Directed Study, Research Service Learning", degree:"Undergraduate", dept:"Psychology", years:"2022–2023"},
+  {sec:"alumni", order:31, name:"Jack Blake", role:"Emerging Scholars Program", degree:"Undergraduate", dept:"Psychology", years:"2021–2022"},
+  {sec:"alumni", order:32, name:"Hailey DuBose", role:"Research Service Learning, Directed Study", degree:"Undergraduate", dept:"Psychology", years:"2021–2022"},
+  {sec:"alumni", order:33, name:"Vy Phan", role:"Research Service Learning", degree:"Undergraduate", dept:"Psychology", years:"2021–2022"},
+  {sec:"alumni", order:34, name:"Dejonai Willis", role:"Honors College Fellowship Program", degree:"Undergraduate", dept:"Psychology", years:"2021–2022"},
+  {sec:"alumni", order:35, name:"Lauren Field", role:"Mentored Research", degree:"Undergraduate", dept:"Physical Therapy & Kinesiology", years:"2021"},
+  {sec:"alumni", order:36, name:"Kyra Barry", role:"Honors College Fellowship Program", degree:"Undergraduate", dept:"Nursing", years:"2023–2024"},
+  {sec:"alumni", order:37, name:"Maika Belizor", role:"River Hawk Scholars Academy Road to Research program", degree:"Undergraduate", dept:"Biological Sciences", years:"2023–2024"}
 ];
 
 const TDIR_GROUPS = [
   {key:"current", label:"Current Members", test: p => p.sec === "current"},
-  {key:"doctoral", label:"Alumni · Doctoral", test: p => p.sec === "alumni" && p.program.indexOf("Doctoral") === 0},
-  {key:"masters", label:"Alumni · Master's", test: p => p.sec === "alumni" && p.program.indexOf("Master's") === 0},
-  {key:"undergrad", label:"Alumni · Undergraduate", test: p => p.sec === "alumni" && p.program.indexOf("Undergraduate") === 0}
+  {key:"doctoral", label:"Alumni · Doctoral", test: p => p.sec === "alumni" && p.degree === "Doctoral"},
+  {key:"masters", label:"Alumni · Master's", test: p => p.sec === "alumni" && p.degree === "Master's"},
+  {key:"undergrad", label:"Alumni · Undergraduate", test: p => p.sec === "alumni" && p.degree === "Undergraduate"}
 ];
 
-function TDIRrowText(p){
-  return p.sec === "current"
-    ? `${p.name} — ${p.role}`
-    : `${p.name} — ${p.program}, ${p.years}, ${p.role}`;
+function TDIRrow(p, groupKey){
+  if (p.sec === "current") {
+    return `
+    <div class="trow">
+      <span class="trow-dot ${groupKey}"></span>
+      <div class="trow-body">
+        <div class="trow-name">${p.name}</div>
+        <div class="trow-sub">${p.role}</div>
+      </div>
+    </div>`;
+  }
+  const line2 = p.role ? `${p.dept} · ${p.role}` : p.dept;
+  return `
+  <div class="trow">
+    <span class="trow-dot ${groupKey}"></span>
+    <div class="trow-body">
+      <div class="trow-line1">
+        <span class="trow-name">${p.name}</span>
+        <span class="trow-years">${p.years}</span>
+      </div>
+      <div class="trow-sub">${line2}</div>
+    </div>
+  </div>`;
 }
 
 function TDIRrender(query){
@@ -248,11 +279,7 @@ function TDIRrender(query){
         <span class="theme-group-name">${g.label}</span>
         <span class="theme-group-count">${items.length}</span>
       </div>
-      ${items.map(p => `
-      <div class="trow">
-        <span class="trow-dot ${g.key}"></span>
-        <p class="trow-text">${TDIRrowText(p)}</p>
-      </div>`).join("")}
+      ${items.map(p => TDIRrow(p, g.key)).join("")}
     </div>`;
   }).join("");
 }

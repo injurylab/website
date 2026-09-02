@@ -274,12 +274,25 @@ It now drives **two** places on the site, not one:
   counter across the whole sheet (not reset to 1 within every group), so
   don't be surprised when Alumni order numbers aren't contiguous — just
   sort by it within whatever group you're building.
-- `Program (Degree – Department)` and `Years in Lab` — short plain facts,
-  e.g. `"Doctoral – Applied Psychology & Prevention Science"` and
-  `"2021–2024"`. On `team.html`, the `Program` column's *prefix*
-  (`"Doctoral"` / `"Master's"` / `"Undergraduate"`) determines which of
-  the three Alumni subheadings a person lands in. These two columns are
-  only rendered on `team.html`, never on the homepage cards.
+- `Degree Level` and `Department / Program` are two separate columns
+  (they used to be one combined `Program (Degree – Department)` field —
+  don't reintroduce that combined form). `Degree Level` must be exactly
+  `"Doctoral"`, `"Master's"`, or `"Undergraduate"` and is grouping-only:
+  it decides which of `team.html`'s three Alumni subheadings a person
+  lands in and is never itself displayed. `Department / Program` (e.g.
+  `"Mechanical Engineering"`, `"Public Health"`) IS displayed, on
+  `team.html` only, never on homepage cards. `Years in Lab` (e.g.
+  `"2021–2024"`) is likewise `team.html`-only.
+- `Role / Title` must describe what the STUDENT did (e.g. "Research
+  Service Learning," "Mentored Research"), never Dr. Shen's own
+  mentoring relationship to them — "co-mentor," "committee chair," etc.
+  describe his role, not the student's, and must never be displayed as
+  if they were. If a row's Role/Title looks like it's describing Dr.
+  Shen's involvement rather than the student's activity, flag it rather
+  than copying it in as-is; leave `role` blank if the CV doesn't name a
+  separate student activity (see Venkata Akella, whose row has no
+  Role/Title for exactly this reason — `team.html` shows just his
+  Department with no dangling separator in that case).
 - `Featured` (`Yes`/`No`) — controls whether an **Alumni** row also gets
   a full homepage card in `ITG_DATA` (bio, focus, photo/initials, links)
   versus a text-only line on `team.html` only. It does NOT gate whether
@@ -288,27 +301,41 @@ It now drives **two** places on the site, not one:
   every Current Member always gets a homepage card, Featured or not,
   since removing a current lab member's card would be a much bigger
   visual change than trimming an alumnus down to a text line.
-- The rest of the columns (`Full Name`, `Role / Title`, `Current Focus`,
-  `Full Bio`, `Photo filename`, `Avatar initials`, the two Link
-  label/URL pairs) map the same way they always have — see the field
-  mapping below.
+- The rest of the columns (`Full Name`, `Current Focus`, `Full Bio`,
+  `Photo filename`, `Avatar initials`, the two Link label/URL pairs)
+  map the same way they always have — see the field mapping below.
 
-**Known gotcha: a row can claim a full card it doesn't have the data
-for.** `team.html` was introduced alongside a spreadsheet row (Joy
-Gomes) that was `Section = Current Members` with `Featured = Yes`, but
-had no Current Focus, Full Bio, Photo filename, or Avatar initials
-filled in — despite Current Members always getting cards. Don't
-fabricate a bio or focus line to fill a gap like this; ask the user how
-they want it handled. The resolution used for that case, if the user
-wants to move forward without new content: give the card initials
-derived from the person's own name (not a fabricated fact, just a
-standard abbreviation, same convention as everyone else's initials),
-optionally borrow a literal existing field (e.g. the `Program` column)
-for the flip-side focus line, and leave `bio` unset entirely rather than
-an empty string. `ITGcard`/`ITGopenModal` already handle a falsy `bio`
-gracefully — the modal skips the bio paragraph and the flip-card hint
-reads "Click for more" instead of "Click for full bio" — so lean on
-that existing behavior instead of inventing new markup for the gap.
+**`team.html` row format: two lines per person, never an em dash as a
+separator.** Current Members render as `Full Name` on one line and
+`Role/Title` below it in a smaller muted line. Alumni render as `Full
+Name` (left) with `Years in Lab` right-aligned in a small muted mono
+font on the first line (the same visual treatment as a News item's
+date), then `Department · Role/Title` below it in a smaller muted line
+(middle dot separator, matching the device already used for Angelina
+Davis's current role) — or just `Department` alone, no dangling
+separator, when Role/Title is blank. Em dashes are reserved for prose
+elsewhere on the site; don't use one to glue name/department/role
+together into a single line here.
+
+**Gotcha, worth remembering: a row can be flagged for a full card
+without having the data a card needs.** Joy Gomes's row (`Section` and
+`Featured` both flip-flopped across a couple of syncs — she's landed as
+`Section = Current Members`, `Featured = Yes`) has never had a Current
+Focus, Full Bio, Photo filename, or Avatar initials filled in. Don't
+fabricate any of those to fill the gap — ask the owner if you're unsure
+whether the card should exist at all, but if they confirm the person
+belongs as a Current Member / Featured card as-is, the deliberate
+treatment is: derive initials from their own name (a standard
+abbreviation, same convention as everyone else's, not a fabricated
+fact), use a literal existing field for the flip-side focus line (e.g.
+her `Department / Program` value), and leave `bio` unset entirely
+rather than an empty string. `ITGcard`/`ITGopenModal` already handle a
+falsy `bio` gracefully — the modal skips the bio paragraph and the
+flip-card hint reads "Click for more" instead of "Click for full bio" —
+so lean on that existing behavior rather than inventing new markup.
+Since this row's Section/Featured value has changed direction more than
+once, double-check its current values against the spreadsheet (or ask)
+before assuming either state is stable.
 
 **Workflow:** whenever the user says something like "I updated the
 spreadsheet," "sync the team section," or similar — even without further
@@ -319,7 +346,11 @@ detail — do the following:
    `team.html`.
 3. Regenerate `TDIR_DATA` in `team.html` to match the spreadsheet
    **exactly** — every row, every time, since that page has no Featured
-   filter of its own.
+   filter of its own. Each entry needs `sec` (from `Section`), `order`,
+   `name`, `role`, `degree` (from `Degree Level`, alumni only), `dept`
+   (from `Department / Program`, alumni only), and `years` (alumni
+   only) — `degree` and `dept` are separate fields, not a combined
+   string.
 4. Regenerate `ITG_DATA` in `index.html` to hold only: all Current
    Members, plus any Alumni row with `Featured = Yes`.
    - Map each column directly: `Full Name` → `name`, `Role / Title` →
