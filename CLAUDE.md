@@ -582,10 +582,88 @@ break it). The `66` fallback only fires if `data/publications-data.js`
 failed to load entirely (e.g. testing via `file://` — see the gotcha
 under "How to test changes" above) and should be bumped to match reality
 if it ever drifts, but it is not the source of truth in normal use. The
-funding total ($1.6M) and mentee count (43) later in the same sentence
-are still static text sourced from the CV — there's no live data source
-for those in this codebase, so they still need manual updates when the
-CV changes.
+funding total ($1.6M) later in the same sentence is still static text
+sourced from the CV — there's no live data source for it in this
+codebase, so it still needs a manual update when the CV changes. The
+mentee count right after it (42) is also static text, but it is NOT
+CV-sourced — see "The 'Why join our lab?' student-authorship and mentee
+figures" below for where it actually comes from and why it's expected to
+differ from team.html's headcount.
+
+## The "Why join our lab?" student-authorship and mentee figures
+
+The two numeric tabs inside `#join`'s `.eng-card` (`mentor` and `pubs` in
+`IMPACT_DATA`) used to be typed by hand from the CV and drifted the
+moment their underlying source changed elsewhere. Both are now kept
+honest, but by two different mechanisms — know which one applies before
+editing either number.
+
+**`pubs` (student-authored papers) is fully self-syncing — never hand-edit
+its `number` or `sub` fields.** Just above `const IMPACT_DATA`, three
+constants (`STU_HAS`, `STU_PAPERS`, `STU_FIRST`, `STU_CO_ONLY`) derive the
+figure from `data/publications-data.js` — the same array
+`publications.html` filters by `student_first_author` / `student_coauthor`
+— the same live-data pattern `PUB_COUNT` already uses for Shen's bio (see
+below). `STU_FIRST` and `STU_CO_ONLY` are kept deliberately disjoint so
+they always sum to `STU_PAPERS`: a paper flagged both (a mentee led it
+*and* a different mentee also contributed) counts once, under first
+author, not twice. This means running the normal publications sync
+workflow (editing the CSV's authorship checkboxes, then
+`sync_publications.py`) updates this tab automatically — there is nothing
+further to do here. If this number ever looks wrong, the fix is in the
+CSV's `student_first_author`/`student_coauthor` columns, never in this
+file.
+
+**`mentor` (students mentored) is still static text, but it now has a
+real source of truth: the Mentees Database workbook**, kept by Dr. Shen
+in his P&T folder rather than this repo, at (as of September 2026):
+
+    ~/Library/CloudStorage/OneDrive-UMassLowell/P&T/Annual Evalutions/Mentees Database.xlsx
+
+That workbook is the authoritative mentoring roster — broader than
+`team.html`'s roster, and that's intentional, not a bug to reconcile away.
+Its one sheet ("Student Academic Level Spreadsh...") has one row per
+mentoring relationship, with an `Academic Level` column of `Undergraduate`
+/ `Master's` / `Doctoral` / `External`. Two things make a raw row count
+the wrong number to publish:
+
+- **Exclude `External`** rows before counting — they're not UML mentees.
+- **A person can appear in more than one row** if mentored at two
+  different academic levels over time (e.g. undergraduate, then later
+  admitted to a master's or PhD program here). Count *distinct people*,
+  not rows, for the headline number, but keep the per-level sub-counts
+  as row counts (they describe relationships, not people) — the
+  `IMPACT_DATA.mentor.sub` line spells out the person(s) this affected
+  and why the three level-counts don't sum to the headline, so a reader
+  isn't left thinking the arithmetic is broken.
+
+**Do not "fix" `mentor`'s number to match `team.html`'s People count —
+they measure different things on purpose.** As of the September 2026
+reconciliation, the Mentees Database has 4 doctoral rows
+(Karen Salazar Laverde, Gloria L. Fanning-Tacoaman, Joseph Veneziano,
+Stephanie Madden) whose `Role / Activity` is qualifying-paper or
+dissertation **committee service only** — no "Mentored Research." None of
+them were ever lab members, so they correctly have no entry in
+`ITG_DATA`/`TDIR_DATA` and never should. Every doctoral student who *is*
+on `team.html` has actual research mentoring in their role text. So
+`team.html`'s People count will always run a few below the Mentees
+Database total, and that gap is the expected, correct signal that
+committee-only mentees exist — not evidence the team roster is missing
+rows. Before ever changing this number, cross-reference the same way:
+every row in the Mentees Database not matched by name to a `team.html`
+entry should have committee-only language in its `Role / Activity`
+column; if a new row appears there with real mentoring language
+("Mentored Research", "Research Service Learning," etc.) and no matching
+team.html entry, that person is a genuine gap in the team roster and
+should be raised with Dr. Shen, not silently added to this count.
+
+Because the Mentees Database isn't in this repo, updating `mentor`
+requires being handed the current copy (or a fresh export) each time —
+unlike `pubs`, it cannot self-sync. Record the reconciliation date and
+arithmetic in `IMPACT_DATA.mentor.source` (never rendered) each time this
+is redone, the way the September 2026 entry does, so the next session
+doesn't have to redo the distinct-people/committee-only analysis from
+scratch.
 
 ## Keeping this file itself up to date
 
