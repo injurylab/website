@@ -80,7 +80,7 @@ const papers = [
     "featured": true,
     "note": "Memory problems are common after youth sports-related brain injuries, yet this review finds very few rehabilitation programs currently target memory specifically, identifying a clear gap for future research.",
     "studentFirstAuthor": true,
-    "studentCoauthor": false
+    "studentCoauthor": true
   },
   {
     "id": 8,
