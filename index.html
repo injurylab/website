@@ -768,7 +768,7 @@ const ITG_DATA = {
       id:'shen', name:'Jiabin Shen, PhD', role:'Principal Investigator', initials:'JS', photo:'images/jiabin-shen.jpg',
       color:'linear-gradient(135deg,#2E6CA8,#1B3A6B)',
       focus:'TBI rehabilitation · injury epidemiology · neurodivergent youth',
-      bio:`Dr. Shen has studied pediatric injury prevention and rehabilitation since 2011. He directs the Pediatric Injury Research Lab at UMass Lowell, where his interdisciplinary program integrates virtual reality, fNIRS, and large-scale national datasets to improve outcomes for children with TBI, ADHD, and autism. Over $1.6M in external funding secured, ${PUB_COUNT} peer-reviewed publications, and 43 students mentored at UML. Dr. Shen received his PhD in Life-Span Developmental Psychology from University of Alabama at Birmingham (2015).`,
+      bio:`Dr. Shen has studied pediatric injury prevention and rehabilitation since 2011. He directs the Pediatric Injury Research Lab at UMass Lowell, where his interdisciplinary program integrates virtual reality, fNIRS, and large-scale national datasets to improve outcomes for children with TBI, ADHD, and autism. Over $1.6M in external funding secured, ${PUB_COUNT} peer-reviewed publications, and 42 students mentored at UML. Dr. Shen received his PhD in Life-Span Developmental Psychology from University of Alabama at Birmingham (2015).`,
       teaching:['PSYC.2600 Child and Adolescent Development (undergraduate)','PSYC.6410 Fundamentals of Prevention Science (graduate)','PSYC.4880 Research Service Learning (undergraduate, mentored research)'],
       service:{
         current:['Associate Editor, Frontiers in Public Health (Injury Prevention &amp; Control)','Editorial Board Member, BMC Injury Prevention','Editorial Board Member &amp; Guest Editor, Rehabilitation Psychology','Program Officer &amp; Executive Committee Member, Brain Injury Interdisciplinary SIG, American Congress of Rehabilitation Medicine (ACRM)','Member at Large, Executive Committee, APA Division 22 (Rehabilitation Psychology)'],
@@ -976,34 +976,52 @@ ITGrender();
           number/example came from, even though it won't render.
      ────────────────────────────────────────────────────────────── -->
 <script>
+// ── Student-authorship figures, read live from data/publications-data.js ──
+// These used to be hand-typed from the CV's Publications summary, which meant
+// they drifted the moment the CSV's student_first_author / student_coauthor
+// checkboxes were edited — the tab claimed 9 papers (2 first author, 7
+// coauthor) while publications.html showed 8 papers carrying purple student
+// tags (3 first author, 6 coauthor, one paper flagged both). Deriving them
+// here means the tab and the browsable list can never disagree again.
+//
+// The two buckets are kept DISJOINT so they sum to the headline number: a
+// paper flagged both (a mentee led it and another mentee also contributed)
+// counts once, under "first author". The fallbacks only fire if
+// data/publications-data.js failed to load (e.g. opened over file://) and
+// should be refreshed if they ever drift from the CSV.
+const STU_HAS = p => p.studentFirstAuthor || p.studentCoauthor;
+const STU_PAPERS   = typeof papers !== 'undefined' ? papers.filter(STU_HAS).length : 8;
+const STU_FIRST    = typeof papers !== 'undefined' ? papers.filter(p => p.studentFirstAuthor).length : 3;
+const STU_CO_ONLY  = STU_PAPERS - STU_FIRST;
+
 const IMPACT_DATA = [
   {
     id: "mentor",
     tabLabel: "Mentorship & Training",
     tag: "Research experience, at every level",
-    number: "43",
+    number: "42",
     numLabel: "students mentored at UML since 2020",
-    sub: "22 undergraduate &middot; 9 master's &middot; 12 doctoral",
+    sub: "22 undergraduate &middot; 9 master's &middot; 13 doctoral (two mentored at two levels)",
     overview: "Training looks different depending on what a student is looking for, from a semester of Research Service Learning or Directed Study to a doctoral assistantship or mentorship through a qualifying paper or dissertation.",
     examples: [
       "In spring 2024 alone, the lab supported 13 student-led research projects.",
       "Entry points include the FAHSS Emerging Scholars Program, Honors College Fellowship, and Moloney Scholar Fellowship for undergraduates, and NIH- or HRSA-funded assistantships for doctoral students."
     ],
-    source: "CV, Student Mentoring section."
+    source: "Reconciled 2026-09-02 against the Mentees Database workbook (OneDrive: P&T/Annual Evaluations/Mentees Database.xlsx), which is the authoritative mentoring roster. That sheet holds 45 rows: 1 External (excluded from a UML count) and 44 UML rows across 22 undergraduate, 9 master's and 13 doctoral. The 44 rows cover 42 distinct people — JaiSurya Aravala (undergraduate 2023-24, then master's 2025) and Jack Blake (undergraduate 2021-22, then doctoral 2024-25) each appear at two levels — so the headline is 42 students and the sub-line notes why the three levels sum to 44. Deliberately LARGER than team.html's 38: four doctoral students (Karen Salazar Laverde, Gloria L. Fanning-Tacoaman, Joseph Veneziano, Stephanie Madden) were mentored only through QP/dissertation committee service and were never lab members, so they are correctly absent from the lab roster. 38 + 4 = 42."
   },
   {
     id: "pubs",
     tabLabel: "Student-Authored Research",
     tag: "Coauthors, not just assistants",
-    number: "9",
+    number: String(STU_PAPERS),
     numLabel: "papers with a student coauthor at UML",
-    sub: "2 with a mentee as first author &middot; 7 as coauthor",
+    sub: `${STU_FIRST} with a mentee as first author &middot; ${STU_CO_ONLY} as coauthor`,
     overview: "Mentored students don't just assist with the research, they coauthor it: shaping a research question, defending an analytic choice, and seeing a manuscript through peer review.",
     examples: [
       "Recent student-coauthored work appears in journals including <em>Prevention Science</em> and <em>Rehabilitation Psychology</em>.",
       "In a 2026 paper in the <em>Journal of Safety Research</em>, Angelina Davis is first author with Dr. Shen as senior author."
     ],
-    source: "CV, Publications summary; Journal of Safety Research (in press), corroborated by Narrative of Accomplishments."
+    source: "Derived at render time from data/publications-data.js (the student_first_author / student_coauthor columns of the publications CSV) — not hand-typed. If this disagrees with the CV's Publications summary, correct the CSV rather than this file."
   },
   {
     id: "conf",
