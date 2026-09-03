@@ -17,11 +17,32 @@ is not read back in as input):
                  fails this run (see the CrossRef-pending gotcha below).
     url       -- fallback if no DOI exists yet (uses citation_* meta tags)
     theme     -- prevention | neuro | tbi | other
-    role      -- e.g. "First author, PI" or "Senior author \u00b7 PhD Mentee"
     note      -- plain-language "why it matters" -- ONLY used if featured=yes
     featured  -- yes/no -- whether this paper appears in the homepage's
-                 curated 3-pillar section (all 69 always appear on the
+                 curated 3-pillar section (all papers always appear on the
                  all-publications page regardless of this flag)
+
+    student_first_author -- yes/no -- DISPLAYS a "Student First Author" tag.
+                 Always an explicit human call, never inferred.
+    student_coauthor     -- yes/no -- DISPLAYS a "Student Coauthor" tag. A
+                 paper can be yes on BOTH student columns at once (one
+                 student led it, a different one also contributed) and both
+                 tags then show. These two are the ONLY columns that produce
+                 a visible tag on the site.
+
+    my_first_author  -- yes/no -- was Dr. Shen the first author
+    my_senior_author -- yes/no -- was Dr. Shen the senior/last author
+    my_pi            -- yes/no -- did he lead/fund the study as PI
+                 (independent of byline position, so it can be yes
+                 alongside my_first_author OR my_senior_author)
+    my_collaborator  -- yes/no -- a middle-author contribution
+    my_consortium    -- yes/no -- large multi-author consortium paper (GBD)
+
+    None of the five my_* columns ever render as a visible tag -- they only
+    feed the search box, so typing "PI" or "first author" still surfaces
+    the right papers. build_role_text() assembles the searchable phrase
+    from whichever boxes are checked, so that text is never hand-typed and
+    can't drift out of sync the way a free-text field could.
 
 Everything else -- authors, journal, volume/issue/pages, and the full
 APA 7 reference string -- is generated automatically from CrossRef (for
@@ -236,6 +257,23 @@ def fetch_citation_meta_tags(url):
     }
 
 
+def build_role_text(my_first_author, my_senior_author, my_pi, my_collaborator, my_consortium):
+    """Auto-generate the search-only role phrase from checkbox columns, so
+    nobody ever hand-types this text (and it can't drift or be misspelled)."""
+    parts = []
+    if my_first_author:
+        parts.append("First author")
+    if my_senior_author:
+        parts.append("Senior author")
+    if my_collaborator:
+        parts.append("Collaborator")
+    if my_consortium:
+        parts.append("Consortium collaborator")
+    if my_pi:
+        parts.append("PI")
+    return ", ".join(parts)
+
+
 def sync(csv_path, out_path):
     with open(csv_path, newline="", encoding="utf-8") as f:
         rows = list(csv.DictReader(f))
@@ -243,12 +281,18 @@ def sync(csv_path, out_path):
     papers, problems = [], []
 
     for i, row in enumerate(rows, start=1):
+        def flag(col):
+            return (row.get(col) or "").strip().lower() in ("yes", "true", "1")
+
         doi = (row.get("doi") or "").strip()
         url = (row.get("url") or "").strip()
         theme = (row.get("theme") or "other").strip()
-        role = (row.get("role") or "").strip()
         note = (row.get("note") or "").strip() or None
-        featured = (row.get("featured") or "").strip().lower() in ("yes", "true", "1")
+        featured = flag("featured")
+        student_first_author = flag("student_first_author")
+        student_coauthor = flag("student_coauthor")
+        role = build_role_text(flag("my_first_author"), flag("my_senior_author"),
+                               flag("my_pi"), flag("my_collaborator"), flag("my_consortium"))
         in_press = not doi and bool(url)
 
         try:
@@ -273,10 +317,12 @@ def sync(csv_path, out_path):
             "id": i,
             "year": meta["year"] or 2100,   # sorts undated/in-press entries last
             "theme": theme,
-            "role": role,
+            "role": role,   # derived from the my_* checkboxes; search only, never rendered
             "apa": apa,
             "featured": featured,
             "note": note if featured else None,   # only featured papers carry a "why it matters" note
+            "studentFirstAuthor": student_first_author,   # explicit human call, not inferred
+            "studentCoauthor": student_coauthor,           # explicit human call, not inferred
         })
         time.sleep(0.2)  # stay polite to CrossRef / publisher servers
 
@@ -287,7 +333,10 @@ def sync(csv_path, out_path):
         f.write(json.dumps(papers, indent=2, ensure_ascii=False))
         f.write(";\n")
 
-    csv_fieldnames = ["doi", "title", "url", "theme", "role", "note", "featured"]
+    csv_fieldnames = ["doi", "title", "url", "theme", "note", "featured",
+                      "student_first_author", "student_coauthor",
+                      "my_first_author", "my_senior_author", "my_pi",
+                      "my_collaborator", "my_consortium"]
     with open(csv_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=csv_fieldnames, extrasaction="ignore")
         writer.writeheader()

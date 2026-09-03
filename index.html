@@ -17,6 +17,9 @@
   --navy:#0D1F3C; --steel:#1B3A6B; --sky:#2E6CA8;
   --accent:#E8B84B; --sage:#5B8A6F; --sand:#F7F4EE;
   --white:#fff; --mid:#6E7B8B; --ink:#1A2332;
+  /* student tags: purple, deliberately outside the sky/accent/sage theme
+     palette so the tag reads as its own signal rather than a theme color */
+  --student:#6B4C87; --student-bg:rgba(107,76,135,.14);
   --dp:'DM Serif Display',Georgia,serif;
   --bd:'Inter',system-ui,sans-serif;
   --mn:'JetBrains Mono',monospace;
@@ -134,7 +137,9 @@ h2.st{font-family:var(--dp);font-size:clamp(1.7rem,3vw,2.4rem);color:var(--navy)
 .pub-accent .pub-paper::before{background:var(--accent)}
 .pub-sage .pub-paper::before{background:var(--sage)}
 .pub-paper:hover{box-shadow:0 12px 32px rgba(0,0,0,.08)}
-.pub-role{display:inline-block;font-family:var(--mn);font-size:.6rem;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:20px;background:var(--sand);color:var(--steel);margin-bottom:.75rem;align-self:flex-start}
+.pub-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:.75rem;align-self:flex-start}
+.pub-role{display:inline-block;font-family:var(--mn);font-size:.6rem;font-weight:500;letter-spacing:.04em;text-transform:uppercase;padding:3px 9px;border-radius:20px;background:var(--student-bg);color:var(--student)}
+.pub-inpress{display:inline-block;font-family:var(--mn);font-size:.6rem;letter-spacing:.04em;text-transform:uppercase;padding:3px 9px;border-radius:20px;background:var(--sand);color:var(--steel)}
 .pub-ref{font-size:.82rem;color:var(--ink);line-height:1.55;margin-bottom:.7rem;padding-left:1.3em;text-indent:-1.3em}
 .pub-ref em{font-style:italic}
 .pub-ref a{color:var(--sky);word-break:break-word}
@@ -534,11 +539,17 @@ const PUB_THEMES = [
 ];
 
 function PUBcard(p){
+  // Only the two student flags produce a visible tag. Role text is search-only
+  // on publications.html and never rendered, so "In Press" gets its own neutral
+  // pill rather than being appended to a role string.
   const inPress = p.apa.includes('Advance online publication.');
-  const role = p.role + (inPress ? ' · In Press' : '');
+  let tags = '';
+  if (p.studentFirstAuthor) tags += '<span class="pub-role">Student First Author</span>';
+  if (p.studentCoauthor) tags += '<span class="pub-role">Student Coauthor</span>';
+  if (inPress) tags += '<span class="pub-inpress">In Press</span>';
   return `
   <div class="pub-paper">
-    <span class="pub-role">${role}</span>
+    ${tags ? `<div class="pub-tags">${tags}</div>` : ''}
     <p class="pub-ref">${p.apa}</p>
     ${p.note ? `<div class="pub-why"><span class="pub-why-label">Why it matters</span>${p.note}</div>` : ''}
   </div>`;

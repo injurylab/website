@@ -39,6 +39,20 @@ directory instead
 of opening the file: `python3 -m http.server 8000`, then open
 `http://localhost:8000/index.html`.
 
+**Gotcha when verifying CSS via `getComputedStyle` in a headless/hidden
+browser pane:** several classes here animate (`.chip` has
+`transition:background .15s`), and in a hidden pane transitions and
+`requestAnimationFrame` don't advance normally. Reading
+`getComputedStyle(el).backgroundColor` right after toggling a class
+returns the *pre-transition* value, which reads as "the CSS isn't
+applying" when it applies fine. This produced a completely false
+"`<button>` ignores background-color" diagnosis once. Before concluding a
+style is broken: inject `*{transition:none !important}`, wait via
+`setTimeout` (not `rAF`, which can hang in a hidden pane), then measure.
+Also worth knowing: the pane serves **stale inline CSS** aggressively, so
+append a cache-busting query string (`?v=2`) when re-checking a change to
+a `<style>` block, or you will measure the old rules.
+
 ## Design system (do not deviate without being asked)
 
 - **Colors:** navy `#0D1F3C`, steel `#1B3A6B`, sky blue `#2E6CA8`, amber
@@ -596,7 +610,39 @@ from CrossRef. Three files work together:
 pending workaround below** — it's generated output, and the next sync run
 will silently overwrite manual edits.
 
-**CSV columns:** `doi, title, url, theme, role, note, featured`. `title`
+**Authorship is recorded as checkbox columns, not free text.** The CSV has
+no `role` column any more. Instead there are seven yes/no columns, and
+`build_role_text()` in the sync script assembles the searchable role
+phrase from whichever are checked, so that string is never hand-typed and
+can't drift:
+
+- `student_first_author` and `student_coauthor` are the ONLY columns that
+  produce a **visible** tag ("Student First Author" / "Student Coauthor",
+  purple, `--student:#6B4C87` on `--student-bg:rgba(107,76,135,.14)`).
+  A paper can be yes on both at once (one student led it, another also
+  contributed) and both tags render. When both are no, **no tag renders at
+  all** — there is deliberately no fallback badge and no role text on the
+  card, so don't add one.
+- `my_first_author`, `my_senior_author`, `my_pi`, `my_collaborator`,
+  `my_consortium` never render anywhere. They exist only so searching
+  "PI" or "first author" on `publications.html` still finds the right
+  papers. `my_pi` is independent of byline position, so it can be yes
+  alongside either `my_first_author` or `my_senior_author`.
+
+**Filling in the student columns is a judgment call with a specific trap:**
+the CV asterisks *any* student coauthor, including students from other
+labs (Dr. Schwebel's UAB mentees, Dr. Stavrinos's, etc.), so a raw
+asterisk count overstates this lab's own mentorship. Cross-reference every
+asterisked name against the CV's own Student Mentoring roster before
+marking yes. Two edge cases that recur: (a) the roster covers UML students
+only, so asterisked students from the Ohio State/Nationwide era aren't on
+it even though they were genuinely his mentees, and (b) a roster mentee is
+occasionally *not* asterisked on a paper they coauthored. Both were left
+as `no` and flagged for Dr. Shen to correct by hand rather than guessed at.
+Default to `no` plus a flag in your summary whenever you're unsure.
+
+**CSV columns:** `doi, title, url, theme, note, featured`, then the seven
+authorship checkboxes above. `title`
 exists purely so the CSV is readable by a human scanning rows (originally
 added because the owner couldn't tell which paper a row was just from its
 DOI) — the sync script fills or refreshes it automatically after every
@@ -612,12 +658,9 @@ script scrapes `citation_*` meta tags from that URL instead). `theme` is
 one of `prevention | neuro | tbi | other` — GBD/consortium-style papers
 with huge collaborator lists (Dr. Shen contributes analytic/interpretive
 input, not authorship credit) consistently go in `other` with
-`role: "Consortium collaborator"`, even when the topic is injury-related,
-since there's no clean way to feature or theme-bucket a 200+ author paper.
-`role` should reuse the existing vocabulary already in the CSV (e.g.
-`"First author, PI"`, `"Senior author · PhD Mentee"`, `"Collaborator"`,
-`"Contributing author"`) rather than inventing new phrasing, so filtering
-and role-pill styling stay consistent. `note` and `featured:yes` are only
+`my_consortium: yes`, even when the topic is injury-related, since
+there's no clean way to feature or theme-bucket a 200+ author paper.
+`note` and `featured:yes` are only
 meaningful for the ~8 papers curated onto the homepage; every other row
 should have `featured:no` and a blank `note` — don't write "why it
 matters" copy for the general list, per the site's no-fabrication rule.
@@ -665,8 +708,8 @@ existing mechanisms before adding a fifth.
 **Workflow:** whenever the user says something like "add this paper,"
 "sync the publications database," or similar:
 
-1. Add/edit the CSV row(s), reusing existing `theme`/`role` conventions
-   above.
+1. Add/edit the CSV row(s), following the `theme` and authorship-checkbox
+   conventions above.
 2. Run `python3 scripts/sync_publications.py data/PIRL-Publications-Database.csv data/publications-data.js`.
 3. Handle any fetch failures per the CrossRef-pending gotcha above rather
    than assuming they're errors in the CSV.

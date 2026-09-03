@@ -13,6 +13,9 @@
   --navy:#0D1F3C; --steel:#1B3A6B; --sky:#2E6CA8;
   --accent:#E8B84B; --sage:#5B8A6F; --sand:#F7F4EE;
   --white:#fff; --mid:#6E7B8B; --ink:#1A2332;
+  /* student tags: purple, deliberately outside the sky/accent/sage theme
+     palette so the tag reads as its own signal rather than a theme color */
+  --student:#6B4C87; --student-bg:rgba(107,76,135,.14);
   --dp:'DM Serif Display',Georgia,serif;
   --bd:'Inter',system-ui,sans-serif;
   --mn:'JetBrains Mono',monospace;
@@ -60,7 +63,7 @@ nav{position:sticky;top:0;z-index:1000;background:rgba(13,31,60,.97);backdrop-fi
 .chip:hover{border-color:var(--sky)}
 .chip.active{background:var(--navy);border-color:var(--navy);color:#fff}
 .chip .dot{width:7px;height:7px;border-radius:50%;display:inline-block}
-.chip.mentee.active{background:var(--sage);border-color:var(--sage)}
+.chip.student.active{background:var(--student);border-color:var(--student);color:#fff}
 .view-toggle{display:inline-flex;border:1px solid rgba(0,0,0,.14);border-radius:8px;overflow:hidden;flex-shrink:0}
 .view-toggle button{font-family:var(--mn);font-size:.68rem;letter-spacing:.03em;text-transform:uppercase;padding:7px 14px;border:none;background:#fff;color:var(--mid);cursor:pointer}
 .view-toggle button.active{background:var(--steel);color:#fff}
@@ -86,8 +89,7 @@ nav{position:sticky;top:0;z-index:1000;background:rgba(13,31,60,.97);backdrop-fi
 .prow-dot.other{background:var(--steel)}
 .prow-body{flex:1;min-width:0}
 .prow-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:.4rem}
-.prow-role{display:inline-block;font-family:var(--mn);font-size:.6rem;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:20px;background:var(--sand);color:var(--steel)}
-.prow-role.mentee{background:rgba(91,138,111,.14);color:var(--sage)}
+.prow-role{display:inline-block;font-family:var(--mn);font-size:.6rem;font-weight:500;letter-spacing:.04em;text-transform:uppercase;padding:3px 9px;border-radius:20px;background:var(--student-bg);color:var(--student)}
 .prow-year{display:inline-block;font-family:var(--mn);font-size:.6rem;color:var(--mid);padding:2px 4px}
 .prow-ref{font-size:.86rem;color:var(--ink);line-height:1.6;padding-left:1.35em;text-indent:-1.35em}
 .prow-ref em{font-style:italic}
@@ -151,7 +153,8 @@ footer.pf a:hover{color:var(--accent)}
     <div class="control-row">
       <div class="chips" id="theme-chips" role="group" aria-label="Filter by theme"></div>
       <div style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap">
-        <button type="button" class="chip mentee" id="mentee-toggle" aria-pressed="false">Mentee-led only</button>
+        <button type="button" class="chip student" id="sfa-toggle" aria-pressed="false">Student First Author</button>
+        <button type="button" class="chip student" id="sca-toggle" aria-pressed="false">Student Coauthor</button>
         <div class="view-toggle" role="group" aria-label="View mode">
           <button type="button" id="view-theme" class="active">By theme</button>
           <button type="button" id="view-year">By year</button>
@@ -182,7 +185,7 @@ const THEME_META = {
 };
 const THEME_ORDER = ['prevention','neuro','tbi','other'];
 
-const state = { search:'', theme:null, menteeOnly:false, view:'theme' };
+const state = { search:'', theme:null, studentFirstAuthor:false, studentCoauthor:false, view:'theme' };
 const allPapers = typeof papers !== 'undefined' ? papers : [];
 
 function buildThemeChips(){
@@ -221,25 +224,40 @@ function matchesSearch(p, q){
   return haystack.includes(q);
 }
 
+function matchesStudentFilters(p){
+  // both chips off means no student filtering at all; with either or both on,
+  // a paper matches if it satisfies EITHER active chip (OR logic)
+  if (!state.studentFirstAuthor && !state.studentCoauthor) return true;
+  return (state.studentFirstAuthor && p.studentFirstAuthor) ||
+         (state.studentCoauthor && p.studentCoauthor);
+}
+
 function filteredPapers(){
   const q = state.search.trim().toLowerCase();
   return allPapers.filter(p =>
     matchesSearch(p, q) &&
     (!state.theme || p.theme === state.theme) &&
-    (!state.menteeOnly || /mentee/i.test(p.role))
+    matchesStudentFilters(p)
   );
+}
+
+function studentTagsHTML(p){
+  // the only visible tags. Both show when both are true; nothing shows when
+  // neither is -- no fallback to role text, which is search-only.
+  let out = '';
+  if (p.studentFirstAuthor) out += '<span class="prow-role">Student First Author</span>';
+  if (p.studentCoauthor) out += '<span class="prow-role">Student Coauthor</span>';
+  return out;
 }
 
 function rowHTML(p){
   const theme = THEME_META[p.theme] ? p.theme : 'other';
-  const isMentee = /mentee/i.test(p.role);
+  const tags = studentTagsHTML(p);
   return `
   <div class="prow">
     <span class="prow-dot ${theme}"></span>
     <div class="prow-body">
-      <div class="prow-tags">
-        <span class="prow-role${isMentee ? ' mentee' : ''}">${p.role}</span>
-      </div>
+      ${tags ? `<div class="prow-tags">${tags}</div>` : ''}
       <p class="prow-ref">${p.apa}</p>
     </div>
   </div>`;
@@ -286,11 +304,15 @@ document.getElementById('search').addEventListener('input', e => {
   render();
 });
 
-document.getElementById('mentee-toggle').addEventListener('click', function(){
-  state.menteeOnly = !state.menteeOnly;
-  this.classList.toggle('active', state.menteeOnly);
-  this.setAttribute('aria-pressed', String(state.menteeOnly));
-  render();
+// the two student chips toggle independently of each other and of the theme
+// chips, so any combination can be active at once
+[['sfa-toggle', 'studentFirstAuthor'], ['sca-toggle', 'studentCoauthor']].forEach(([id, key]) => {
+  document.getElementById(id).addEventListener('click', function(){
+    state[key] = !state[key];
+    this.classList.toggle('active', state[key]);
+    this.setAttribute('aria-pressed', String(state[key]));
+    render();
+  });
 });
 
 document.getElementById('view-theme').addEventListener('click', function(){
