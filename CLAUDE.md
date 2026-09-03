@@ -13,13 +13,22 @@ UMass Lowell. Hosted on **GitHub Pages**, served at the custom domain
 in the repo root contains `injurylab.org`).
 
 There is no build step, no framework, no package.json, no dependencies.
-The entire site is one file: **`index.html`** — plain HTML + inline
-`<style>` + inline `<script>`. Two supporting files sit alongside it at the
-repo root: **`robots.txt`** and **`sitemap.xml`** (basic SEO). Do not
-introduce a build tool, bundler, or framework unless explicitly asked —
-simplicity here is intentional, since the site owner is not a developer
-and edits files directly through the GitHub web UI when Claude isn't
-involved.
+The site is three hand-written HTML pages plus one shared stylesheet:
+
+    index.html          -- the homepage (hero, research, publications,
+                           team, join, news, contact); still carries all of
+                           its own JS and its page-specific CSS inline
+    publications.html   -- full publications list, search + filters
+    team.html           -- full team & alumni directory
+    assets/site.css     -- the ONE stylesheet shared by all three
+    robots.txt          -- basic SEO
+    sitemap.xml         -- basic SEO
+
+Do not introduce a build tool, bundler, framework, or CSS preprocessor
+unless explicitly asked — simplicity here is intentional, since the site
+owner is not a developer and edits files directly through the GitHub web
+UI when Claude isn't involved. `assets/site.css` is a plain `<link>`, not
+a build artifact; nothing compiles it.
 
 ## How to "test" changes
 
@@ -51,12 +60,47 @@ style is broken: inject `*{transition:none !important}`, wait via
 `setTimeout` (not `rAF`, which can hang in a hidden pane), then measure.
 Also worth knowing: the pane serves **stale inline CSS** aggressively, so
 append a cache-busting query string (`?v=2`) when re-checking a change to
-a `<style>` block, or you will measure the old rules.
+a `<style>` block, or you will measure the old rules. The same applies to
+`assets/site.css` now that it's an external file.
+
+Three more hidden-pane behaviours, all confirmed the hard way, all of
+which look like broken code but aren't:
+
+- `document.documentElement.clientWidth` reports **0** and `scrollWidth`
+  reports a nonsense value (~200px), so any overflow or touch-target
+  measurement taken without first calling `resize_window` is garbage.
+  Set an explicit viewport (e.g. 375x812, then 1280x900) before
+  measuring anything geometric.
+- **Smooth scrolling does not advance.** `scrollIntoView()` and
+  `window.scrollTo({behavior:'smooth'})` are no-ops because `html` has
+  `scroll-behavior:smooth` and smooth scroll is driven by `rAF`. Use
+  `window.scrollTo({top:N, behavior:'instant'})` instead.
+- **Screenshots of scrolled-to content come back blank white** — the
+  compositor doesn't repaint off-screen regions. Only the initial
+  viewport screenshots reliably. To check a section further down the
+  page, measure it with `getBoundingClientRect` /
+  `getComputedStyle` rather than trying to photograph it.
 
 ## Design system (do not deviate without being asked)
 
 - **Colors:** navy `#0D1F3C`, steel `#1B3A6B`, sky blue `#2E6CA8`, amber
   accent `#E8B84B`, sage green `#5B8A6F`, sand background `#F7F4EE`.
+  These live as CSS custom properties in `assets/site.css` (`:root`) and
+  are the single source of truth — don't redeclare them in a page's
+  inline `<style>`.
+- **Text-safe color variants — use these whenever a brand color carries
+  words.** `--accent` and `--sage` are tuned to look right as fills,
+  borders, and dots, but as *text on a light background* they measure
+  around 3:1, below the WCAG AA 4.5:1 floor. `--accent-ink` (`#8F6A1B`)
+  and `--sage-ink` (`#456B54`) are the text versions. Likewise `--mid`,
+  the muted body-copy grey, is `#5D6B7C` and not the older `#6E7B8B` —
+  that measured 4.33:1 on white and 3.92:1 on `--sand`, and it's used
+  for a lot of real running copy. Don't "restore" the lighter value.
+- **Text on navy/steel surfaces** uses three fixed steps —
+  `--on-dark-1` (.92, body), `--on-dark-2` (.74, secondary),
+  `--on-dark-3` (.58, meta/eyebrow) — instead of ad-hoc `rgba(255,255,
+  255,.4)`-style alphas, several of which previously fell below AA.
+  Reach for one of the three rather than inventing a fourth.
 - **Fonts:** `DM Serif Display` for headings, `Inter` for body text,
   `JetBrains Mono` for small labels/eyebrows/tags. All loaded via Google
   Fonts `<link>` in `<head>`.
@@ -64,9 +108,82 @@ a `<style>` block, or you will measure the old rules.
   Research Pillars (3 cards) → Publications → Team ("Meet the Lab") →
   Join Us (grad student recruiting, including the tabbed student
   engagement content) → News → Contact/Footer.
-- All custom CSS classes are short/abbreviated (e.g. `.hin`, `.rc`, `.tgd`,
-  `.itg-card`) to keep the single file compact. Follow the existing naming
+- **Spacing, radii, elevation and motion are tokenized too** — a 4px
+  spacing scale (`--s1` = .25rem through `--s24` = 6rem), radii
+  (`--r-sm/md/lg/pill`), one shadow ramp (`--sh-1/2/3`, tinted navy
+  rather than neutral black), and one easing curve (`--ease`) with three
+  durations (`--dur-1/2/3`). Use them instead of fresh magic numbers, so
+  vertical rhythm and hover timing stay consistent across sections.
+- All custom CSS classes are short/abbreviated (e.g. `.hin`, `.rc`,
+  `.itg-card`) to keep the files compact. Follow the existing naming
   convention rather than introducing verbose class names.
+
+## The shared stylesheet (`assets/site.css`) — what goes where
+
+Until September 2026 every page carried its own full copy of the design
+tokens, the reset, the nav, and (on the two sub-pages) the page-header /
+search / chip / footer shell. That meant a nav tweak was three identical
+edits, and the three copies had already drifted apart — `team.html` and
+`publications.html` had `background:none;border:none` on the hamburger
+`<button>` and `index.html` did not, so the homepage's mobile menu button
+rendered with default browser chrome and nobody noticed. That
+triplication is why `assets/site.css` exists.
+
+**The dividing line:** if two or more pages use a rule, it belongs in
+`assets/site.css`. If exactly one page uses it, it stays in that page's
+inline `<style>` block. Concretely, `assets/site.css` owns:
+
+- design tokens (`:root`), the reset, base typography, `::selection`
+- the global `:focus-visible` ring and the `prefers-reduced-motion` block
+- the nav (including the mobile menu and the hamburger's X animation)
+- `.skip`, `.con`, `.sec`, `.snd`
+- the `.bp` / `.bo` buttons
+- the sub-page shell shared by `publications.html` and `team.html`:
+  `.phead`, `.controls`, `.search`, `.chip`, `.view-toggle`,
+  `.result-count`, `.theme-group*`, `.plist`, `.no-results`, `footer.pf`
+
+Everything else — the hero, research cards, `.eng-card` tabs, featured
+publications, the `.itg-*` team grid and modal, `.ndb-*` news, contact —
+is homepage-specific and stays inline in `index.html`. `.prow*` stays in
+`publications.html`; `.trow*` and `.alum-note` stay in `team.html`.
+
+**Load order is load-bearing.** `assets/site.css` must be linked *before*
+each page's inline `<style>`. Ties in specificity are resolved by
+whichever rule comes later, so the inline block is what lets a page
+override a shared rule. Flip the order and page-specific overrides
+silently stop working. This is the same source-order trap already
+documented for the `@media(max-width:760px)` block inside `index.html`,
+just across files instead of within one — and that within-file trap still
+applies unchanged.
+
+**Two conventions inside the shared file that are easy to undo by
+accident:**
+
+- The `:focus-visible` rule deliberately sets **no `border-radius`.** The
+  ring is a `box-shadow`, so it already follows whatever radius the
+  element has. Adding `border-radius` there reshapes every focused
+  element — it turned the round 50% modal close button into a squircle
+  before it was caught.
+- `.con` is the single horizontal-rhythm authority: it owns `max-width`
+  **and** the left/right gutter. `.sec` owns vertical padding only. That
+  split is what lets a full-bleed background (`.snd`, `.conb`) reach the
+  viewport edge while its content stays aligned with every other
+  section. Don't put horizontal padding back on `.sec`.
+
+**Per-person avatar colors are passed as a custom property, not a
+background.** `ITG_DATA`'s `color` field (a `linear-gradient(...)`
+string) is emitted as `style="--tint:..."`, and `.itg-avatar` /
+`.itg-modal-avatar` resolve it via
+`background:var(--tint, <fallback gradient>)`. The old code wrote
+`background:${p.color}` directly, which meant an alumni row — those have
+no `color` field — emitted the invalid declaration `background:undefined`;
+the browser dropped it and the modal showed white initials on a
+transparent circle. The `--tint` fallback fixes that class of bug, so
+keep the guard (`${p.color ? ` style="--tint:${p.color}"` : ''}`) that
+omits the attribute entirely when there's no color. The remaining inline
+styles in `index.html` are all legitimate per-person data bindings of
+this kind (tint, and photo `object-position`) — don't try to "clean them
+up" into classes, since their values come from the roster data.
 
 ## The "Why join our lab?" section — merged structure and update cadence
 
@@ -125,20 +242,24 @@ instead of stretching edge to edge now that it's not sharing a 2-column
 grid with the perks anymore.
 
 **Gotcha: this file's mobile overrides only work if they come after their
-base rule in source order.** The single `@media(max-width:760px)` block
-(currently sitting right after the `.stps`/`.stxt` rules, at the end of
-the JOIN CSS) holds mobile tweaks for several unrelated components
-(`.pw-tab`, `.pw-examples`, `.eng-card`, `.prks`) — not because they're
-related, but because CSS resolves a tie in specificity by whichever rule
-comes *later* in the file, media query or not. When `.prks`'s base rule
-briefly lived below this media query during a reorder, its mobile
-override was silently ignored (grid stayed 2 columns at every width) even
-though the CSS looked correct and no console error appeared — the only
-way to catch it was checking `getComputedStyle` at a narrow width. If you
-add a new mobile override here, or move a class's base rule around,
-confirm in a browser (not just by reading the CSS) that the base rule
-still sits earlier in the file than this media query, or move the media
-query again rather than assuming order doesn't matter.
+base rule in source order.** The `@media(max-width:760px)` block holding
+`.pw-tab`, `.pw-examples`, `.eng-card` and `.prks` groups those four
+unrelated components together not because they're related, but because
+CSS resolves a tie in specificity by whichever rule comes *later* in the
+file, media query or not. When `.prks`'s base rule briefly lived below
+this media query during a reorder, its mobile override was silently
+ignored (grid stayed 2 columns at every width) even though the CSS looked
+correct and no console error appeared — the only way to catch it was
+checking `getComputedStyle` at a narrow width.
+
+Since the September 2026 cleanup, **every media query in `index.html`
+lives in one `RESPONSIVE` block at the very end of the inline `<style>`**,
+ordered widest-to-narrowest (900 → 760 → 700 → 640 → 480). Keeping them
+there is what makes the rule easy to honour: any base rule you add sits
+above them automatically. If you add a new mobile override, put it in
+that block rather than next to its base rule, and if you move a base rule
+around, confirm in a browser (not just by reading the CSS) that it still
+sits earlier in the file than the RESPONSIVE block.
 
 ## The "Meet the Lab" team section — important structure
 
@@ -230,8 +351,9 @@ the user for the real information instead.
   contact info, research areas). Validate any edits to this block with a
   JSON parser — a syntax error here won't break the visible page but will
   silently make the structured data useless to search engines.
-- `robots.txt` and `sitemap.xml` exist at the repo root, referenced from
-  `<head>` and pointing crawlers at the single homepage URL.
+- `robots.txt` and `sitemap.xml` exist at the repo root. The sitemap lists
+  all three pages (homepage, `publications.html`, `team.html`) — add a
+  `<url>` entry if a fourth page is ever created.
 - Google Search Console verification is a manual step the owner does
   themselves (pasting a verification meta tag Claude adds on request) —
   not yet fully confirmed as complete as of this writing.

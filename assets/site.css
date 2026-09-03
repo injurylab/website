@@ -1,0 +1,399 @@
+/* ==========================================================================
+   PIRL — shared site foundation
+   --------------------------------------------------------------------------
+   Loaded by index.html, publications.html and team.html.
+
+   Previously the design tokens, the reset, the nav and the sub-page shell
+   (page header, search field, filter chips, footer) were copy-pasted into all
+   three pages' inline <style> blocks. A nav tweak meant three identical edits
+   and they had already drifted apart. Everything genuinely shared now lives
+   here; anything used by exactly one page stays inline in that page.
+
+   Section order matters — several page-level overrides rely on being able to
+   win a specificity tie by coming later, so keep this file loaded FIRST.
+   ========================================================================== */
+
+
+/* ── 1. DESIGN TOKENS ────────────────────────────────────────────────────── */
+:root {
+  /* Brand palette — unchanged hues, these are the canonical values. */
+  --navy:#0D1F3C;
+  --steel:#1B3A6B;
+  --sky:#2E6CA8;
+  --accent:#E8B84B;
+  --sage:#5B8A6F;
+  --sand:#F7F4EE;
+  --white:#fff;
+  --ink:#1A2332;
+
+  /* Text-safe variants of the decorative brand colors.
+     --accent and --sage are tuned to look right as fills, borders and dots;
+     as *text on a light background* they land around 3:1, which fails WCAG AA.
+     Use the -ink variants any time the color carries words. */
+  --accent-ink:#8F6A1B;
+  --sage-ink:#456B54;
+
+  /* Muted body text. Nudged darker than the original #6E7B8B, which measured
+     4.33:1 on white and 3.92:1 on --sand (both below the 4.5:1 AA floor) and
+     is used for a lot of real running copy. This sits at 5.4 / 4.9. */
+  --mid:#5D6B7C;
+
+  /* Text on the navy/steel surfaces. Three fixed steps instead of a dozen
+     ad-hoc rgba() alphas, all of which clear AA against --navy. */
+  --on-dark-1:rgba(255,255,255,.92);   /* body copy */
+  --on-dark-2:rgba(255,255,255,.74);   /* secondary */
+  --on-dark-3:rgba(255,255,255,.58);   /* meta / eyebrow */
+  --hairline-dark:rgba(255,255,255,.12);
+  --surface-dark:rgba(255,255,255,.06);
+
+  /* Hairlines on light surfaces. */
+  --hairline:rgba(13,31,60,.09);
+  --hairline-strong:rgba(13,31,60,.16);
+
+  /* Student authorship tags: purple, deliberately outside the sky/accent/sage
+     theme palette so the tag reads as its own signal rather than a theme color. */
+  --student:#6B4C87;
+  --student-bg:rgba(107,76,135,.14);
+
+  /* Type */
+  --dp:'DM Serif Display',Georgia,'Times New Roman',serif;
+  --bd:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mn:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+
+  /* Spacing scale — 4px base. Use these rather than fresh magic numbers so
+     vertical rhythm stays consistent between sections. */
+  --s1:.25rem;  --s2:.5rem;   --s3:.75rem;  --s4:1rem;
+  --s5:1.25rem; --s6:1.5rem;  --s7:1.75rem; --s8:2rem;
+  --s10:2.5rem; --s12:3rem;   --s14:3.5rem; --s16:4rem;
+  --s20:5rem;   --s24:6rem;
+
+  /* Radii */
+  --r-sm:6px; --r-md:10px; --r-lg:14px; --r-pill:999px;
+
+  /* Elevation — a single ramp, tinted navy rather than neutral black so
+     shadows sit in the same color family as the rest of the page. */
+  --sh-1:0 1px 2px rgba(13,31,60,.05), 0 1px 3px rgba(13,31,60,.05);
+  --sh-2:0 2px 6px rgba(13,31,60,.06), 0 6px 16px -6px rgba(13,31,60,.10);
+  --sh-3:0 4px 10px rgba(13,31,60,.06), 0 18px 38px -12px rgba(13,31,60,.20);
+  --sh-glow-accent:0 10px 26px -8px rgba(232,184,75,.55);
+
+  /* Motion — two durations and one easing curve, used everywhere. */
+  --dur-1:.16s;
+  --dur-2:.28s;
+  --dur-3:.45s;
+  --ease:cubic-bezier(.22,.61,.36,1);
+
+  /* Layout */
+  --mw:1140px;
+  --gutter:2rem;
+  --nav-h:64px;
+
+  --ring:0 0 0 3px rgba(46,108,168,.42);
+  --ring-dark:0 0 0 3px rgba(232,184,75,.5);
+}
+
+
+/* ── 2. RESET & BASE ─────────────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+html{
+  scroll-behavior:smooth;
+  /* Anchor targets clear the sticky nav instead of hiding behind it. */
+  scroll-padding-top:calc(var(--nav-h) + var(--s4));
+  -webkit-text-size-adjust:100%;
+}
+
+body{
+  font-family:var(--bd);
+  font-size:1rem;
+  line-height:1.65;
+  color:var(--ink);
+  background:var(--white);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  font-synthesis-weight:none;
+  text-rendering:optimizeLegibility;
+}
+
+img,svg{display:block;max-width:100%}
+img{height:auto}
+
+a{color:inherit;text-decoration:none}
+
+/* Inputs and buttons inherit type instead of falling back to browser chrome. */
+button,input,textarea,select{font:inherit;color:inherit}
+button{background:none;border:none;cursor:pointer}
+
+/* Serif display headings are set tight; the default 1.2em tracking of
+   DM Serif Display reads loose at large sizes. */
+h1,h2,h3,h4{
+  font-family:var(--dp);
+  font-weight:400;
+  letter-spacing:-.012em;
+  line-height:1.15;
+  text-wrap:balance;
+}
+p{text-wrap:pretty}
+
+::selection{background:rgba(232,184,75,.32);color:var(--navy)}
+
+/* One visible focus style for the whole site — keyboard only, never on click.
+   No border-radius here on purpose: the ring is a box-shadow, so it already
+   follows whatever radius the element has (a 50% close button stays round). */
+:focus-visible{outline:none;box-shadow:var(--ring)}
+.hero :focus-visible,
+.conb :focus-visible,
+.phead :focus-visible,
+nav :focus-visible,
+footer.pf :focus-visible{box-shadow:var(--ring-dark)}
+
+.skip{
+  position:absolute;top:-60px;left:0;z-index:9999;
+  background:var(--accent);color:var(--navy);
+  padding:var(--s2) var(--s4);border-radius:0 0 var(--r-sm) 0;
+  font-weight:600;transition:top var(--dur-2) var(--ease);
+}
+.skip:focus{top:0}
+
+/* Respect reduced-motion: kill transforms/transitions rather than just
+   shortening them, since the team cards use a 3D flip. */
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{
+    animation-duration:.01ms!important;animation-iteration-count:1!important;
+    transition-duration:.01ms!important;scroll-behavior:auto!important;
+  }
+  .itg-card:hover .itg-card-inner,
+  .itg-card:focus-visible .itg-card-inner,
+  .itg-card.itg-flipped .itg-card-inner{transform:none!important}
+}
+
+
+/* ── 3. LAYOUT PRIMITIVES ────────────────────────────────────────────────── */
+
+/* .con is the single horizontal-rhythm authority: max width + gutters.
+   Sections own vertical padding only, so a full-bleed background always
+   reaches the viewport edge while its content stays aligned. */
+.con{max-width:var(--mw);margin-inline:auto;padding-inline:var(--gutter);width:100%}
+.sec{padding-block:var(--s20)}
+.snd{background:var(--sand)}
+
+
+/* ── 4. NAV ──────────────────────────────────────────────────────────────── */
+nav{
+  position:sticky;top:0;z-index:1000;
+  background:rgba(13,31,60,.94);
+  backdrop-filter:blur(14px) saturate(160%);
+  -webkit-backdrop-filter:blur(14px) saturate(160%);
+  border-bottom:1px solid var(--hairline-dark);
+}
+/* Browsers without backdrop-filter get the opaque navy instead of a
+   washed-out translucent bar. */
+@supports not (backdrop-filter:blur(1px)){
+  nav{background:rgba(13,31,60,.98)}
+}
+
+.ni{
+  max-width:var(--mw);margin-inline:auto;padding-inline:var(--gutter);
+  height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;gap:var(--s4);
+}
+
+.logo{display:flex;align-items:center;gap:12px;min-width:0}
+.logo .mk{
+  width:36px;height:36px;flex-shrink:0;border-radius:var(--r-sm);
+  background:linear-gradient(140deg,#F2CC6B,var(--accent));
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--dp);font-size:18px;color:var(--navy);font-weight:700;
+  box-shadow:0 2px 8px -2px rgba(232,184,75,.5);
+  transition:transform var(--dur-2) var(--ease),box-shadow var(--dur-2) var(--ease);
+}
+.logo:hover .mk{transform:translateY(-1px) rotate(-3deg);box-shadow:0 5px 14px -3px rgba(232,184,75,.65)}
+.logo .wm{font-weight:600;font-size:.85rem;color:#fff;line-height:1.25;min-width:0}
+.logo .wm span{
+  display:block;font-weight:300;font-size:.68rem;color:var(--on-dark-3);
+  letter-spacing:.08em;text-transform:uppercase;
+}
+
+.nl{display:flex;gap:2px;list-style:none;align-items:center}
+.nl a{
+  position:relative;display:block;padding:9px 13px;
+  font-size:.78rem;font-weight:500;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--on-dark-2);border-radius:var(--r-sm);
+  transition:color var(--dur-1) var(--ease),background var(--dur-1) var(--ease);
+}
+.nl a:hover,.nl a:focus-visible{color:#fff;background:rgba(255,255,255,.09)}
+.nl a.active{color:#fff;background:rgba(255,255,255,.09)}
+/* Thin amber underline marks the current page without adding weight. */
+.nl a.active::after{
+  content:'';position:absolute;left:13px;right:13px;bottom:3px;height:1.5px;
+  background:var(--accent);border-radius:2px;
+}
+
+/* Hamburger — animates into an X so its state is readable without the menu. */
+.hb{
+  display:none;flex-direction:column;justify-content:center;gap:5px;
+  width:44px;height:44px;flex-shrink:0;align-items:center;padding:0;border-radius:var(--r-sm);
+  transition:background var(--dur-1) var(--ease);
+}
+.hb:hover{background:rgba(255,255,255,.08)}
+.hb span{
+  display:block;width:22px;height:2px;background:#fff;border-radius:2px;
+  transition:transform var(--dur-2) var(--ease),opacity var(--dur-1) var(--ease);
+}
+.hb[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hb[aria-expanded="true"] span:nth-child(2){opacity:0;transform:scaleX(.4)}
+.hb[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+@media(max-width:820px){
+  .hb{display:flex}
+  .nl{
+    display:none;position:fixed;top:var(--nav-h);left:0;right:0;
+    max-height:calc(100dvh - var(--nav-h));overflow-y:auto;
+    background:rgba(13,31,60,.98);backdrop-filter:blur(14px);
+    flex-direction:column;align-items:stretch;gap:0;
+    padding:var(--s2) var(--gutter) var(--s8);
+  }
+  .nl.open{display:flex}
+  /* 48px minimum touch target, per WCAG 2.5.8 / platform guidance. */
+  .nl a{
+    display:flex;align-items:center;min-height:48px;padding:0 2px;
+    font-size:.85rem;border-radius:0;
+    border-bottom:1px solid rgba(255,255,255,.07);
+  }
+  .nl a.active::after{left:2px;right:auto;width:18px;bottom:10px}
+}
+
+
+/* ── 5. BUTTONS ──────────────────────────────────────────────────────────── */
+/* Shared by the hero, the "Ready to apply?" box and the sub-page shells.
+   All three lift very slightly on hover — the same 2px, the same curve. */
+.bp,.bo{
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  min-height:46px;padding:0 var(--s6);border-radius:var(--r-sm);
+  font-size:.88rem;font-weight:600;letter-spacing:.005em;text-align:center;
+  transition:background var(--dur-1) var(--ease),
+             border-color var(--dur-1) var(--ease),
+             color var(--dur-1) var(--ease),
+             transform var(--dur-2) var(--ease),
+             box-shadow var(--dur-2) var(--ease);
+}
+.bp{background:var(--accent);color:var(--navy);box-shadow:0 1px 2px rgba(13,31,60,.18)}
+.bp:hover{background:#F2C862;transform:translateY(-2px);box-shadow:var(--sh-glow-accent)}
+.bp:active{transform:translateY(0);box-shadow:0 1px 2px rgba(13,31,60,.2)}
+
+.bo{border:1px solid rgba(255,255,255,.3);color:var(--on-dark-1);font-weight:500}
+.bo:hover{border-color:rgba(255,255,255,.7);color:#fff;background:rgba(255,255,255,.06);transform:translateY(-2px)}
+.bo:active{transform:translateY(0)}
+
+
+/* ── 6. SUB-PAGE SHELL (publications.html + team.html) ───────────────────── */
+.phead{background:var(--navy);color:#fff;padding:var(--s14) 0 var(--s10)}
+.phead .back{
+  display:inline-flex;align-items:center;gap:6px;margin-bottom:var(--s5);
+  font-family:var(--mn);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--on-dark-3);transition:color var(--dur-1) var(--ease),gap var(--dur-1) var(--ease);
+}
+.phead .back:hover{color:var(--accent);gap:10px}
+.phead h1{font-size:clamp(1.9rem,3.4vw,2.6rem);margin-bottom:var(--s2)}
+.phead p{color:var(--on-dark-2);font-size:.92rem;max-width:60ch;line-height:1.65}
+
+/* Sticky filter bar, docked under the nav. */
+.controls{
+  position:sticky;top:var(--nav-h);z-index:100;
+  padding:var(--s8) 0 var(--s5);
+  background:var(--white);border-bottom:1px solid var(--hairline);
+}
+
+/* Search field — fully custom, no platform chrome. */
+.search-wrap{position:relative;margin-bottom:var(--s4)}
+.search{
+  width:100%;min-height:46px;padding:.8rem 1rem .8rem 2.6rem;
+  border:1px solid var(--hairline-strong);border-radius:var(--r-md);
+  background:var(--sand);color:var(--ink);font-size:.9rem;
+  transition:background var(--dur-1) var(--ease),
+             border-color var(--dur-1) var(--ease),
+             box-shadow var(--dur-1) var(--ease);
+  -webkit-appearance:none;appearance:none;
+}
+.search::placeholder{color:var(--mid);opacity:1}
+.search:hover{border-color:rgba(13,31,60,.24)}
+.search:focus{outline:none;background:#fff;border-color:var(--sky);box-shadow:var(--ring)}
+/* Kill the WebKit "clear field" X so the control looks the same everywhere. */
+.search::-webkit-search-decoration,
+.search::-webkit-search-cancel-button{-webkit-appearance:none;appearance:none}
+.search-icon{
+  position:absolute;left:.9rem;top:50%;transform:translateY(-50%);
+  width:16px;height:16px;color:var(--mid);pointer-events:none;
+  transition:color var(--dur-1) var(--ease);
+}
+.search:focus + .search-icon,
+.search-wrap:focus-within .search-icon{color:var(--sky)}
+
+.control-row{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s3);justify-content:space-between}
+.chips{display:flex;flex-wrap:wrap;gap:var(--s2)}
+.chip{
+  display:inline-flex;align-items:center;gap:6px;min-height:34px;padding:6px 13px;
+  font-family:var(--mn);font-size:.68rem;letter-spacing:.03em;text-transform:uppercase;
+  border:1px solid var(--hairline-strong);border-radius:var(--r-pill);
+  background:#fff;color:var(--steel);
+  transition:background var(--dur-1) var(--ease),
+             color var(--dur-1) var(--ease),
+             border-color var(--dur-1) var(--ease),
+             transform var(--dur-1) var(--ease);
+}
+.chip:hover{border-color:var(--sky);color:var(--sky)}
+.chip:active{transform:scale(.97)}
+.chip.active{background:var(--navy);border-color:var(--navy);color:#fff}
+.chip.student.active{background:var(--student);border-color:var(--student);color:#fff}
+.chip .dot{width:7px;height:7px;border-radius:50%;display:inline-block;flex-shrink:0}
+
+.view-toggle{display:inline-flex;border:1px solid var(--hairline-strong);border-radius:var(--r-md);overflow:hidden;flex-shrink:0}
+.view-toggle button{
+  min-height:34px;padding:7px 14px;background:#fff;color:var(--mid);
+  font-family:var(--mn);font-size:.68rem;letter-spacing:.03em;text-transform:uppercase;
+  transition:background var(--dur-1) var(--ease),color var(--dur-1) var(--ease);
+}
+.view-toggle button:hover{background:var(--sand);color:var(--steel)}
+.view-toggle button.active{background:var(--steel);color:#fff}
+.view-toggle button:focus-visible{position:relative;z-index:1}
+
+.result-count{
+  font-family:var(--mn);font-size:.66rem;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--mid);margin-top:var(--s3);
+}
+
+/* Grouped list headers, shared by both sub-pages. */
+.plist{padding:var(--s8) 0 var(--s20)}
+.theme-group{margin-bottom:var(--s10)}
+.theme-group-head{
+  display:flex;align-items:center;gap:10px;margin-bottom:var(--s4);
+  padding-top:var(--s2);border-top:3px solid var(--mid);
+}
+.theme-group-name{
+  font-family:var(--mn);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--navy);font-weight:500;
+}
+.theme-group-count{font-family:var(--mn);font-size:.68rem;color:var(--mid)}
+
+.no-results{text-align:center;padding:var(--s12) var(--s4);color:var(--mid);font-size:.9rem}
+
+footer.pf{background:var(--navy);color:var(--on-dark-2);padding:var(--s8) 0;font-size:.8rem}
+footer.pf a{color:var(--on-dark-1);transition:color var(--dur-1) var(--ease)}
+footer.pf a:hover{color:var(--accent)}
+
+
+/* ── 7. SHARED RESPONSIVE ────────────────────────────────────────────────── */
+@media(max-width:430px){
+  /* The wordmark subtitle wraps to two lines and crowds the 64px bar here. */
+  .logo .wm span{display:none}
+  .logo .wm{font-size:.8rem}
+}
+
+@media(max-width:640px){
+  :root{--gutter:1.25rem}
+  .sec{padding-block:var(--s14)}
+  .control-row{flex-direction:column;align-items:stretch}
+  .view-toggle{align-self:flex-start}
+  /* A sticky search bar eats a third of a short phone screen; release it. */
+  .controls{position:static;padding:var(--s6) 0 var(--s4)}
+}
